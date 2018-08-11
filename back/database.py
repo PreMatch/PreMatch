@@ -1,0 +1,42 @@
+import sqlite3
+from flask import g
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect('users.db')
+        db.row_factory = sqlite3.Row
+    return db
+
+def query_db(query, args=(), one=False):
+    cur = get_db().execute(query, args)
+    rv = cur.fetchall()
+    cur.close()
+    return (rv[0] if rv else None) if one else rv
+
+def modify_db(query, args=()):
+    get_db().execute(query, args)
+    get_db().commit()
+
+def handle_exists(handle):
+    return query_db('select A from schedule where handle is ?', [handle], one=True) is not None
+
+def remove_schedule(handle):
+    modify_db('delete from schedule where handle is ?', [handle])
+
+def add_schedule(handle, name, sched_list):
+    modify_db('insert into schedule values (?,?,?,?,?,?,?,?,?,?)', [handle, name] + sched_list)
+
+def update_schedule(handle, sched_list):
+    modify_db('update schedule set handle=?,A=?,B=?,C=?,D=?,E=?,F=?,G=?,H=? where handle is ?',
+        [handle] + list(sched_list) + [handle])
+
+def user_schedule(handle):
+    return query_db('select A,B,C,D,E,F,G,H from schedule where handle is ?', [handle], one=True)
+
+def user_auth(handle):
+    return query_db('select name,salt,pepper,passhash from auth where handle is ?', [handle], one=True)
+
+def class_roster(period, teacher):
+    result = query_db('select name,handle from schedule where {} like ?'.format(period), (teacher,))
+    return list(map(lambda i: i.values, result))

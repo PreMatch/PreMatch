@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Class roster - PreMatch</title>
+</head>
+<body>
+	<h2>Block {{ period }} with {{ teacher }}</h2>
+	<table>
+		<thead>
+			<tr>
+				<td>Name</td>
+				<td>Handle</td>
+			</tr>
+		</thead>
+		<tbody>
+		{% for name, handle in roster %}
+			<tr>
+				<td>{{ name }}</td>
+				<td>{{ handle }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</body>
+</html>

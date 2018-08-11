@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script async>
+		function onSignIn(user) {
+			console.info(user.getBasicProfile());
+			document.getElementById('token').value = user.getAuthResponse().id_token;
+			document.forms[0].submit();
+		}
+	</script>
+	<title>Login - PreMatch</title>
+	<meta name="google-signin-client_id" content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+	<div class="g-signin2" data-onfailure="console.error" data-onsuccess="onSignIn"></div>
+	<form method="POST" action="/edit" id="form">
+		<input type="hidden" name="id_token" id="token">
+	</form>
+</body>
+</html>
