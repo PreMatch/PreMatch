@@ -18,27 +18,31 @@ def login():
 def do_edit():
     # POST form will contain: id_token
     try:
-        handle, name = validate_token_for_info(flask.request.form['id_token'])
+        token = flask.request.form['id_token']
+        handle, name = validate_token_for_info(token)
         schedule = database.user_schedule(handle)
-        return flask.render_template('edit.html', handle=handle, name=name, schedule=schedule, teachers=teachers)
+        return flask.render_template('edit.html', token=token, name=name, schedule=schedule, teachers=teachers)
     except Exception as e:
         return flask.render_template('auth_failed.html', error=str(e))
 
 @app.route('/update', methods=['POST'])
 def do_update():
-    # form will contain: id_token, handle, name, A, B, ..., H
-    forms = flask.request.form
-    handle = forms['handle']
-    periods = list(map(lambda i: forms[i], PERIODS))
-
-    if database.handle_exists(handle):
-        database.update_schedule(handle, periods)
-        return 'Updated with great success'
+    for key in ['id_token'] + PERIODS:
+        if key not in flask.request.form:
+            return "Missing value for {}".format(key), 400
     try:
-        database.add_schedule(handle, forms['name'], periods)
-        return 'Added with great success'
+        # form will contain: id_token, A, B, ..., H
+        periods = list(map(flask.request.form.get, PERIODS))
+        handle, name = validate_token_for_info(flask.request.form['id_token'])
+
+        if database.handle_exists(handle):
+            database.update_schedule(handle, periods)
+            return 'Updated with great success'
+        else:
+            database.add_schedule(handle, name, periods)
+            return 'Added with great success'
     except Exception as e:
-        return flask.render_template('update_failed.html', error=str(e))
+            return flask.render_template('update_failed.html', error=str(e)), 500
 
 @app.route('/roster/<period>/<teacher>')
 def show_roster(period, teacher):
@@ -47,7 +51,7 @@ def show_roster(period, teacher):
     
     roster = database.class_roster(period, teacher)
     if len(roster) == 0:
-        return 'Empty class'
+        return 'Empty or nonexistent class', 400
 
     return flask.render_template('roster.html', period=period, teacher=teacher, roster=roster)
     

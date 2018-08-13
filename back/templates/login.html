@@ -2,8 +2,16 @@
 <html>
 <head>
 	<script async>
+		function signOut() {
+			return gapi.auth2.getAuthInstance().signOut();
+		}
+
 		function onSignIn(user) {
-			console.info(user.getBasicProfile());
+			if (!user.getBasicProfile().getEmail().endsWith('k12.andoverma.us')) {
+				signOut().then(() => alert("You need to sign in with your k12.andoverma.us account!"));
+				return;
+			}
+
 			document.getElementById('token').value = user.getAuthResponse().id_token;
 			document.forms[0].submit();
 		}
@@ -13,6 +21,8 @@
 	<script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
+	You need to sign in with your k12.andoverma.us Google account.
+
 	<div class="g-signin2" data-onfailure="console.error" data-onsuccess="onSignIn"></div>
 	<form method="POST" action="/edit" id="form">
 		<input type="hidden" name="id_token" id="token">

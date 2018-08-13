@@ -8,13 +8,12 @@
 	{% endif %}
 </head>
 <body>
+	{% if schedule is none %}
+	<h3>Welcome, {{ name }} ({{ handle }})!</h3>
+	{% endif %}
 	<form method="POST" action="/update" id="form">
-		<label for="name">Name</label>
-		<input type="text" readonly id="name" name="name" value="{{ name }}">
-		<br>
-		<label for="handle">Handle</label>
-		<input type="text" readonly id="handle" name="handle" value="{{ handle }}">
-
+		<input type="hidden" name="id_token" value="{{ token }}">
+		
 		{% for period in 'ABCDEFGH' %}
 			<br>
 			<label for="teacher{{ period }}">{{ period }}</label>
