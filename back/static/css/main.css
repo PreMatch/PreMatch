@@ -1,0 +1,57 @@
+/*
+*
+* COLOR THEME:
+* Primary: #03A9F4
+* Secondary: #ffffff
+* Accent: #009688
+*
+*/
+
+/*****************NAVIGATION*****************/
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #03A9F4;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    display: block;
+    transition: 1s all ease;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.navbar-burger {
+    z-index: 999999;
+}
+
+.overridden-white {
+    color: #ffffff!important;
+}
+
+.overridden-white:hover {
+    opacity: 0.6!important;
+    color: #ffffff!important;
+}
+
+#main {
+    transition: margin-right .5s;
+}
+
+/*****************MEDIA QUERIES*****************/
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}

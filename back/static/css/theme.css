@@ -1,0 +1,29 @@
+/*
+*
+* COLOR THEME:
+* Primary: #03A9F4
+* Secondary: #ffffff
+* Accent: #009688
+*
+*/
+
+body {
+    background-color: white!important;
+}
+
+h1, h2, h3, h4, h5, h6, a {
+    color: #03A9F4!important;
+}
+
+a {
+    transition: 1s all ease;
+}
+
+a:hover {
+    color: #009688!important;
+}
+
+/* A little Bulma correction */
+.is-transparent {
+    background: transparent none!important;
+}
