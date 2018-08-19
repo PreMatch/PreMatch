@@ -3,50 +3,54 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
+    <title>PreMatch - Fnd your classmates</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/theme.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
 </head>
-<body>
+<body id="main">
 
-<nav class="navbar is-transparent" role="navigation" aria-label="main navigation" style="position: fixed; top: 0; width: 100%;">
-        <div id="navbar-brand" class="navbar-brand">
-            <a class="navbar-item" href="index.html">
-                <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Slogan Here" id="nav-logo">
-            </a>
-    
-            <a role="button" class="navbar-burger is-active" aria-label="menu" aria-expanded="false" onclick="toggleNav()">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
-    
-        <div id="sidenav" class="sidenav">
-            <a class="overridden-white" href="#">Link 1</a>
-            <a class="overridden-white" href="#">Link 2</a>
-            <a class="overridden-white" href="#">Link 3</a>
-            <a class="overridden-white" href="#">Link 4</a>
-        </div>
-    </nav>
-    
-    <main id="main">
-        <section class="hero is-fullheight is-transparent" id="main-hero">
-            <div class="hero-body">
-                <div class="container has-text-centered">
-                    <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Slogan Here" id="title-logo">
-                    <h2 class="subtitle">Find your classmates</h2>
-                </div>
-            </div>
-        </section>
-        <section class="bg-primary">
-    
-        </section>
-    </main>
+<nav class="navbar is-transparent" role="navigation" aria-label="main navigation"
+     style="position: fixed; top: 0; width: 100%; min-height: 52px;">
+    <div id="navbar-brand" class="navbar-brand">
+        <a class="navbar-item overridden-white" href="index.html">
+            <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Slogan Here" id="nav-logo"
+                 style="max-width: 100%; height: auto;">
+        </a>
 
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" onclick="toggleNav()"
+           style="display: block; right: 0; position: absolute">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+
+    <div id="sidenav" class="sidenav">
+        <a class="sidenav-active" href="/">Home</a>
+        <a class="overridden-white" href="#">Link 2</a>
+        <a class="overridden-white" href="#">Link 3</a>
+        <a class="overridden-white" href="#">Link 4</a>
+    </div>
+</nav>
+
+<section class="hero is-fullheight is-transparent section" id="main-hero">
+    <div class="hero-body" style="padding-top: 0; padding-bottom: 0;">
+        <div class="container has-text-centered">
+            <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Slogan Here" id="title-logo">
+            <h2 class="subtitle">Find your classmates</h2>
+            <a class="button is-outlined is-primary" href="/login">Get started</a>
+        </div>
+    </div>
+</section>
+<section class="bg-primary section">
+    <div class="container is-fluid has-text-centered">
+        <h1 class="title overridden-white">What is PreMatch?</h1>
+        <p class="overridden-white">PreMatch is a site designed for students at Andover High School, enabling them to find out which of their friends are in which of their classes, before school starts.</p>
+    </div>
+</section>
 
 <script src="/static/js/sideBar.js"></script>
 </body>

@@ -18,7 +18,7 @@
     background-color: #03A9F4;
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 60px;
+    padding-top: 52px;
 }
 
 .sidenav a {
@@ -41,8 +41,8 @@
     color: #ffffff!important;
 }
 
-.overridden-white:hover {
-    opacity: 0.6!important;
+a.overridden-white:hover {
+    opacity: 0.6;
     color: #ffffff!important;
 }
 
@@ -52,6 +52,14 @@
 }
 
 /*****************MAIN*****************/
+.sidenav-active {
+    background-color: white;
+    color: #03A9F4;
+}
+
+.sidenav-active:hover {
+    opacity: 0.6;
+}
 
 #main {
     transition: margin-right .5s;
@@ -64,10 +72,4 @@
 
 .bg-primary {
     background-color: #03A9F4;
-}
-
-/*****************MEDIA QUERIES*****************/
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
 }

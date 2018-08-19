@@ -23,7 +23,29 @@ a:hover {
     color: #009688!important;
 }
 
-/* A little Bulma correction */
+/* Bulma corrections & color changes */
 .is-transparent {
     background: transparent none!important;
+}
+
+.button.is-primary {
+    background-color: #03A9F4!important;
+    color: white!important;
+}
+
+.button.is-primary:hover {
+    background-color: white!important;
+    color: #03A9F4!important;
+    border: 1px solid #03A9F4;
+}
+
+.button.is-primary.is-outlined {
+    background-color: white!important;
+    color: #03A9F4!important;
+    border: 1px solid #03A9F4!important;
+}
+
+.button.is-primary.is-outlined:hover {
+    background-color: #03A9F4!important;
+    color: white!important;
 }
