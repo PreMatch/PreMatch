@@ -62,6 +62,10 @@
     height: auto;
 }
 
+.bg-primary {
+    background-color: #03A9F4;
+}
+
 /*****************MEDIA QUERIES*****************/
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
