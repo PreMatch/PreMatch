@@ -3,6 +3,7 @@ import flask
 import re
 import atexit
 import database
+import json
 from teachers import teachers
 from google_auth import *
 
@@ -20,44 +21,43 @@ app = flask.Flask(__name__)
 def frontpage():
     return flask.render_template('index.html')
 
-@app.route('/login', methods=['GET'])
-def login():
-    return flask.render_template('login.html')
+@app.route('/user/<handle>', methods=['GET'])
+def show_user(handle):
+    if not database.handle_exists(handle):
+        return '404 Page not Found: no such handle', 404
+    schedule = database.user_schedule(handle)
+    name = database.user_name(handle)
+    return flask.render_template('user.html', schedule=schedule, name=name, handle=handle, teachers=teachers)
 
-@app.route('/edit', methods=['POST'])
-def do_edit():
-    # POST form will contain: id_token
-    if missing_form_field('id_token'):
-        return 'Missing value for id_token', 400
-    try:
-        token = flask.request.form['id_token']
-        handle, name = validate_token_for_info(token)
-        schedule = database.user_schedule(handle)
-        return flask.render_template('edit.html', token=token, name=name, schedule=schedule, teachers=teachers)
-    except Exception as e:
-        return flask.render_template('auth_failed.html', error=str(e))
-
+@app.route('/add', methods=['GET'])
+def do_add():
+    return flask.render_template('add.html', teachers=teachers)
+    
 @app.route('/update', methods=['POST'])
 def do_update():
-    for key in ['id_token'] + PERIODS:
-        if missing_form_field(key):
-            return "Missing value for {}".format(key), 400
-    for key in PERIODS:
-        if flask.request.form[key] not in teachers:
-            return "Unknown teacher: {}".format(flask.request.form[key]), 400
+    # Form key existence check
+    if missing_form_field('id_token'):
+        return 'Missing value for id_token', 400
+    if any(map(missing_form_field, PERIODS)):
+        return 'One or more periods missing', 400
+    
+    # Teacher validity check
+    new_schedule = list(map(flask.request.form.get, PERIODS))
+    for teacher in new_schedule:
+        if teacher not in teachers:
+            return 'Unknown teacher: ' + teacher, 400
     try:
-        # form will contain: id_token, A, B, ..., H
-        periods = list(map(flask.request.form.get, PERIODS))
-        handle, name = validate_token_for_info(flask.request.form['id_token'])
+        # Token validity check
+        token = flask.request.form['id_token']
+        handle, name = validate_token_for_info(token)
 
         if database.handle_exists(handle):
-            database.update_schedule(handle, periods)
-            return 'Updated with great success'
+            database.update_schedule(handle, new_schedule)
         else:
-            database.add_schedule(handle, name, periods)
-            return 'Added with great success'
+            database.add_schedule(handle, name, new_schedule)
+        return '{"status": "success"}'
     except Exception as e:
-        return flask.render_template('update_failed.html', error=str(e)), 500
+        return json.dumps({'status': 'error', 'message': str(e)})
 
 @app.route('/roster/<period>/<teacher>')
 def show_roster(period, teacher):

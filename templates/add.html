@@ -13,10 +13,9 @@
 			}
 
 			document.getElementById('token').value = user.getAuthResponse().id_token;
-			document.forms[0].submit();
 		}
 	</script>
-	<title>Login - PreMatch</title>
+	<title>Add Schedule - PreMatch</title>
 	<meta name="google-signin-client_id" content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
 	<script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
@@ -24,8 +23,16 @@
 	You need to sign in with your k12.andoverma.us Google account.
 
 	<div class="g-signin2" data-onfailure="console.error" data-onsuccess="onSignIn"></div>
-	<form method="POST" action="/edit" id="form">
+	<form method="POST" action="/update" id="form">
 		<input type="hidden" name="id_token" id="token">
+		{% for period in 'ABCDEFGH' %}
+			{{period}} <select form="form" id="{{ period }}" name="{{ period }}">
+				{% for teacher in teachers %}
+				<option name="{{ teacher }}">{{ teacher }}</option>
+				{% endfor %}
+			</select>
+		{% endfor %}
+		<input type="submit">
 	</form>
 </body>
 </html>

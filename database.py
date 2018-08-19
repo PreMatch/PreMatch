@@ -36,12 +36,12 @@ def update_schedule(handle, sched_list):
 def user_schedule(handle):
     return query_db('select A,B,C,D,E,F,G,H from schedule where handle is ?', [handle], one=True)
 
-def user_auth(handle):
-    return query_db('select name,salt,pepper,passhash from auth where handle is ?', [handle], one=True)
+def user_name(handle):
+    return query_db('select name from schedule where handle is ?', [handle], one=True)['name']
 
 def class_roster(period, teacher):
     result = query_db('select name,handle from schedule where {} is ?'.format(period), (teacher,))
-    return list(map(lambda i: i.values, result))
+    return result
 
 def search_user(query):
     pattern = '%' + query + '%'
