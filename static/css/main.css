@@ -2,8 +2,8 @@
 *
 * COLOR THEME:
 * Primary: #03A9F4
-* Secondary: #ffffff
-* Accent: #009688
+* Secondary: #009688
+* Accent: #00BCD4
 *
 */
 
@@ -46,8 +46,20 @@
     color: #ffffff!important;
 }
 
+#nav-logo {
+    max-width: 100%;
+    height: auto;
+}
+
+/*****************MAIN*****************/
+
 #main {
     transition: margin-right .5s;
+}
+
+#title-logo {
+    max-width: 40%;
+    height: auto;
 }
 
 /*****************MEDIA QUERIES*****************/
