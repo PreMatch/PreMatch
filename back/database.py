@@ -40,5 +40,9 @@ def user_auth(handle):
     return query_db('select name,salt,pepper,passhash from auth where handle is ?', [handle], one=True)
 
 def class_roster(period, teacher):
-    result = query_db('select name,handle from schedule where {} like ?'.format(period), (teacher,))
+    result = query_db('select name,handle from schedule where {} is ?'.format(period), (teacher,))
     return list(map(lambda i: i.values, result))
+
+def search_user(query):
+    pattern = '%' + query + '%'
+    return query_db('select name,handle from schedule where name like ? or handle like ?', (pattern, pattern))

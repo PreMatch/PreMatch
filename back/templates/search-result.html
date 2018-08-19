@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Search Result - PreMatch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <form method="GET" action="/search">
+        Search again: <input name="query">
+    </form><br>
+    {% for row in results %}
+    {{ row['handle'] }} ({{ row['name'] }})
+    {% endfor %}
+</body>
+</html>

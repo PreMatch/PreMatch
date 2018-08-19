@@ -16,6 +16,10 @@ def missing_form_field(key):
 
 app = flask.Flask(__name__)
 
+@app.route('/')
+def frontpage():
+    return flask.render_template('index.html')
+
 @app.route('/login', methods=['GET'])
 def login():
     return flask.render_template('login.html')
@@ -67,7 +71,16 @@ def show_roster(period, teacher):
         return 'Empty or nonexistent class'
 
     return flask.render_template('roster.html', period=period, teacher=teacher, roster=roster)
+
+@app.route('/search')
+def do_search():
+    query = flask.request.args.get('query')
+    if query is None:
+        return flask.render_template('search-new.html')
     
+    results = database.search_user(str(query))
+    return flask.render_template('search-result.html', results=results)
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(flask.g, '_database', None)
