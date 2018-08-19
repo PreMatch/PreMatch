@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PreMatch - Find your classmates</title>
+    <meta name="google-signin-client_id"
+          content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
+    <title>PreMatch - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/theme.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
+    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
 </head>
 <body id="main">
 
@@ -29,28 +34,25 @@
     </div>
 
     <div id="sidenav" class="sidenav">
-        <a class="sidenav-active" href="/">Home</a>
+        <a class="overridden-white" href="/">Home</a>
         <a class="overridden-white" href="/about">About</a>
-        <a class="overridden-white" href="/login">Login</a>
+        <a class="sidenav-active" href="/login">Login</a>
     </div>
 </nav>
 
-<section class="hero is-fullheight is-transparent section" id="main-hero">
-    <div class="hero-body" style="padding-top: 0; padding-bottom: 0;">
-        <div class="container has-text-centered">
-            <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Slogan Here" id="title-logo">
-            <h2 class="subtitle">Find your classmates</h2>
-            <a class="button is-outlined is-primary" href="/login.html">Get started</a>
-        </div>
-    </div>
-</section>
-<section class="bg-primary section">
+<section class="section">
     <div class="container is-fluid has-text-centered">
-        <h1 class="title overridden-white">What is PreMatch?</h1>
-        <p class="overridden-white">PreMatch is a site designed for students at Andover High School, enabling them to find out which of their friends are in which of their classes before school starts.</p>
+        <div class="box">
+            <h1 class="title is-4">Login to PreMatch</h1>
+            <br>
+            <div class="g-signin2" data-onsuccess="onSignIn" data-width="300" data-height="50"
+                 data-longtitle="true"></div>
+        </div>
     </div>
 </section>
 
 <script src="/static/js/sideBar.js"></script>
+<script src="/static/js/googleSignIn.js"></script>
+
 </body>
 </html>
