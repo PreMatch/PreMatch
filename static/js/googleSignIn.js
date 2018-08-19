@@ -7,9 +7,7 @@ function signOut() {
 
 function onSignIn(user) {
     if (!user.getBasicProfile().getEmail().endsWith('k12.andoverma.us')) {
-        signOut().then(() => alert("You need to sign in with your k12.andoverma.us account!"));
+        signOut().then(() => alert("You need to sign in with a k12.andoverma.us account!"));
         return;
     }
-
-    document.getElementById('token').value = user.getAuthResponse().id_token;
 }

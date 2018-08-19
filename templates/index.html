@@ -3,6 +3,23 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     <title>PreMatch - Find your classmates</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -13,15 +30,14 @@
 <body id="main">
 
 <nav class="navbar is-transparent" role="navigation" aria-label="main navigation"
-     style="position: fixed; top: 0; width: 100%; min-height: 52px;">
+     style="position: fixed; top: 0; width: 100%; min-height: 100px;">
     <div id="navbar-brand" class="navbar-brand">
         <a class="navbar-item overridden-white" href="/">
-            <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Slogan Here" id="nav-logo"
-                 style="max-width: 100%; height: auto;">
+            <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Find your classmates" id="nav-logo">
         </a>
 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" onclick="toggleNav()"
-           style="display: block; right: 0; position: absolute">
+           id="nav-burg">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -38,16 +54,17 @@
 <section class="hero is-fullheight is-transparent section" id="main-hero">
     <div class="hero-body" style="padding-top: 0; padding-bottom: 0;">
         <div class="container has-text-centered">
-            <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Slogan Here" id="title-logo">
+            <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Find your classmates" id="title-logo">
             <h2 class="subtitle">Find your classmates</h2>
-            <a class="button is-outlined is-primary" href="/login.html">Get started</a>
+            <a class="button is-outlined is-primary" href="/login">Get started</a>
         </div>
     </div>
 </section>
 <section class="bg-primary section">
     <div class="container is-fluid has-text-centered">
         <h1 class="title overridden-white">What is PreMatch?</h1>
-        <p class="overridden-white">PreMatch is a site designed for students at Andover High School, enabling them to find out which of their friends are in which of their classes before school starts.</p>
+        <p class="overridden-white">PreMatch is a site designed for students at Andover High School, enabling them to
+            find out which of their friends are in which of their classes before school starts.</p>
     </div>
 </section>
 

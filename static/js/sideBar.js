@@ -1,5 +1,5 @@
 let navOpen = false;
-const sideBarWidth = 250;
+const sideBarWidth = 200;
 
 function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));

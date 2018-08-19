@@ -23,6 +23,10 @@ a:hover {
     color: #009688!important;
 }
 
+strong {
+    color: #00BCD4!important;
+}
+
 /* Bulma corrections & color changes */
 .is-transparent {
     background: transparent none!important;
