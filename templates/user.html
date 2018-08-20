@@ -15,21 +15,10 @@
 			document.getElementById('token').value = user.getAuthResponse().id_token;
 		}
 	</script>
-	{% if schedule is none %}
-	<title>Add new schedule - PreMatch</title>
-	{% else %}
-	<title>Edit existing schedule - PreMatch</title>
-	{% endif %}
-	<meta name="google-signin-client_id" content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
-	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<title>Schedule of {{ name }} - PreMatch</title>
 </head>
 <body>
-	{% if schedule is none %}
-	<h3>Welcome, {{ name }} ({{ handle }})!</h3>
-	{% else %}
-	<h3>Welcome back, {{ name }}! Your schedule has been prepopulated below.</h3>
-	{% endif %}
-	<div class="g-signin2" data-onfailure="console.error" data-onsuccess="onSignIn"></div>
+	<h3>The schedule of {{ name }} ({{ handle }})</h3>
 	<form method="POST" action="/update" id="form">
 		<input type="hidden" name="id_token" id="token">
 

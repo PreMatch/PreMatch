@@ -52,6 +52,9 @@ def show_home():
     if handle is None:
         return error_not_logged_in()
 
+    if not database.handle_exists(handle):
+        return redirect('/add')
+
     schedule = database.user_schedule(handle)
     name = database.user_name(handle)
     return render_template('home.html', handle=handle, name=name, schedule=schedule, teachers=teachers)
@@ -79,9 +82,11 @@ def do_login():
         log_in(handle)
 
         flash('Logged in successfully as ' + name)
+        default = '/home' if database.handle_exists(handle) else '/add?name=' + escape(name)
+
         if missing_form_field('redirect'):
-            return redirect('/home')
-        return redirect(request.form.get('redirect', '/home'))
+            return redirect(default)
+        return redirect(request.form.get('redirect', default))
 
     except ValueError as e:
         return error(400, 'Authentication failed: ' + str(e))
@@ -103,7 +108,7 @@ def show_user(handle):
         return error_not_logged_in()
 
     if not database.handle_exists(handle):
-        return error(404, 'No such handle: ' + str(handle))
+        return error(404, 'No schedule exists for ' + str(handle))
 
     schedule = database.user_schedule(handle)
     name = database.user_name(handle)
@@ -112,7 +117,10 @@ def show_user(handle):
 
 @app.route('/add', methods=['GET'])
 def do_add():
-    return render_template('add.html', teachers=teachers)
+    if logged_handle() is None:
+        return error_not_logged_in()
+
+    return render_template('add.html', teachers=teachers, name=request.args.get('name', ''))
 
 
 @app.route('/update', methods=['POST'])
@@ -121,6 +129,7 @@ def do_update():
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
+
     if any(map(missing_form_field, PERIODS)):
         flash('One or more periods missing', 'error')
         return redirect('/home')
@@ -150,6 +159,9 @@ def do_update():
 
 @app.route('/roster/<period>/<teacher>')
 def show_roster(period, teacher):
+    if logged_handle() is None:
+        return error_not_logged_in()
+
     if period not in PERIODS:
         return error(400, 'Invalid period: ' + period)
     if teacher not in teachers:
@@ -164,6 +176,9 @@ def show_roster(period, teacher):
 
 @app.route('/search')
 def do_search():
+    if logged_handle() is None:
+        return error_not_logged_in()
+
     query = request.args.get('query')
     if query is None:
         return render_template('search-new.html')

@@ -26,7 +26,6 @@
 	<h3>Welcome back, {{ name }}! Your schedule has been prepopulated below.</h3>
 	{% endif %}
 	<p>Tip: You can type your teachers' names directly into each dropdown to select them.</p>
-	<div class="g-signin2" data-onfailure="console.error" data-onsuccess="onSignIn"></div>
 	<form method="POST" action="/update" id="form">
 		<input type="hidden" name="id_token" id="token">
 		
