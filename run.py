@@ -1,9 +1,6 @@
-import sqlite3
-import flask
-import re
-import atexit
+from flask import *
 import database
-import json
+from auth import *
 from teachers import teachers
 from google_auth import validate_token_for_info
 
@@ -15,73 +12,138 @@ def empty(string):
 
 
 def missing_form_field(key):
-    return key not in flask.request.form or empty(flask.request.form[key])
+    return key not in request.form or empty(request.form[key])
 
 
 def error(code, message):
-    return flask.render_template('error.html', code=code, error=message), code
+    return render_template('error.html', code=code, error=message), code
 
 
 def json_success(message):
-    return flask.jsonify({'status': 'success', 'message': str(message)})
+    return jsonify({'status': 'success', 'message': str(message)})
 
 
 def json_failure(code, message):
-    return flask.jsonify({'status': 'failure', 'message': str(message)}), code
+    return jsonify({'status': 'failure', 'message': str(message)}), code
 
 
-app = flask.Flask(__name__)
+def error_not_logged_in():
+    flash('You must be logged in to view this page.')
+    return redirect('/')
+
+
+app = Flask(__name__)
+set_secret_key(app)
 
 
 @app.route('/')
 def front_page():
-    return flask.render_template('index.html')
+    return render_template('index.html')
 
 
-@app.route('/login')
-def show_login():
-    return flask.render_template('login.html')
+@app.route('/about')
+def show_about():
+    return render_template('about.html')
+
+
+@app.route('/home')
+def show_home():
+    handle = logged_handle()
+    if handle is None:
+        return error_not_logged_in()
+
+    schedule = database.user_schedule(handle)
+    name = database.user_name(handle)
+    return render_template('home.html', handle=handle, name=name, schedule=schedule, teachers=teachers)
+
+
+# Relaying final redirect (after log-in) from originator of /login GET to /login POST
+# 1. Originator sends user to /login?redirect=<desired_url>
+# 2. login.html is rendered with redirect (template variable) set to the value above, or '' if there wasn't one
+# 3. Form submission from login.html sends redirect as form key in POST form to /login
+# 4. /login POST logic acknowledges URL and redirects the user to it upon success
+@app.route('/login', methods=['GET', 'POST'])
+def do_login():
+    if request.method == 'GET':
+        if logged_handle() is not None:
+            flash('You are already logged in')
+            return redirect(request.args.get('redirect', '/home'))
+        return render_template('login.html', redirect=request.args.get('redirect', ''))
+
+    # expected form argument: id_token, redirect (optional)
+    if missing_form_field('id_token'):
+        return error(400, 'Missing token from Google sign-in')
+
+    try:
+        handle, name = validate_token_for_info(request.form['id_token'])
+        log_in(handle)
+
+        flash('Logged in successfully as ' + name)
+        if missing_form_field('redirect'):
+            return redirect('/home')
+        return redirect(request.form.get('redirect', '/home'))
+
+    except ValueError as e:
+        return error(400, 'Authentication failed: ' + str(e))
+
+
+@app.route('/logout')
+def do_logout():
+    handle = logged_handle()
+    if handle is None:
+        return error(400, 'Cannot log out when not logged in')
+
+    log_out()
+    return render_template('logout.html')
 
 
 @app.route('/user/<handle>', methods=['GET'])
 def show_user(handle):
+    if logged_handle() is None:
+        return error_not_logged_in()
+
     if not database.handle_exists(handle):
-        return error(404, '404 No such handle')
+        return error(404, 'No such handle: ' + str(handle))
+
     schedule = database.user_schedule(handle)
     name = database.user_name(handle)
-    return flask.render_template('user.html', schedule=schedule, name=name, handle=handle, teachers=teachers)
+    return render_template('user.html', schedule=schedule, name=name, handle=handle, teachers=teachers)
 
 
 @app.route('/add', methods=['GET'])
 def do_add():
-    return flask.render_template('add.html', teachers=teachers)
+    return render_template('add.html', teachers=teachers)
 
 
 @app.route('/update', methods=['POST'])
 def do_update():
     # Form key existence check
-    if missing_form_field('id_token'):
-        return json_failure(400, 'Missing value for id_token')
+    handle = logged_handle()
+    if handle is None:
+        return error_not_logged_in()
     if any(map(missing_form_field, PERIODS)):
-        return json_failure(400, 'One or more periods missing')
+        flash('One or more periods missing', 'error')
+        return redirect('/home')
 
     # Teacher validity check
-    new_schedule = list(map(flask.request.form.get, PERIODS))
+    new_schedule = list(map(request.form.get, PERIODS))
     for teacher in new_schedule:
         if teacher not in teachers:
-            return error(400, 'Unknown teacher: ' + teacher)
+            flash('Unknown teacher: ' + teacher, 'error')
+            return redirect('/home')
     try:
         # Token validity check
-        token = flask.request.form['id_token']
+        token = request.form['id_token']
         handle, name = validate_token_for_info(token)
 
         if database.handle_exists(handle):
             database.update_schedule(handle, new_schedule)
-            return json_success('Schedule updated successfully')
+            flash('Schedule updated successfully')
         else:
             database.add_schedule(handle, name, new_schedule)
-            return json_success('Schedule added successfully')
+            flash('Schedule added successfully')
 
+        return redirect('/home')
     except Exception as e:
         return error(500, str(e))
 
@@ -97,22 +159,22 @@ def show_roster(period, teacher):
     if len(roster) == 0:
         return error(400, 'Empty or nonexistent class')
 
-    return flask.render_template('roster.html', period=period, teacher=teacher, roster=roster)
+    return render_template('roster.html', period=period, teacher=teacher, roster=roster)
 
 
 @app.route('/search')
 def do_search():
-    query = flask.request.args.get('query')
+    query = request.args.get('query')
     if query is None:
-        return flask.render_template('search-new.html')
+        return render_template('search-new.html')
 
     results = database.search_user(str(query))
-    return flask.render_template('search-result.html', results=results)
+    return render_template('search-result.html', results=results)
 
 
 @app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(flask.g, '_database', None)
+def close_connection(_):
+    db = getattr(g, '_database', None)
     if db is not None:
         db.commit()
         db.close()

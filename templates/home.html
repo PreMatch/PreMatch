@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+	{% if schedule is none %}
+	<title>Add new schedule - PreMatch</title>
+	{% else %}
+	<title>Edit existing schedule - PreMatch</title>
+	{% endif %}
+	<meta name="google-signin-client_id" content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
+	<script src="https://apis.google.com/js/platform.js"></script>
+    <script src="/static/js/googleSignIn.js"></script>
+</head>
+<body>
+	{% if schedule is none %}
+	<h3>Welcome, {{ name }} ({{ handle }})!</h3>
+	{% else %}
+	<h3>Welcome back, {{ name }}! Your schedule has been prepopulated below.</h3>
+	{% endif %}
+	<p>Tip: You can type your teachers' names directly into each dropdown to select them.</p>
+	<div class="g-signin2" data-onfailure="console.error" data-onsuccess="onSignIn"></div>
+	<form method="POST" action="/update" id="form">
+		<input type="hidden" name="id_token" id="token">
+		
+		{% for period in 'ABCDEFGH' %}
+			<br>
+			<label for="teacher{{ period }}">{{ period }}</label>
+			<select name="{{ period }}" id="teacher{{ period }}" form="form">
+				{% for teacher in teachers %}
+					{% if schedule is not none and schedule[period] == teacher %}
+						<option value="{{ teacher }}" selected>{{ teacher }}</option>
+					{% else %}
+						<option value="{{ teacher }}">{{ teacher }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+		{% endfor %}
+
+		<input type="submit" value="Submit">
+	</form>
+</body>
+</html>
