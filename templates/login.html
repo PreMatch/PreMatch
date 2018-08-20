@@ -26,7 +26,6 @@
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/client:platform.js" async defer></script>
-    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
 </head>
 <body id="main">
 <nav class="navbar is-transparent" role="navigation" aria-label="main navigation"
@@ -58,7 +57,7 @@
             <p class="subtitle">Please log in using your <strong>k12.andoverma.us</strong> Google account</p>
 
             <div class="g-signin2" data-onsuccess="onSignIn" data-width="225" data-height="50"
-                 data-longtitle="true"></div>
+                 data-longtitle="true" data-theme="dark"></div>
             <form method="post">
                 <input type="hidden" name="redirect" value="{{ redirect }}">
                 <input type="hidden" name="id_token" id="token">
@@ -71,6 +70,5 @@
 
 <script src="/static/js/sideBar.js"></script>
 <script src="/static/js/googleSignIn.js"></script>
-
 </body>
 </html>
