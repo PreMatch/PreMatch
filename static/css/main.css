@@ -35,6 +35,10 @@
     z-index: 999999;
 }
 
+.navbar-burger:hover {
+    background-color: rgba(0,0,0,.1);;
+}
+
 .overridden-white {
     color: #ffffff !important;
 }
@@ -70,6 +74,7 @@ a.overridden-white:hover {
     transform: translateY(-50%);
     width: 156px;
     height: 156px;
+    transition: 1s all ease;
 }
 
 #nav-burg span {
@@ -79,27 +84,27 @@ a.overridden-white:hover {
 }
 
 #nav-burg span:nth-child(1) {
-    top: calc(50% - 14px)!important;
+    top: calc(50% - 14px) !important;
 }
 
 #nav-burg span:nth-child(2) {
-    top: calc(50% - 1px)!important;
+    top: calc(50% - 1px) !important;
 }
 
 #nav-burg span:nth-child(3) {
-    top: calc(50% + 12px)!important;
+    top: calc(50% + 12px) !important;
 }
 
 #nav-burg.is-active span:nth-child(1) {
-    top: calc(50% - 6px)!important;
+    top: calc(50% - 6px) !important;
 }
 
 #nav-burg.is-active span:nth-child(2) {
-    top: calc(50% + (1rem / 2))!important;
+    top: calc(50% + (1rem / 2)) !important;
 }
 
 #nav-burg.is-active span:nth-child(3) {
-    top: calc(50% + 4px)!important;
+    top: calc(50% + 4px) !important;
 }
 
 #overlay {
@@ -117,7 +122,6 @@ a.overridden-white:hover {
     transition: 0.5s all;
 }
 
-/*****************MAIN*****************/
 .sidenav-active {
     background-color: white;
     color: #03A9F4;
@@ -126,6 +130,8 @@ a.overridden-white:hover {
 .sidenav-active:hover {
     opacity: 0.6;
 }
+
+/*****************MAIN*****************/
 
 .pushed {
     transition: margin-right .5s;

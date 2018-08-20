@@ -1,62 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="apple-touch-icon" sizes="57x57" href="/static/img/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/static/img/favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/static/img/favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/static/img/favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/static/img/favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/static/img/favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/static/img/favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/static/img/favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/static/img/favicon/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon/favicon-16x16.png">
-    <meta name="google-signin-client_id"
-          content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
-    <title>PreMatch - About</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/theme.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
+{% from 'macros.html' import head, nav, importJs %}
 
-    <style>
-        .navbar-burger {
-            color: white !important;
-        }
-    </style>
-</head>
+{{ head('About PreMatch', True) }}
+
 <body id="body" class="bg-primary">
 
-<nav class="navbar is-transparent" role="navigation" aria-label="main navigation" id="nav">
-    <div id="navbar-brand" class="navbar-brand">
-        <a class="navbar-item overridden-white" href="/">
-            <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Find your classmates" id="nav-logo">
-        </a>
-
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" onclick="toggleNav()"
-           id="nav-burg">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-
-    <div id="sidenav" class="sidenav is-size-2">
-        <a class="overridden-white" href="/">Home</a>
-        <a class="sidenav-active" href="/about">About</a>
-        <a class="overridden-white" href="/login">Login</a>
-    </div>
-</nav>
-
-<div id="overlay"></div>
+{{ nav(False, "/about") }}
 
 <section class="hero is-fullheight is-transparent section pushed">
     <div class="hero-body" style="padding-top: 0; padding-bottom: 0;">
@@ -66,7 +16,7 @@
     </div>
 </section>
 
-<script src="/static/js/sideBar.js"></script>
-<script src="/static/js/googleSignIn.js"></script>
+{{ importJs() }}
+
 </body>
 </html>

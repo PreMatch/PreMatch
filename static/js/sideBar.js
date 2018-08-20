@@ -19,6 +19,9 @@ function openNav() {
     $("#overlay").width($(window).width() - sideBarWidth);
 
     $(".navbar-burger:first").addClass("is-active overridden-white");
+    if ($("#body").hasClass("bg-primary")) {
+        $(".navbar-burger:first").css("cssText", "color: #03A9F4 !important;")
+    }
     sleep(1000);
     navOpen = true;
 }
@@ -37,6 +40,10 @@ function closeNav() {
 
 
     $(".navbar-burger:first").removeClass("is-active overridden-white");
+
+    if ($("#body").hasClass("bg-primary")) {
+        $(".navbar-burger:first").css("cssText", "")
+    }
     sleep(1000);
     navOpen = false;
 }
@@ -62,9 +69,24 @@ $(document).ready(() => {
     });
 
     $(document).click((event) => {
-        if(event.target.id === "overlay"){
+        if (event.target.id === "overlay") {
             closeNav();
         }
     });
 
+    if ($("#body").hasClass("bg-primary")) {
+
+        $("#sidenav").css("background-color", "white");
+
+        let childList = document.getElementById('sidenav').children;
+
+        $("#sidenav").children('a').each((index) => {
+            let selectedChild = childList[index];
+            if ($(selectedChild).hasClass('sidenav-active')) {
+                $(selectedChild).css("cssText", "color: white !important; background-color: #03A9F4;");
+            } else {
+                $(selectedChild).css("cssText", "color: #03A9F4 !important;");
+            }
+        });
+    }
 });
