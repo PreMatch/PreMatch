@@ -1,5 +1,5 @@
 let navOpen = false;
-const sideBarWidth = 200;
+const sideBarWidth = 250;
 
 function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
@@ -50,6 +50,10 @@ function toggleNav() {
 }
 
 $(document).ready(() => {
+
+    $("#nav-logo").width($("#nav-logo").innerHeight());
+
+    $("#sidenav").css("padding-top", $("#nav").innerHeight());
 
     $(window).resize(() => {
         if (navOpen) {

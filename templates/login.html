@@ -33,9 +33,9 @@
         }
     </style>
 </head>
-<body class="bg-primary" style="min-height: 100vh;">
-<nav class="navbar is-transparent" role="navigation" aria-label="main navigation"
-     style="position: fixed; top: 0; width: 100%;">
+<body id="body" class="bg-primary" style="height: 100vh;">
+
+<nav class="navbar is-transparent" role="navigation" aria-label="main navigation" id="nav">
     <div id="navbar-brand" class="navbar-brand">
         <a class="navbar-item overridden-white" href="/">
             <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Find your classmates" id="nav-logo">
@@ -49,7 +49,7 @@
         </a>
     </div>
 
-    <div id="sidenav" class="sidenav">
+    <div id="sidenav" class="sidenav is-size-2">
         <a class="overridden-white" href="/">Home</a>
         <a class="overridden-white" href="/about">About</a>
         <a class="sidenav-active" href="/login">Login</a>
@@ -76,6 +76,11 @@
         </div>
     </div>
 </section>
+<script type="text/javascript">
+    $(document).ready(() => {
+        $("#body").css("padding-top", $("#nav").innerHeight());
+    });
+</script>
 <script src="/static/js/sideBar.js"></script>
 <script src="/static/js/googleSignIn.js"></script>
 </body>

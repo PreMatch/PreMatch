@@ -17,14 +17,12 @@
     right: 0;
     background-color: #03A9F4;
     overflow-x: hidden;
-    transition: 0.5s all;
-    padding-top: 52px;
+    transition: 0.5s width;
 }
 
 .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 18px;
     display: block;
     transition: 1s all ease;
 }
@@ -46,11 +44,22 @@ a.overridden-white:hover {
     color: #ffffff !important;
 }
 
+#nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    min-height: 156px;
+}
+
+#navbar-brand {
+    min-height: 156px;
+    width: 100%;
+}
+
 #nav-logo {
     display: block;
     width: auto;
     min-height: 100%;
-    min-width: 36px;
 }
 
 #nav-burg {
@@ -59,6 +68,38 @@ a.overridden-white:hover {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    width: 156px;
+    height: 156px;
+}
+
+#nav-burg span {
+    width: 3rem;
+    height: 4px;
+    left: calc(50% - 1.5rem);
+}
+
+#nav-burg span:nth-child(1) {
+    top: calc(50% - 14px)!important;
+}
+
+#nav-burg span:nth-child(2) {
+    top: calc(50% - 1px)!important;
+}
+
+#nav-burg span:nth-child(3) {
+    top: calc(50% + 12px)!important;
+}
+
+#nav-burg.is-active span:nth-child(1) {
+    top: calc(50% - 6px)!important;
+}
+
+#nav-burg.is-active span:nth-child(2) {
+    top: calc(50% + (1rem / 2))!important;
+}
+
+#nav-burg.is-active span:nth-child(3) {
+    top: calc(50% + 4px)!important;
 }
 
 #overlay {
@@ -70,7 +111,7 @@ a.overridden-white:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
     z-index: 31;
     cursor: pointer; /* Add a pointer on hover */
     transition: 0.5s all;
@@ -109,6 +150,18 @@ a.overridden-white:hover {
 
 .small-text {
     font-size: 8px;
+}
+
+#login-message {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+
+    background-color: #009688;
+}
+
+#login-message button {
+    transition: 0.5s all;
 }
 
 /*****************MEDIA QUERIES*****************/

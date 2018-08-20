@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class=flashes>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" sizes="57x57" href="/static/img/favicon/apple-icon-57x57.png">
@@ -40,10 +31,9 @@
     <link rel="stylesheet" type="text/css" href="/static/css/theme.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
 </head>
-<body>
+<body id="body">
 
-<nav class="navbar is-transparent" role="navigation" aria-label="main navigation"
-     style="position: fixed; top: 0; width: 100%;">
+<nav class="navbar is-transparent" role="navigation" aria-label="main navigation" id="nav">
     <div id="navbar-brand" class="navbar-brand">
         <a class="navbar-item overridden-white" href="/">
             <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Find your classmates" id="nav-logo">
@@ -57,12 +47,21 @@
         </a>
     </div>
 
-    <div id="sidenav" class="sidenav">
+    <div id="sidenav" class="sidenav is-size-2">
         <a class="sidenav-active" href="/">Home</a>
         <a class="overridden-white" href="/about">About</a>
         <a class="overridden-white" href="/login">Login</a>
     </div>
 </nav>
+
+{% with messages = get_flashed_messages() %}
+{% if messages[0] %}
+<div id="login-message" class="notification is-primary">
+  <button class="delete" onclick="closeLoginMessage()"></button>
+    {{ messages[0] }}
+</div>
+{% endif %}
+{% endwith %}
 
 <div id="overlay"></div>
 
@@ -70,20 +69,21 @@
     <div class="hero-body" style="padding-top: 0; padding-bottom: 0;">
         <div class="container has-text-centered">
             <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Find your classmates" id="title-logo">
-            <h2 class="subtitle">Find your classmates</h2>
-            <a class="button is-outlined is-primary" href="/login">Get started</a>
+            <h2 class="subtitle is-size-1">Find your classmates</h2>
+            <a class="button is-outlined is-primary is-large" href="/login">Get started</a>
         </div>
     </div>
 </section>
 <section class="bg-primary section pushed">
     <div class="container is-fluid has-text-centered">
-        <h1 class="title overridden-white">What is PreMatch?</h1>
-        <p class="overridden-white">PreMatch is a site designed for students at Andover High School, enabling them to
+        <h1 class="title overridden-white is-size-1">What is PreMatch?</h1>
+        <p class="overridden-white is-size-4">PreMatch is a site designed for students at Andover High School, enabling them to
             find out which of their friends are in which of their classes before school starts.</p>
     </div>
 </section>
 
 <script src="/static/js/sideBar.js"></script>
 <script src="/static/js/googleSignIn.js"></script>
+<script src="/static/js/loginMessage.js"></script>
 </body>
 </html>
