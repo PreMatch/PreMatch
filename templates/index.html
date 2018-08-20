@@ -2,14 +2,14 @@
 <html>
 <head>
     {% with messages = get_flashed_messages() %}
-  {% if messages %}
+    {% if messages %}
     <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
     </ul>
-  {% endif %}
-{% endwith %}
+    {% endif %}
+    {% endwith %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" sizes="57x57" href="/static/img/favicon/apple-icon-57x57.png">
