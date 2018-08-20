@@ -20,10 +20,14 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
+    <meta name="google-signin-client_id"
+          content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
     <title>PreMatch - Find your classmates</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
     <link rel="stylesheet" type="text/css" href="/static/css/theme.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
 </head>
@@ -68,6 +72,9 @@
     </div>
 </section>
 
+<button onclick="signOut()">Sign Out</button>
+
 <script src="/static/js/sideBar.js"></script>
+<script src="/static/js/googleSignIn.js"></script>
 </body>
 </html>

@@ -26,8 +26,14 @@
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/client:platform.js" async defer></script>
+
+    <style>
+        .navbar-burger {
+            color: white!important;
+        }
+    </style>
 </head>
-<body id="main">
+<body id="main" class="bg-primary" style="min-height: 100vh;">
 <nav class="navbar is-transparent" role="navigation" aria-label="main navigation"
      style="position: fixed; top: 0; width: 100%;">
     <div id="navbar-brand" class="navbar-brand">
@@ -52,7 +58,7 @@
 
 <section class="section">
     <div class="container is-fluid has-text-centered">
-        <div class="box">
+        <div id="login-box" class="box">
             <h1 class="title is-4">Login to PreMatch</h1>
             <p class="subtitle">Please log in using your <strong>k12.andoverma.us</strong> Google account</p>
 
@@ -64,10 +70,11 @@
             </form>
             <br>
             <p class="small-text">Or go back to the <a href="/">Home Page</a></p>
+            <!--<br>
+            <p id="login-error" class="subtitle"></p>-->
         </div>
     </div>
 </section>
-
 <script src="/static/js/sideBar.js"></script>
 <script src="/static/js/googleSignIn.js"></script>
 </body>

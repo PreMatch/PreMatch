@@ -50,6 +50,7 @@ a.overridden-white:hover {
     display: block;
     width: auto;
     min-height: 100%;
+    min-width: 36px;
 }
 
 #nav-burg {
@@ -72,6 +73,7 @@ a.overridden-white:hover {
 
 #main {
     transition: margin-right .5s;
+    padding-top: 52px;
 }
 
 #title-logo {
@@ -80,7 +82,7 @@ a.overridden-white:hover {
 }
 
 .bg-primary {
-    background-color: #03A9F4;
+    background-color: #03A9F4!important;
 }
 
 .g-signin2 {
