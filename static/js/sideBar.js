@@ -10,9 +10,13 @@ function openNav() {
 
     let pushed = document.getElementsByClassName("pushed");
 
-    Array.prototype.forEach.call(pushed, (element) => {
-        element.style.marginRight = `${sideBarWidth}px`
-    });
+    if ($(window).width() > 510) {
+        Array.prototype.forEach.call(pushed, (element) => {
+            element.style.marginRight = `${sideBarWidth}px`
+        });
+    }
+
+    $("#overlay").width($(window).width() - sideBarWidth);
 
     $(".navbar-burger:first").addClass("is-active overridden-white");
     sleep(1000);
@@ -23,9 +27,14 @@ function closeNav() {
     $("#sidenav").width(0);
     let pushed = document.getElementsByClassName("pushed");
 
-    Array.prototype.forEach.call(pushed, (element) => {
-        element.style.marginRight = "0"
-    });
+    if ($(window).width() > 510) {
+        Array.prototype.forEach.call(pushed, (element) => {
+            element.style.marginRight = "0"
+        });
+    }
+
+    $("#overlay").width(0);
+
 
     $(".navbar-burger:first").removeClass("is-active overridden-white");
     sleep(1000);
@@ -39,3 +48,19 @@ function toggleNav() {
         openNav();
     }
 }
+
+$(document).ready(() => {
+
+    $(window).resize(() => {
+        if (navOpen) {
+            $("#overlay").width($(window).width() - sideBarWidth);
+        }
+    });
+
+    $(document).click((event) => {
+        if(event.target.id === "overlay"){
+            closeNav();
+        }
+    });
+
+});

@@ -18,7 +18,7 @@
     background-color: #03A9F4;
     overflow-x: hidden;
     transition: 0.5s all;
-    padding-top: 100px;
+    padding-top: 52px;
 }
 
 .sidenav a {
@@ -59,6 +59,21 @@ a.overridden-white:hover {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: block; /* Hidden by default */
+    height: 100vh; /* Full height (cover the whole page) */
+    width: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 31;
+    cursor: pointer; /* Add a pointer on hover */
+    transition: 0.5s all;
 }
 
 /*****************MAIN*****************/
