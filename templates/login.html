@@ -33,7 +33,7 @@
         }
     </style>
 </head>
-<body id="main" class="bg-primary" style="min-height: 100vh;">
+<body class="bg-primary" style="min-height: 100vh;">
 <nav class="navbar is-transparent" role="navigation" aria-label="main navigation"
      style="position: fixed; top: 0; width: 100%;">
     <div id="navbar-brand" class="navbar-brand">
@@ -56,7 +56,7 @@
     </div>
 </nav>
 
-<section class="section">
+<section class="section pushed">
     <div class="container is-fluid has-text-centered">
         <div id="login-box" class="box">
             <h1 class="title is-4">Login to PreMatch</h1>
@@ -64,14 +64,13 @@
 
             <div class="g-signin2" data-onsuccess="onSignIn" data-width="225" data-height="50"
                  data-longtitle="true" data-theme="dark"></div>
-            <form method="post">
+            <br>
+            <p class="small-text">Or go back to the <a href="/">Home Page</a></p>
+
+            <form method="post" action="/login">
                 <input type="hidden" name="redirect" value="{{ redirect }}">
                 <input type="hidden" name="id_token" id="token">
             </form>
-            <br>
-            <p class="small-text">Or go back to the <a href="/">Home Page</a></p>
-            <!--<br>
-            <p id="login-error" class="subtitle"></p>-->
         </div>
     </div>
 </section>

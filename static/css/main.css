@@ -17,7 +17,7 @@
     right: 0;
     background-color: #03A9F4;
     overflow-x: hidden;
-    transition: 0.5s;
+    transition: 0.5s all;
     padding-top: 100px;
 }
 
@@ -71,9 +71,8 @@ a.overridden-white:hover {
     opacity: 0.6;
 }
 
-#main {
+.pushed {
     transition: margin-right .5s;
-    padding-top: 52px;
 }
 
 #title-logo {
@@ -82,7 +81,7 @@ a.overridden-white:hover {
 }
 
 .bg-primary {
-    background-color: #03A9F4!important;
+    background-color: #03A9F4 !important;
 }
 
 .g-signin2 {

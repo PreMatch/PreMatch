@@ -7,7 +7,13 @@ function sleep(time) {
 
 function openNav() {
     $("#sidenav").width(sideBarWidth);
-    document.getElementById("main").style.marginRight = `${sideBarWidth}px`;
+
+    let pushed = document.getElementsByClassName("pushed");
+
+    Array.prototype.forEach.call(pushed, (element) => {
+        element.style.marginRight = `${sideBarWidth}px`
+    });
+
     $(".navbar-burger:first").addClass("is-active overridden-white");
     sleep(1000);
     navOpen = true;
@@ -15,7 +21,12 @@ function openNav() {
 
 function closeNav() {
     $("#sidenav").width(0);
-    document.getElementById("main").style.marginRight = "0";
+    let pushed = document.getElementsByClassName("pushed");
+
+    Array.prototype.forEach.call(pushed, (element) => {
+        element.style.marginRight = "0"
+    });
+
     $(".navbar-burger:first").removeClass("is-active overridden-white");
     sleep(1000);
     navOpen = false;
