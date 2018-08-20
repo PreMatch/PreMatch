@@ -4,7 +4,6 @@ function setActive(href) {
     let activeIndex = -1;
     for (let i = 0; i < links.length; i++) {
         let currentLink = links[i];
-        console.log(currentLink.getAttribute("href"), href);
         if (currentLink.getAttribute("href") === href) {
             currentLink.classList.add("sidenav-active");
             activeIndex = i;
