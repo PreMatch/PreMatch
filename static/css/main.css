@@ -48,8 +48,8 @@ a.overridden-white:hover {
 
 #nav-logo {
     display: block;
-    width: 100px;
-    min-height: 100px;
+    width: auto;
+    min-height: 100%;
 }
 
 #nav-burg {
@@ -72,7 +72,6 @@ a.overridden-white:hover {
 
 #main {
     transition: margin-right .5s;
-    padding-top: 100px;
 }
 
 #title-logo {

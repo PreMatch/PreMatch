@@ -1,8 +1,6 @@
 function signOut() {
-    let auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-        console.log('User signed out.');
-    });
+    const auth2 = gapi.auth2.getAuthInstance();
+    return auth2.signOut();
 }
 
 function onSignIn(user) {
@@ -10,4 +8,7 @@ function onSignIn(user) {
         signOut().then(() => alert("You need to sign in with a k12.andoverma.us account!"));
         return;
     }
+
+    $('#token').val(user.getAuthResponse().id_token);
+    document.forms[0].submit();
 }
