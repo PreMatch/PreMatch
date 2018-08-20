@@ -42,7 +42,9 @@ function closeNav() {
     $(".navbar-burger:first").removeClass("is-active overridden-white");
 
     if ($("#body").hasClass("bg-primary")) {
-        $(".navbar-burger:first").css("cssText", "")
+        $("#nav-burg").css("cssText", "color: white !important;");
+    } else {
+        $("#nav-burg").css("cssText", "");
     }
     sleep(1000);
     navOpen = false;
@@ -60,7 +62,9 @@ $(document).ready(() => {
 
     $("#nav-logo").width($("#nav-logo").innerHeight());
 
-    $("#sidenav").css("padding-top", $("#nav").innerHeight());
+    if (!document.getElementById("login-message")) {
+        $("#sidenav").css("padding-top", $("#nav").innerHeight());
+    }
 
     $(window).resize(() => {
         if (navOpen) {
@@ -75,8 +79,8 @@ $(document).ready(() => {
     });
 
     if ($("#body").hasClass("bg-primary")) {
-
         $("#sidenav").css("background-color", "white");
+        $("#nav-burg").css("cssText", "color: white !important;");
 
         let childList = document.getElementById('sidenav').children;
 

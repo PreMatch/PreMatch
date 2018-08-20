@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Add Schedule - PreMatch</title>
-	<meta name="google-signin-client_id" content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
-	<script src="https://apis.google.com/js/platform.js"></script>
-    <script src="/static/js/googleSignIn.js"></script>
-</head>
-<body>
-    {% if name != '' %}
-    <h1>Welcome, {{ name }}!</h1>
-    {% endif %}
+{% from 'macros.html' import head, nav, importJs %}
 
-	<form method="POST" action="/update" id="form">
-		{% for period in 'ABCDEFGH' %}
-			{{period}} <select form="form" id="{{ period }}" name="{{ period }}">
-				{% for teacher in teachers %}
-				<option name="{{ teacher }}">{{ teacher }}</option>
-				{% endfor %}
-			</select>
-		{% endfor %}
-		<input type="submit">
-	</form>
+{{ head('Add Schedule - PreMatch') }}
+<script type="text/javascript" src="/static/js/addSchedule.js"></script>
+<body id="body" class="bg-primary">
+
+{{ nav(True) }}
+
+<script type="text/javascript">
+    document.getElementById("body").style.paddingTop = $("#nav").innerHeight() + 'px'
+</script>
+
+{% if name != '' %}
+<h1 class="overridden-white">Welcome, {{ name }}!</h1>
+{% endif %}
+
+<form method="POST" action="/update" id="form">
+</form>
+
+<script type="text/javascript">
+    buildForm(["A", "B", "C"], {{ teachers|tojson }});
+</script>
+
+{{ importJs() }}
+
 </body>
 </html>

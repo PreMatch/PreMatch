@@ -1,6 +1,5 @@
 if (document.getElementById("login-message")) {
     let msgHeight = $("#login-message").innerHeight();
-    console.log(msgHeight, document.getElementById("nav"));
     document.getElementById("nav").style.top = `${msgHeight}px`;
     $("#body").css("padding-top", "0");
     document.getElementById("sidenav").style.paddingTop = `${msgHeight + $("#nav").innerHeight()}px`;
