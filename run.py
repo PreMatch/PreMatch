@@ -4,8 +4,7 @@ from auth import *
 from teachers import teachers
 from google_auth import validate_token_for_info
 
-PERIODS = list(map(chr, range(65, 73)))
-
+PERIODS = list(map(chr, range(65, 72)))
 
 def empty(string):
     return str(string).strip() == ''
@@ -29,7 +28,11 @@ def json_failure(code, message):
 
 def error_not_logged_in():
     flash('You must be logged in to view this page.')
-    return redirect('/')
+    return redirect('/login?redirect=' + escape(request.path))
+
+
+def render_login_optional(template):
+    return render_template(template, logged_in=logged_handle() is not None)
 
 
 app = Flask(__name__)
@@ -38,12 +41,12 @@ set_secret_key(app)
 
 @app.route('/')
 def front_page():
-    return render_template('index.html')
+    return render_login_optional('index.html')
 
 
 @app.route('/about')
 def show_about():
-    return render_template('about.html')
+    return render_login_optional('about.html')
 
 
 @app.route('/home')
@@ -82,7 +85,11 @@ def do_login():
         log_in(handle)
 
         flash('Logged in successfully as ' + name)
-        default = '/home' if database.handle_exists(handle) else '/add?name=' + escape(name)
+        default = '/home'
+
+        if not database.handle_exists(handle) or request.form.get('redirect', '') is '/add':
+            default = '/add'
+            session['name'] = name
 
         if missing_form_field('redirect'):
             return redirect(default)
@@ -120,39 +127,46 @@ def do_add():
     if logged_handle() is None:
         return error_not_logged_in()
 
-    return render_template('add.html', teachers=teachers, name=request.args.get('name', ''))
+    if database.handle_exists(logged_handle()):
+        flash('You already have a schedule')
+        return redirect('/home')
+
+    return render_template('add.html', teachers=teachers, name=session['name'])
 
 
 @app.route('/update', methods=['POST'])
 def do_update():
+    # Redirect path reading from args
+    redirect_path = request.args.get('from', '/home')
+    if empty(redirect_path):
+        redirect_path = '/home'
+
     # Form key existence check
     handle = logged_handle()
     if handle is None:
-        return error_not_logged_in()
+        flash('You must be logged in to make updates to schedules', 'error')
+        return redirect('/')
 
     if any(map(missing_form_field, PERIODS)):
-        flash('One or more periods missing', 'error')
-        return redirect('/home')
+        return error(400, 'One or more periods missing')
 
     # Teacher validity check
     new_schedule = list(map(request.form.get, PERIODS))
     for teacher in new_schedule:
         if teacher not in teachers:
-            flash('Unknown teacher: ' + teacher, 'error')
-            return redirect('/home')
+            return error(400, 'Unknown teacher: ' + teacher)
     try:
-        # Token validity check
-        token = request.form['id_token']
-        handle, name = validate_token_for_info(token)
-
         if database.handle_exists(handle):
             database.update_schedule(handle, new_schedule)
             flash('Schedule updated successfully')
         else:
-            database.add_schedule(handle, name, new_schedule)
+            if 'name' not in session:
+                return error(417, 'Name unknown because it is not in user session')
+
+            database.add_schedule(handle, session.pop('name'), new_schedule)
             flash('Schedule added successfully')
 
-        return redirect('/home')
+        return redirect(redirect_path)
     except Exception as e:
         return error(500, str(e))
 
@@ -169,7 +183,8 @@ def show_roster(period, teacher):
 
     roster = database.class_roster(period, teacher)
     if len(roster) == 0:
-        return error(400, 'Empty or nonexistent class')
+        flash('That class is either empty or nonexistent', 'error')
+        return redirect('/home')
 
     return render_template('roster.html', period=period, teacher=teacher, roster=roster)
 

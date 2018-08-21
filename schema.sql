@@ -1,5 +1,4 @@
 drop table if exists schedule;
-drop table if exists auth;
 
 create table schedule (
     handle varchar(30) unique not null,
@@ -10,6 +9,5 @@ create table schedule (
     D varchar(30) not null,
     E varchar(30) not null,
     F varchar(30) not null,
-    G varchar(30) not null,
-    H varchar(30) not null
+    G varchar(30) not null
 );

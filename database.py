@@ -33,16 +33,16 @@ def remove_schedule(handle):
 def add_schedule(handle, name, sched_list):
     if handle_exists(handle):
         raise Exception('Schedule with handle {} already exists'.format(handle))
-    modify_db('insert into schedule values (?,?,?,?,?,?,?,?,?,?)', [handle, name] + sched_list)
+    modify_db('insert into schedule values (?,?,?,?,?,?,?,?,?)', [handle, name] + sched_list)
 
 
 def update_schedule(handle, sched_list):
-    modify_db('update schedule set A=?,B=?,C=?,D=?,E=?,F=?,G=?,H=? where handle is ?',
+    modify_db('update schedule set A=?,B=?,C=?,D=?,E=?,F=?,G=? where handle is ?',
               list(sched_list) + [handle])
 
 
 def user_schedule(handle):
-    return query_db('select A,B,C,D,E,F,G,H from schedule where handle is ?', [handle], one=True)
+    return query_db('select A,B,C,D,E,F,G from schedule where handle is ?', [handle], one=True)
 
 
 def user_name(handle):
