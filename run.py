@@ -56,6 +56,7 @@ def show_home():
         return error_not_logged_in()
 
     if not database.handle_exists(handle):
+        flash('You do not have a schedule yet')
         return redirect('/add')
 
     schedule = database.user_schedule(handle)

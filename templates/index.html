@@ -6,16 +6,8 @@
 
 <body id="body">
 
-{{ nav(False, "/") }}
+{{ nav(logged_in, "/") }}
 
-{% with messages = get_flashed_messages() %}
-{% if messages[0] %}
-<div id="login-message" class="notification is-primary">
-    <button class="delete" onclick="closeLoginMessage()"></button>
-    {{ messages[0] }}
-</div>
-{% endif %}
-{% endwith %}
 
 <section class="hero is-fullheight is-transparent section pushed" id="main-hero">
     <div class="hero-body" style="padding-top: 0; padding-bottom: 0;">

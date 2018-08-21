@@ -82,14 +82,13 @@ $(document).ready(() => {
         $("#sidenav").css("background-color", "white");
         $("#nav-burg").css("cssText", "color: white !important;");
 
-        let childList = document.getElementById('sidenav').children;
+        $("#sidenav").children('a').each((_, domChild) => {
+            const child = $(domChild);
 
-        $("#sidenav").children('a').each((index) => {
-            let selectedChild = childList[index];
-            if ($(selectedChild).hasClass('sidenav-active')) {
-                $(selectedChild).css("cssText", "color: white !important; background-color: #03A9F4;");
+            if (child.hasClass('sidenav-active')) {
+                child.css("cssText", "color: white !important; background-color: #03A9F4;");
             } else {
-                $(selectedChild).css("cssText", "color: #03A9F4 !important;");
+                child.css("cssText", "color: #03A9F4 !important;");
             }
         });
     }
