@@ -4,6 +4,7 @@ $(document).ready(() => {
         let msgHeight = $("#flashes").innerHeight();
         document.getElementById("nav").style.top = `${msgHeight}px`;
         $("#body").css("padding-top", "0");
+        $("#flashes").css("margin-bottom", $("#nav").innerHeight());
         document.getElementById("sidenav").style.paddingTop = `${msgHeight + $("#nav").innerHeight()}px`;
     }
 
