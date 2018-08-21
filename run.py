@@ -27,7 +27,7 @@ def json_failure(code, message):
 
 
 def error_not_logged_in():
-    flash('You must be logged in to view this page.')
+    flash('You must be logged in to view this page.', 'error')
     return redirect('/login?redirect=' + escape(request.path))
 
 
@@ -128,7 +128,7 @@ def do_add():
         return error_not_logged_in()
 
     if database.handle_exists(logged_handle()):
-        flash('You already have a schedule')
+        flash('You already have a schedule', 'error')
         return redirect('/home')
 
     return render_template('add.html', teachers=teachers, name=session['name'])
