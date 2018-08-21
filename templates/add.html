@@ -12,26 +12,42 @@
     document.getElementById("body").style.paddingTop = $("#nav").innerHeight() + 'px'
 </script>
 <section class="section pushed">
-    {% if name != '' %}
-    <h1 class="overridden-white">Welcome, {{ name }}!</h1>
-    {% endif %}
 
-    <form id="form">
-        {% for period in 'ABCDEFG' %}
-        <div class="teacher-dropdown">
-            <div class="teacher-dropdown-content" id="teacher-dropdown{{ period }}">
-                <label for="teacherInput{{ period }}">Block {{ period }}: </label>
-                <input type="text" placeholder="Search for a teacher..." id="teacherInput{{ period }}"
-                       onkeyup="filterTeachers('{{ period }}')" onfocus="selectInput('{{ period }}')">
-                <div class="link-holder" id="link-holder-{{ period }}">
-                    {% for teacher in teachers %}
-                    <a style="display: none;" id="{{ teacher }}-{{ period }}" onclick="selectTeacher('{{ period }}', '{{ teacher }}')">{{ teacher }}</a>
-                    {% endfor %}
+    <div class="box has-text-centered" style="width: 75%; margin: 0 auto; padding: 20px; padding-bottom: 200px;">
+        {% if name != '' %}
+        <h1 class="title is-size-1">Welcome, {{ name }}!</h1>
+        {% endif %}
+        <h2 class="subtitle is-size-4" style="color: black!important;">Please input your schedule below</h2>
+
+        <form id="form" style="height: auto;">
+            {% for period in 'ABCDEFG' %}
+            <div class="teacher-dropdown" id="dropdown-container-{{ period }}">
+                <div class="teacher-dropdown-content" id="teacher-dropdown-{{ period }}">
+                    <label class="block-label" for="teacherInput{{ period }}">Block {{ period }}:</label>
+                    <br>
+                    <input type="text" placeholder="Search for a teacher..." id="teacherInput{{ period }}"
+                           onkeyup="filterTeachers('{{ period }}')" onfocus="selectInput('{{ period }}')">
+                    <div class="link-holder has-text-left" id="link-holder-{{ period }}">
+                        {% for teacher in teachers %}
+                        <a style="display: none;" id="{{ teacher }}-{{ period }}"
+                           onclick="selectTeacher('{{ period }}', '{{ teacher }}')">{{ teacher }}</a>
+                        {% endfor %}
+                        <p style="display: none;" id="no-results-{{ period }}">No teachers found</p>
+                    </div>
+                </div>
+                <div class="notification is-primary" id="teacher-notif-{{ period }}">
+                    <button type="button" class="delete" onclick="unselectTeacher('{{ period }}')"></button>
+                    <p class="block-label">Block {{ period }}:</p>
+                    <p id="teacher-notif-text-{{ period }}"></p>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-    </form>
+            {% endfor %}
+        </form>
+
+        <script type="text/javascript">
+            setOriginalMargin();
+        </script>
+    </div>
 
     <form method="POST" action="/update" id="form-invis">
         {% for period in 'ABCDEFG' %}
