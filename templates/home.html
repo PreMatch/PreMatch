@@ -29,7 +29,7 @@
 	<form method="POST" action="/update" id="form">
 		<input type="hidden" name="id_token" id="token">
 		
-		{% for period in 'ABCDEFGH' %}
+		{% for period in 'ABCDEFG' %}
 			<br>
 			<label for="teacher{{ period }}">{{ period }}</label>
 			<select name="{{ period }}" id="teacher{{ period }}" form="form">

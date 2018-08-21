@@ -11,17 +11,34 @@
 <script type="text/javascript">
     document.getElementById("body").style.paddingTop = $("#nav").innerHeight() + 'px'
 </script>
+<section class="section pushed">
+    {% if name != '' %}
+    <h1 class="overridden-white">Welcome, {{ name }}!</h1>
+    {% endif %}
 
-{% if name != '' %}
-<h1 class="overridden-white">Welcome, {{ name }}!</h1>
-{% endif %}
+    <form id="form">
+        {% for period in 'ABCDEFG' %}
+        <div class="teacher-dropdown">
+            <div class="teacher-dropdown-content" id="teacher-dropdown{{ period }}">
+                <label for="teacherInput{{ period }}">Block {{ period }}: </label>
+                <input type="text" placeholder="Search for a teacher..." id="teacherInput{{ period }}"
+                       onkeyup="filterTeachers('{{ period }}')" onfocus="selectInput('{{ period }}')">
+                <div class="link-holder" id="link-holder-{{ period }}">
+                    {% for teacher in teachers %}
+                    <a style="display: none;" id="{{ teacher }}-{{ period }}" onclick="selectTeacher('{{ period }}', '{{ teacher }}')">{{ teacher }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </form>
 
-<form method="POST" action="/update" id="form">
-</form>
-
-<script type="text/javascript">
-    buildForm(["A", "B", "C"], {{ teachers|tojson }});
-</script>
+    <form method="POST" action="/update" id="form-invis">
+        {% for period in 'ABCDEFG' %}
+        <input type="hidden" name="{{ period }}" id="input-invis-{{ period }}">
+        {% endfor %}
+    </form>
+</section>
 
 {{ importJs() }}
 

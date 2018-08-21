@@ -169,6 +169,18 @@ input[id^="teacherInput"]:focus {
     display: block;
 }
 
+.link-holder {
+    max-height: 192px;
+    overflow: scroll;
+    display: none;
+}
+
+#form-invis {
+    opacity: 0!important;
+    display: none!important;
+    visibility: hidden!important;
+}
+
 /*****************MAIN*****************/
 
 .pushed {
