@@ -163,7 +163,7 @@ input[id^="teacherInput"]:focus {
 }
 
 .teacher-dropdown-content a {
-    color: black!important;
+    color: black !important;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
@@ -176,9 +176,9 @@ input[id^="teacherInput"]:focus {
 }
 
 #form-invis {
-    opacity: 0!important;
-    display: none!important;
-    visibility: hidden!important;
+    opacity: 0 !important;
+    display: none !important;
+    visibility: hidden !important;
 }
 
 /*****************MAIN*****************/
@@ -212,15 +212,17 @@ body.bg-primary {
     font-size: 8px;
 }
 
-#flashes {
+.notification {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
+}
 
+.notification.is-primary {
     background-color: #009688;
 }
 
-#flashes button {
+.notification button {
     transition: 0.5s all;
 }
 

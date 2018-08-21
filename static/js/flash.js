@@ -1,4 +1,4 @@
-$.ready(() => {
+$(document).ready(() => {
 
     if (document.getElementById("flashes")) {
         let msgHeight = $("#flashes").innerHeight();

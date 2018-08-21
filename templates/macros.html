@@ -54,7 +54,7 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages[0] %}
             {% if messages[0][0] == 'error' %}
-                <div id="flashes" class="notification error-msg">
+                <div id="flashes" class="notification is-danger">
             {% else %}
                 <div id="flashes" class="notification is-primary">
             {% endif %}
