@@ -46,7 +46,8 @@ def user_schedule(handle):
 
 
 def user_name(handle):
-    return query_db('select name from schedule where handle is ?', [handle], one=True).get('name', None)
+    result = query_db('select name from schedule where handle is ?', [handle], one=True)
+    return None if result is None else result['name']
 
 
 def class_roster(period, teacher):
