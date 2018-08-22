@@ -1,4 +1,34 @@
-Welcome to Search!
-<form action="/search">
-    Name or handle search here: <input name="query">
-</form>
+<!DOCTYPE html>
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs %}
+
+{{ head('Search within PreMatch', True) }}
+<body id="body" class="bg-primary">
+
+{{ nav(True, "/search") }}
+
+<section class="hero section pushed">
+    <div class="container is-fluid has-text-centered">
+        <div id="login-box" class="box">
+            <h1 class="title is-1">Search PreMatch</h1>
+            <h2 class="subtitle is-4">You may search using name or email account</h2>
+
+            <form method="GET" action="/search">
+                <div class="columns">
+                    <div class="column">
+                        <input class="input is-large" type="text" placeholder="Name or Email here..." name="query"
+                               required>
+                    </div>
+                    <div class="column is-one-quarter">
+                        <input class="button is-outlined is-primary is-large is-fullwidth" style="transition: 0.5s all ease;" type="submit" value="Search">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{{ importJs() }}
+
+</body>
+</html>

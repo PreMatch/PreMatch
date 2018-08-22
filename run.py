@@ -33,7 +33,7 @@ def error_not_logged_in():
 
 
 def render_login_optional(template):
-    return render_template(template, logged_in=logged_handle() is not None)
+    return render_template(template, logged_in=logged_handle() is not None, handle=logged_handle())
 
 
 app = Flask(__name__)
@@ -107,6 +107,8 @@ def do_login():
 @app.route('/logout')
 def do_logout():
     log_out()
+
+    flash('You were successfully logged out')
     return redirect('/')
 
 
@@ -175,7 +177,7 @@ def show_roster(period, teacher):
         flash('That class is either empty or nonexistent', 'error')
         return redirect('/schedule')
 
-    return render_template('roster.html', period=period, teacher=teacher, roster=roster, user_handle=logged_handle())
+    return render_template('roster.html', period=period, teacher=teacher, roster=roster, handle=logged_handle())
 
 
 @app.route('/search')

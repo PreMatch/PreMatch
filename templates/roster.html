@@ -29,12 +29,12 @@
         </tr>
         </thead>
         <tbody>
-        {% for name, handle in roster %}
-            <tr class="{{ 'is-selected' if user_handle == handle }}">
+        {% for name, rhandle in roster %}
+            <tr class="{{ 'is-selected' if handle == rhandle }}">
                 <td>{{ name }}</td>
-                <td>{{ handle }}</td>
+                <td>{{ rhandle }}</td>
             <td>
-                <a class="button is-link is-medium overridden-white" href="/user/{{ handle }}">View Schedule</a>
+                <a class="button is-link is-medium overridden-white" href="/user/{{ rhandle }}">View Schedule</a>
             </td>
             </tr>
         {% endfor %}
