@@ -77,6 +77,12 @@
             </a>
         </div>
 
+        <script type="text/javascript">
+            function signOutAndRedirect(location){
+                signOut(() => {window.location.replace(location);});
+            }
+        </script>
+
         <div id="sidenav" class="sidenav is-size-2">
             <a class="" href="/">Home</a>
             <a class="" href="/about">About</a>
@@ -86,7 +92,7 @@
             <a class="" href="/update">Update</a>
             <a class="" href="/search">Search</a>
             <hr>
-            <a class="" href="/logout">Logout</a>
+            <a class="" onclick="signOutAndRedirect('/logout')">Logout</a>
             {% else %}
             <a class="" href="/login">Login</a>
             {% endif %}
