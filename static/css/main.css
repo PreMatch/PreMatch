@@ -186,6 +186,7 @@ input[id^="teacherInput"]:focus {
 
 div[id^="teacher-notif-"] {
     display: none;
+    z-index: 5;
 }
 
 .block-label {
