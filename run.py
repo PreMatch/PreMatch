@@ -50,25 +50,6 @@ def show_about():
     return render_login_optional('about.html')
 
 
-@app.route('/schedule')
-def show_schedule():
-    handle = logged_handle()
-    if handle is None:
-        return error_not_logged_in()
-
-    schedule = database.user_schedule(handle)
-
-    if schedule is None and 'name' not in session:
-        flash('You need to log in again', 'error')
-        return redirect('/login')
-
-    return render_template('add.html',
-                           handle=handle,
-                           name=session.get('name', database.user_name(handle)),
-                           schedule=schedule,
-                           teachers=teachers)
-
-
 # Relaying final redirect (after log-in) from originator of /login GET to /login POST
 # 1. Originator sends user to /login?redirect=<desired_url>
 # 2. login.html is rendered with redirect (template variable) set to the value above, or '' if there wasn't one
@@ -79,7 +60,7 @@ def do_login():
     if request.method == 'GET':
         if logged_handle() is not None:
             flash('You are already logged in')
-            return redirect(request.args.get('redirect', '/schedule'))
+            return redirect(request.args.get('redirect', '/update'))
         return render_template('login.html', redirect=request.args.get('redirect', ''))
 
     # expected form argument: id_token, redirect (optional)
@@ -91,7 +72,7 @@ def do_login():
         log_in(handle)
 
         flash('Logged in successfully as ' + name)
-        default = '/schedule'
+        default = '/update'
 
         if not database.handle_exists(handle):
             session['name'] = name
@@ -125,41 +106,54 @@ def show_user(handle):
     return render_template('user.html', schedule=schedule, name=name, handle=handle, teachers=teachers)
 
 
-@app.route('/update', methods=['POST'])
+@app.route('/update', methods=['GET', 'POST'])
 def do_update():
-    # Redirect path reading from args
-    redirect_path = request.args.get('from', '/schedule')
-    if empty(redirect_path):
-        redirect_path = '/schedule'
 
-    # Form key existence check
     handle = logged_handle()
     if handle is None:
-        flash('You must be logged in to make updates to schedules', 'error')
-        return redirect('/')
+        return error_not_logged_in()
 
-    if any(map(missing_form_field, PERIODS)):
-        return error(400, 'One or more periods missing')
+    if request.method == 'GET':
 
-    # Teacher validity check
-    new_schedule = list(map(request.form.get, PERIODS))
-    for teacher in new_schedule:
-        if teacher not in teachers:
-            return error(400, 'Unknown teacher: ' + teacher)
-    try:
-        if database.handle_exists(handle):
-            database.update_schedule(handle, new_schedule)
-            flash('Schedule updated successfully')
-        else:
-            if 'name' not in session:
-                return error(417, 'Name unknown because it is not in user session')
+        schedule = database.user_schedule(handle)
 
-            database.add_schedule(handle, session.pop('name'), new_schedule)
-            flash('Schedule added successfully')
+        if schedule is None and 'name' not in session:
+            flash('You need to log in again', 'error')
+            return redirect('/login')
 
-        return redirect(redirect_path)
-    except Exception as e:
-        return error(500, str(e))
+        return render_template('add.html',
+                               handle=handle,
+                               name=session.get('name', database.user_name(handle)),
+                               schedule=schedule,
+                               teachers=teachers)
+    else:
+        # Redirect path reading from args
+        redirect_path = request.args.get('from', '/update')
+        if empty(redirect_path):
+            redirect_path = '/update'
+
+        if any(map(missing_form_field, PERIODS)):
+            return error(400, 'One or more periods missing')
+
+        # Teacher validity check
+        new_schedule = list(map(request.form.get, PERIODS))
+        for teacher in new_schedule:
+            if teacher not in teachers:
+                return error(400, 'Unknown teacher: ' + teacher)
+        try:
+            if database.handle_exists(handle):
+                database.update_schedule(handle, new_schedule)
+                flash('Schedule updated successfully')
+            else:
+                if 'name' not in session:
+                    return error(417, 'Name unknown because it is not in user session')
+
+                database.add_schedule(handle, session.pop('name'), new_schedule)
+                flash('Schedule added successfully')
+
+            return redirect(redirect_path)
+        except Exception as e:
+            return error(500, str(e))
 
 
 @app.route('/roster/<period>/<teacher>')
@@ -175,7 +169,7 @@ def show_roster(period, teacher):
     roster = database.class_roster(period, teacher)
     if len(roster) == 0:
         flash('That class is either empty or nonexistent', 'error')
-        return redirect('/schedule')
+        return redirect('/update')
 
     return render_template('roster.html', period=period, teacher=teacher, roster=roster, handle=logged_handle())
 
