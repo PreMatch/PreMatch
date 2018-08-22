@@ -100,7 +100,11 @@ def show_user(handle):
         return error_not_logged_in()
 
     if not database.handle_exists(handle):
-        return error(404, 'No schedule exists for ' + str(handle))
+        if logged_handle() == handle:
+            flash('You need to enter your schedule first')
+            return redirect('/update')
+
+        return render_template('profile_not_found.html', bad_handle=handle)
 
     schedule = database.user_schedule(handle)
     name = database.user_name(handle)
