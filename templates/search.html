@@ -2,10 +2,10 @@
 <html lang="en">
 {% from 'macros.html' import head, nav, importJs %}
 
-{{ head('Log into PreMatch', True) }}
-<body id="body" class="bg-primary" style="">
+{{ head('Search within PreMatch', True) }}
+<body id="body">
 
-{{ nav(False, "/login") }}
+{{ nav(True, "/search") }}
 
 <section class="section pushed">
     <div class="container is-fluid has-text-centered">
@@ -25,11 +25,6 @@
         </div>
     </div>
 </section>
-<script type="text/javascript">
-    $(document).ready(() => {
-        $("#body").css("padding-top", $("#nav").innerHeight());
-    });
-</script>
 
 {{ importJs() }}
 

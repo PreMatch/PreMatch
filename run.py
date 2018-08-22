@@ -6,6 +6,7 @@ from google_auth import validate_token_for_info
 
 PERIODS = list(map(chr, range(65, 72)))
 
+
 def empty(string):
     return str(string).strip() == ''
 
@@ -49,19 +50,23 @@ def show_about():
     return render_login_optional('about.html')
 
 
-@app.route('/home')
-def show_home():
+@app.route('/edit')
+def do_edit():
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
 
-    if not database.handle_exists(handle):
-        flash('You do not have a schedule yet')
-        return redirect('/add')
-
     schedule = database.user_schedule(handle)
-    name = database.user_name(handle)
-    return render_template('home.html', handle=handle, name=name, schedule=schedule, teachers=teachers)
+
+    if schedule is None and 'name' not in session:
+        flash('You need to log in again', 'error')
+        return redirect('/login')
+
+    return render_template('add.html',
+                           handle=handle,
+                           name=session.get('name', database.user_name(handle)),
+                           schedule=schedule,
+                           teachers=teachers)
 
 
 # Relaying final redirect (after log-in) from originator of /login GET to /login POST
@@ -74,7 +79,7 @@ def do_login():
     if request.method == 'GET':
         if logged_handle() is not None:
             flash('You are already logged in')
-            return redirect(request.args.get('redirect', '/home'))
+            return redirect(request.args.get('redirect', '/edit'))
         return render_template('login.html', redirect=request.args.get('redirect', ''))
 
     # expected form argument: id_token, redirect (optional)
@@ -86,10 +91,9 @@ def do_login():
         log_in(handle)
 
         flash('Logged in successfully as ' + name)
-        default = '/home'
+        default = '/edit'
 
-        if not database.handle_exists(handle) or request.form.get('redirect', '') is '/add':
-            default = '/add'
+        if not database.handle_exists(handle):
             session['name'] = name
 
         if missing_form_field('redirect'):
@@ -123,24 +127,12 @@ def show_user(handle):
     return render_template('user.html', schedule=schedule, name=name, handle=handle, teachers=teachers)
 
 
-@app.route('/add', methods=['GET'])
-def do_add():
-    if logged_handle() is None:
-        return error_not_logged_in()
-
-    if database.handle_exists(logged_handle()):
-        flash('You already have a schedule', 'error')
-        return redirect('/home')
-
-    return render_template('add.html', teachers=teachers, name=session['name'])
-
-
 @app.route('/update', methods=['POST'])
 def do_update():
     # Redirect path reading from args
-    redirect_path = request.args.get('from', '/home')
+    redirect_path = request.args.get('from', '/edit')
     if empty(redirect_path):
-        redirect_path = '/home'
+        redirect_path = '/edit'
 
     # Form key existence check
     handle = logged_handle()
@@ -185,9 +177,9 @@ def show_roster(period, teacher):
     roster = database.class_roster(period, teacher)
     if len(roster) == 0:
         flash('That class is either empty or nonexistent', 'error')
-        return redirect('/home')
+        return redirect('/edit')
 
-    return render_template('roster.html', period=period, teacher=teacher, roster=roster)
+    return render_template('roster.html', period=period, teacher=teacher, roster=roster, user_handle=logged_handle())
 
 
 @app.route('/search')

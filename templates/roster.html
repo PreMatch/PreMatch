@@ -1,25 +1,48 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>Class roster - PreMatch</title>
-</head>
-<body>
-	<h2>Block {{ period }} with {{ teacher }}</h2>
-	<table>
-		<thead>
-			<tr>
-				<td>Name</td>
-				<td>Handle</td>
-			</tr>
-		</thead>
-		<tbody>
-		{% for name, handle in roster %}
-			<tr>
-				<td>{{ name }}</td>
-				<td>{{ handle }}</td>
-			</tr>
-		{% endfor %}
-		</tbody>
-	</table>
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs %}
+
+{{ head('Roster of Block ' + period + ' with ' + teacher, True) }}
+<body id="body" class="bg-primary">
+
+{{ nav(True, "/roster") }}
+
+<section class="hero is-primary section pushed">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title overridden-white is-1">
+                Block {{ period }} with {{ teacher }}
+            </h1>
+            <h2 class="subtitle overridden-white is-3">
+                {{ roster|length }} student(s)
+            </h2>
+        </div>
+    </div>
+</section>
+<section class="section pushed">
+    <table class="table is-fullwidth is-size-4">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Handle</th>
+            <th>Schedule</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for name, handle in roster %}
+            <tr class="{{ 'is-selected' if user_handle == handle }}">
+                <td>{{ name }}</td>
+                <td>{{ handle }}</td>
+            <td>
+                <a class="button is-link is-medium overridden-white" href="/user/{{ handle }}">View Schedule</a>
+            </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{{ importJs() }}
+
 </body>
 </html>

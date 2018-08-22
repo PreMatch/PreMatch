@@ -23,7 +23,7 @@
 		<input type="hidden" name="id_token" id="token">
 
         {% if schedule is not none %}
-		{% for period in 'ABCDEFGH' %}
+		{% for period in 'ABCDEFG' %}
 			<br>
 			{{ period }}: {{ schedule[period] }}
 		{% endfor %}
