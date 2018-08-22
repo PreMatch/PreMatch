@@ -108,7 +108,6 @@ def show_user(handle):
 
 @app.route('/update', methods=['GET', 'POST'])
 def do_update():
-
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
@@ -184,7 +183,7 @@ def do_search():
         return render_template('search-new.html')
 
     results = database.search_user(str(query))
-    return render_template('search-result.html', results=results)
+    return render_template('search-result.html', query=query, results=results, handle=logged_handle())
 
 
 @app.teardown_appcontext
