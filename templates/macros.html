@@ -50,7 +50,7 @@
 <body>
 
 
-{% macro nav(loggedIn, currentHref) %}
+{% macro nav(loggedIn, currentHref, handle) %}
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages[0] %}
 {% if messages[0][0] == 'error' %}
@@ -82,7 +82,8 @@
             <a class="" href="/about">About</a>
             {% if loggedIn %}
             <hr>
-            <a class="" href="/schedule">Schedule</a>
+            <a class="" href="/user/{{ handle }}">My Classes</a>
+            <a class="" href="/update">Update</a>
             <a class="" href="/search">Search</a>
             <hr>
             <a class="" href="/logout">Logout</a>
@@ -101,6 +102,11 @@
     <script src="/static/js/sideBar.js"></script>
     <script src="/static/js/googleSignIn.js"></script>
     <script src="/static/js/flash.js"></script>
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $("#body").css("padding-top", $("#nav").innerHeight());
+        });
+    </script>
     {% endmacro %}
 </body>
 </html>

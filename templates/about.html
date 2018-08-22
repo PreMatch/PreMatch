@@ -6,38 +6,54 @@
 
 <body id="body" class="bg-primary">
 
-{{ nav(logged_in, "/about") }}
+{{ nav(logged_in, "/about", handle) }}
 
-<section class="hero is-fullheight is-transparent section pushed">
-    <div class="hero-body" style="padding-top: 0; padding-bottom: 0;">
-        <div class="container has-text-centered">
-            <h1 class="is-large title overridden-white">PreMatch</h1>
-            <h2 class="subtitle overridden-white">Find your classmates</h2>
-        </div>
-    </div>
-</section>
-<section class="bg-primary section pushed">
+<style>
+    section {
+        width: 100%;
+        padding-left: 8% !important;
+        padding-right: 8% !important;
+    }
+</style>
+
+<section class="is-transparent section pushed">
     <div class="container is-fluid has-text-centered">
         <h1 class="title overridden-white is-size-1">What is PreMatch?</h1>
-        <p class="overridden-white is-size-4">PreMatch is a site designed for students at Andover High School, enabling
-            them to
-            find out which of their friends are in which of their classes before school starts.</p>
+        <p class="overridden-white is-size-4">PreMatch is a site designed specifically for students of Andover High
+            School. It is a tool that you can use to find out which of your friends will be in which of your classes
+            before school starts.</p>
     </div>
 </section>
 <section class="has-background-white is-medium section pushed">
     <div class="container is-fluid has-text-centered">
-        <h1 class="title is-size-1">How did it begin?</h1>
-        <p class="is-size-4">PreMatch is driven off the inspiration that arises from students tending to post their schedules on social media when they get released but before school starts. This phenomenon demonstrated to us that many students are interested in who their classmates will be <strong>in advance</strong>. Following this need, we have developed a platform for students to share their schedules and receive valuable classmate information in return.</p>
+        <h1 class="title is-size-1">Who Made PreMatch?</h1>
+        <p class="is-size-4">PreMatch was made by two students at Andover High, <strong>Daniel Ivanovich</strong> and <strong>Michael Peng</strong>, in the summer before their sophomore year.</p>
     </div>
 </section>
-<section class="bg-secondary is-medium section pushed is-fluid has-text-centered">
+<section class="is-transparent is-medium section pushed">
+    <div class="container is-fluid has-text-centered">
+        <h1 class="overridden-white title is-size-1">Why was PreMatch Made?</h1>
+        <p class="overridden-white is-size-4">As students, we had experienced firsthand the chaos of schedule releases. Normally released around a week before school starts, these schedules cause nearly every student to suddenly freak out over which of their friends are in which of their classes. To try and lessen this chaos, we decided to make a tool that would allow every student to quickly and easily post their schedule. Because of PreMatch, all schedules could be in securely accessed from one place, instead of scattered across many.</p>
+    </div>
+</section>
+<section class="has-background-white is-medium section pushed">
+    <div class="container is-fluid has-text-centered">
+        <h1 class="title is-size-1">Will Others be Able to See What Classes I am Taking?</h1>
+        <p class="is-size-4">No. PreMatch keeps the majority of your schedule hidden. The only information it asks for is the name of your teacher for each block. It does not ask for level, room number, or any sensitive information. </p>
+    </div>
+</section>
+<section class="is-transparent is-medium section pushed">
+    <div class="container is-fluid has-text-centered">
+        <h1 class="overridden-white title is-size-1">Is it Safe to Post My Schedule on PreMatch?</h1>
+        <p class="overridden-white is-size-4">Yes, it is. Nobody can post a schedule, edit a schedule, view a user's schedule or a class roster, or search for users without being logged into a valid k12.andoverma.us gmail account.</p>
+    </div>
+</section>
+<!--<section class="is-transparent is-medium section pushed is-fluid has-text-centered">
     <h1 class="title is-size-1 overridden-white">Contact Us</h1>
     <h2 class="overridden-white is-size-4">We appreciate your feedback.</h2>
     <br>
 
-    <!-- Form here -->
-
-</section>
+</section>-->
 
 {{ importJs() }}
 

@@ -6,7 +6,7 @@
 <script type="text/javascript" src="/static/js/addSchedule.js"></script>
 <body id="body" class="bg-primary">
 
-{{ nav(True, '/edit') }}
+{{ nav(True, '/edit', handle) }}
 
 <script type="text/javascript">
     document.getElementById("body").style.paddingTop = $("#nav").innerHeight() + 'px'
@@ -70,6 +70,7 @@
 
                     let input = form.querySelector(`#input-invis-${period}`);
                     let value = input.value;
+                    console.log(value, period);
                     if (!(value.length > 0)) {
                         valid = false;
                     } else {
@@ -88,13 +89,13 @@
         </script>
         {% if schedule != none %}
         <a class="button is-outlined is-primary is-large"
-           onclick="submitChanges('ABCDEF'.split(''))">Update</a>
+           onclick="submitChanges('ABCDEFG'.split(''))">Update</a>
         {% else %}
         <a class="button is-outlined is-primary is-large"
-           onclick="submitChanges('ABCDEF'.split(''))">Submit</a>
+           onclick="submitChanges('ABCDEFG'.split(''))">Submit</a>
         {% endif %}
 
-        <h1 id="err-msg" style="margin-top: 20px;"></h1>
+        <h1 id="err-msg" style="margin-top: 20px; font-size: 20px;"></h1>
 
         <script type="text/javascript">
             setOriginalMargin();
