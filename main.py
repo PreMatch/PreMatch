@@ -87,9 +87,10 @@ def do_login():
 
 @app.route('/logout')
 def do_logout():
-    log_out()
+    if logged_handle() is not None:
+        flash('You were successfully logged out')
 
-    flash('You were successfully logged out')
+    log_out()
     return redirect('/')
 
 
@@ -179,8 +180,8 @@ def do_search():
         return error_not_logged_in()
 
     query = request.args.get('query')
-    if query is None:
-        return render_template('search-new.html')
+    if query is None or query.strip() == '':
+        return render_template('search-new.html', handle=logged_handle())
 
     results = database.search_user(str(query))
     return render_template('search-result.html', query=query, results=results, handle=logged_handle())
