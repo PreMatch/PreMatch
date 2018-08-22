@@ -36,7 +36,7 @@
                     <div class="link-holder has-text-left" id="link-holder-{{ period }}">
                         {% for teacher in teachers %}
                         <a style="display: none;" id="{{ teacher }}-{{ period }}"
-                           onclick="selectTeacher('{{ period }}', '{{ teacher }}')">{{ teacher }}</a>
+                           onclick="selectTeacher(&quot;{{ period }}&quot;, &quot;{{ teacher }}&quot;)">{{ teacher }}</a>
                         {% endfor %}
                         <p style="display: none;" id="no-results-{{ period }}">No teachers found</p>
                     </div>
