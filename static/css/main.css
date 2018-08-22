@@ -154,9 +154,6 @@ input[id^="teacherInput"]:focus {
 
 .teacher-dropdown-content {
     display: block;
-    position: absolute;
-    left: 0;
-    right: 0;
     min-width: 230px;
     overflow: auto;
     z-index: 1;
