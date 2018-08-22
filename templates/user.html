@@ -1,35 +1,48 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<script async>
-		function signOut() {
-			return gapi.auth2.getAuthInstance().signOut();
-		}
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs %}
 
-		function onSignIn(user) {
-			if (!user.getBasicProfile().getEmail().endsWith('k12.andoverma.us')) {
-				signOut().then(() => alert("You need to sign in with your k12.andoverma.us account!"));
-				return;
-			}
+{{ head('Schedule of ' + name, True) }}
+<body id="body" class="bg-primary">
 
-			document.getElementById('token').value = user.getAuthResponse().id_token;
-		}
-	</script>
-	<title>Schedule of {{ name }} - PreMatch</title>
-</head>
-<body>
-	<h3>The schedule of {{ name }} ({{ handle }})</h3>
-	<form method="POST" action="/update" id="form">
-		<input type="hidden" name="id_token" id="token">
+{{ nav(True, "/user/" + handle) }}
 
-        {% if schedule is not none %}
-		{% for period in 'ABCDEFG' %}
-			<br>
-			{{ period }}: {{ schedule[period] }}
-		{% endfor %}
-        {% endif %}
+<section class="hero is-primary section pushed">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title overridden-white is-1">
+                Schedule for {{ name }}
+            </h1>
+            <h2 class="subtitle overridden-white is-3">
+                {{ handle }}
+            </h2>
+        </div>
+    </div>
+</section>
+<section class="section pushed">
+    <table class="table is-fullwidth is-size-4">
+        <thead>
+        <tr>
+            <th>Period</th>
+            <th>Teacher</th>
+            <th>Roster</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for period in 'ABCDEFG' %}
+            <tr>
+                <td>{{ period }}</td>
+                <td>{{ schedule[period] }}</td>
+            <td>
+                <a class="button is-link is-medium overridden-white" href="/roster/{{ period }}/{{ schedule[period] }}">View Roster</a>
+            </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
 
-		<input type="submit" value="Submit">
-	</form>
+{{ importJs() }}
+
 </body>
 </html>
