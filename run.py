@@ -106,12 +106,8 @@ def do_login():
 
 @app.route('/logout')
 def do_logout():
-    handle = logged_handle()
-    if handle is None:
-        return error(400, 'Cannot log out when not logged in')
-
     log_out()
-    return render_template('logout.html')
+    return redirect('/')
 
 
 @app.route('/user/<handle>', methods=['GET'])
