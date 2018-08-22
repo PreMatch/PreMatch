@@ -50,8 +50,8 @@ def show_about():
     return render_login_optional('about.html')
 
 
-@app.route('/edit')
-def do_edit():
+@app.route('/schedule')
+def show_schedule():
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
@@ -79,7 +79,7 @@ def do_login():
     if request.method == 'GET':
         if logged_handle() is not None:
             flash('You are already logged in')
-            return redirect(request.args.get('redirect', '/edit'))
+            return redirect(request.args.get('redirect', '/schedule'))
         return render_template('login.html', redirect=request.args.get('redirect', ''))
 
     # expected form argument: id_token, redirect (optional)
@@ -91,7 +91,7 @@ def do_login():
         log_in(handle)
 
         flash('Logged in successfully as ' + name)
-        default = '/edit'
+        default = '/schedule'
 
         if not database.handle_exists(handle):
             session['name'] = name
@@ -126,9 +126,9 @@ def show_user(handle):
 @app.route('/update', methods=['POST'])
 def do_update():
     # Redirect path reading from args
-    redirect_path = request.args.get('from', '/edit')
+    redirect_path = request.args.get('from', '/schedule')
     if empty(redirect_path):
-        redirect_path = '/edit'
+        redirect_path = '/schedule'
 
     # Form key existence check
     handle = logged_handle()
@@ -173,7 +173,7 @@ def show_roster(period, teacher):
     roster = database.class_roster(period, teacher)
     if len(roster) == 0:
         flash('That class is either empty or nonexistent', 'error')
-        return redirect('/edit')
+        return redirect('/schedule')
 
     return render_template('roster.html', period=period, teacher=teacher, roster=roster, user_handle=logged_handle())
 
