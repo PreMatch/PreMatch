@@ -242,5 +242,7 @@ teachers = sorted(["Conrad",
                    "Rodriguez",
                    "Shaknovsky",
                    "Wu",
-                   "Zawil"
+                   "Zawil",
+                   "Campbell",
+                   "Remy"
                    ])
