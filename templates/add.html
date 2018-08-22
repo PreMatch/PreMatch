@@ -6,14 +6,14 @@
 <script type="text/javascript" src="/static/js/addSchedule.js"></script>
 <body id="body" class="bg-primary">
 
-{{ nav(True, '/add') }}
+{{ nav(True, '/edit') }}
 
 <script type="text/javascript">
     document.getElementById("body").style.paddingTop = $("#nav").innerHeight() + 'px'
 </script>
 <section class="section pushed">
 
-    <div class="box has-text-centered" style="width: 75%; margin: 0 auto; padding: 20px; padding-bottom: 200px;">
+    <div class="box has-text-centered" style="width: 50%; margin: 0 auto; padding: 20px; padding-bottom: 200px;">
         {% if name != '' %}
         <h1 class="title is-size-1">Welcome, {{ name }}!</h1>
         {% endif %}
