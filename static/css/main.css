@@ -145,10 +145,9 @@ input[id^="teacherInput"]:focus {
 }
 
 .teacher-dropdown {
-    position: relative;
     display: inline-block;
     width: 100%;
-    margin: 45px;
+    margin: 45px 0;
     height: auto;
 }
 
@@ -246,6 +245,10 @@ body.bg-primary {
 
 .notification button {
     transition: 0.5s all;
+}
+
+#flashes {
+    display: none;
 }
 
 /*****************MEDIA QUERIES*****************/

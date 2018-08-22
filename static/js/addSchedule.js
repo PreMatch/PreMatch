@@ -44,11 +44,13 @@ function filterTeachers(period) {
 
 function selectInput(period) {
     $("#form").children().each((index) => {
-        let contentDiv = document.getElementById('form').children[index].children[0];
-        if (!contentDiv.id.endsWith(period)) {
-            contentDiv.getElementsByTagName('div')[0].style.display = "None";
-            let container = document.getElementById(`dropdown-container-${contentDiv.id.slice(-1)}`);
-            $(container).css('margin-bottom', originalMargin);
+        if (document.getElementById('form').children[index].tagName === "DIV") {
+            let contentDiv = document.getElementById('form').children[index].children[0];
+            if (!contentDiv.id.endsWith(period)) {
+                contentDiv.getElementsByTagName('div')[0].style.display = "None";
+                let container = document.getElementById(`dropdown-container-${contentDiv.id.slice(-1)}`);
+                $(container).css('margin-bottom', originalMargin);
+            }
         }
     });
 }
@@ -70,8 +72,14 @@ function selectTeacher(period, teacher) {
     if (input.id.endsWith(period)) {
         input.setAttribute('value', teacher);
     }
-
-    $(document.getElementById(`dropdown-container-${period}`)).css('margin', originalMargin);
+    if (originalMargin !== 0) {
+        $(document.getElementById(`dropdown-container-${period}`)).css('margin-top', originalMargin);
+        $(document.getElementById(`dropdown-container-${period}`)).css('margin-bottom', originalMargin);
+    } else {
+        originalMargin = 45;
+        $(document.getElementById(`dropdown-container-${period}`)).css('margin-top', originalMargin);
+        $(document.getElementById(`dropdown-container-${period}`)).css('margin-bottom', originalMargin);
+    }
 }
 
 function unselectTeacher(period) {
@@ -83,6 +91,10 @@ function unselectTeacher(period) {
 
     let dropdown = document.getElementById(`teacher-dropdown-${period}`);
     dropdown.style.display = "block";
+
+    $('#form').css('margin-bottom', 100);
+
+    document.getElementById(`input-invis-${period}`).value = '';
 
     document.getElementById(`teacherInput${period}`).value = '';
     filterTeachers(period);

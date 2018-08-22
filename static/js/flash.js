@@ -6,6 +6,7 @@ $(document).ready(() => {
         $("#body").css("padding-top", "0");
         $("#flashes").css("margin-bottom", $("#nav").innerHeight());
         document.getElementById("sidenav").style.paddingTop = `${msgHeight + $("#nav").innerHeight()}px`;
+        $('#flashes').css('display', 'block');
     }
 
 });

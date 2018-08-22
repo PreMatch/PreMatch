@@ -11,9 +11,15 @@
 <script type="text/javascript">
     document.getElementById("body").style.paddingTop = $("#nav").innerHeight() + 'px'
 </script>
-<section class="section pushed">
 
-    <div class="box has-text-centered" style="width: 50%; margin: 0 auto; padding: 20px; padding-bottom: 200px;">
+<section class="section pushed" style="z-index: 9999999;">
+    <form method="POST" action="/update" id="form-invis">
+        {% for period in 'ABCDEFG' %}
+        <input type="hidden" name="{{ period }}" id="input-invis-{{ period }}">
+        {% endfor %}
+    </form>
+
+    <div class="box has-text-centered" style="width: 50%; margin: 0 auto; padding: 20px; z-index: 99999999;">
         {% if name != '' %}
         <h1 class="title is-size-1">Welcome, {{ name }}!</h1>
         {% endif %}
@@ -40,20 +46,60 @@
                     <p class="block-label">Block {{ period }}:</p>
                     <p id="teacher-notif-text-{{ period }}"></p>
                 </div>
+
             </div>
             {% endfor %}
+            {% if schedule != none %}
+                <script type="text/javascript">
+                {% for period in 'ABCDEFG' %}
+                    {% if schedule[period] != '' %}
+                            selectTeacher('{{ period }}', '{{ schedule[period] }}');
+                    {% endif %}
+                {% endfor %}
+                </script>
+            {% endif%}
         </form>
+        <script type="text/javascript">
+            let teachers = {{teachers | tojson}};
+
+            function submitChanges(periods) {
+
+                let valid = true;
+                periods.forEach((period) => {
+                    let form = document.getElementById('form-invis');
+
+                    let input = form.querySelector(`#input-invis-${period}`);
+                    let value = input.value;
+                    if (!(value.length > 0)) {
+                        valid = false;
+                    } else {
+                        if (!teachers.includes(value)) {
+                            valid = false;
+                        }
+                    }
+                });
+
+                if (valid) {
+                    document.getElementById('form-invis').submit();
+                } else {
+                    document.getElementById('err-msg').innerHTML = "Sorry, but your form isn't valid! <br> Make sure <strong>all of your classes have a teacher selected</strong> and that you <strong>didn't</strong> try to edit the site's code to break it."
+                }
+            }
+        </script>
+        {% if schedule != none %}
+        <a class="button is-outlined is-primary is-large"
+           onclick="submitChanges('ABCDEF'.split(''))">Update</a>
+        {% else %}
+        <a class="button is-outlined is-primary is-large"
+           onclick="submitChanges('ABCDEF'.split(''))">Submit</a>
+        {% endif %}
+
+        <h1 id="err-msg" style="margin-top: 20px;"></h1>
 
         <script type="text/javascript">
             setOriginalMargin();
         </script>
     </div>
-
-    <form method="POST" action="/update" id="form-invis">
-        {% for period in 'ABCDEFG' %}
-        <input type="hidden" name="{{ period }}" id="input-invis-{{ period }}">
-        {% endfor %}
-    </form>
 </section>
 
 {{ importJs() }}

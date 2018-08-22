@@ -58,10 +58,9 @@ function toggleNav() {
     }
 }
 
+$("#nav-logo").width($("#nav-logo").innerHeight());
+
 $(document).ready(() => {
-
-    $("#nav-logo").width($("#nav-logo").innerHeight());
-
     if (!document.getElementById("login-message")) {
         $("#sidenav").css("padding-top", $("#nav").innerHeight());
     }
