@@ -11,7 +11,7 @@
     <div class="hero-body">
         <div class="container">
             <h1 class="title overridden-white is-1">
-                Schedule for {{ name }}
+                Class List for {{ name }}
             </h1>
             <h2 class="subtitle overridden-white is-3">
                 {{ handle }}
@@ -20,10 +20,10 @@
     </div>
 </section>
 <section class="section pushed">
-    <table class="table is-fullwidth is-size-4">
+    <table class="table is-fullwidth is-size-4" style="max-width: 75%; margin: 0 auto;">
         <thead>
         <tr>
-            <th>Period</th>
+            <th>Block</th>
             <th>Teacher</th>
             <th>Roster</th>
         </tr>
@@ -34,7 +34,7 @@
                 <td>{{ period }}</td>
                 <td>{{ schedule[period] }}</td>
             <td>
-                <a class="button is-link is-medium overridden-white" href="/roster/{{ period }}/{{ schedule[period] }}">View Roster</a>
+                <a class="button is-link is-outlined is-primary is-medium overridden-white" href="/roster/{{ period }}/{{ schedule[period] }}">View Roster</a>
             </td>
             </tr>
         {% endfor %}
@@ -42,6 +42,11 @@
     </table>
 </section>
 
+<script type="text/javascript">
+    $(document).ready(() => {
+        $("#body").css("padding-top", $("#nav").innerHeight());
+    });
+</script>
 {{ importJs() }}
 
 </body>
