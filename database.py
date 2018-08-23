@@ -1,60 +1,83 @@
-import sqlite3
+from google.cloud import datastore
 from flask import g
 
+PERIODS = 'ABCDEFG'
 
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        db = g._database = sqlite3.connect('users.db')
-        db.row_factory = sqlite3.Row
+        db = g._database = datastore.Client()
     return db
 
 
-def query_db(query, args=(), one=False):
-    cur = get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
+def get_row_from_handle(handle):
+    query = get_db().query(kind="Schedule")
+    query.add_filter('handle', '=', handle)
 
-
-def modify_db(query, args=()):
-    get_db().execute(query, args)
-    get_db().commit()
+    results = list(query.fetch())
+    return results[0] if results else None
 
 
 def handle_exists(handle):
-    return query_db('select A from schedule where handle is ?', [handle], one=True) is not None
+    return get_row_from_handle(handle) is not None
 
 
-def remove_schedule(handle):
-    modify_db('delete from schedule where handle is ?', [handle])
+def schedule_count():
+    return len(list(get_db().query(kind="Schedule").fetch()))
 
 
 def add_schedule(handle, name, sched_list):
     if handle_exists(handle):
         raise Exception('Schedule with handle {} already exists'.format(handle))
-    modify_db('insert into schedule values (?,?,?,?,?,?,?,?,?)', [handle, name] + sched_list)
+
+    key = get_db().key('Schedule')
+    data = {
+        'handle': handle,
+        'name': name
+    }
+
+    for i in range(len(sched_list)):
+        data[PERIODS[i]] = sched_list[i]
+
+    task = datastore.Entity(key)
+    task.update(data)
+
+    get_db().put(task)
+
+    return task.key
 
 
 def update_schedule(handle, sched_list):
-    modify_db('update schedule set A=?,B=?,C=?,D=?,E=?,F=?,G=? where handle is ?',
-              list(sched_list) + [handle])
+    client = get_db()
+    with client.transaction():
+        key = client.key('Schedule', handle)
+        task = client.get(key)
+
+        if task:
+            for i in range(len(sched_list)):
+                task[PERIODS[i]] = sched_list[i]
+            client.put(task)
 
 
 def user_schedule(handle):
-    return query_db('select A,B,C,D,E,F,G from schedule where handle is ?', [handle], one=True)
+    return get_row_from_handle(handle)
 
 
 def user_name(handle):
-    result = query_db('select name from schedule where handle is ?', [handle], one=True)
-    return None if result is None else result['name']
+    row = get_row_from_handle(handle)
+
+    return None if row is None else row['name']
 
 
 def class_roster(period, teacher):
-    result = query_db('select name,handle from schedule where {} is ?'.format(period), (teacher,))
-    return result
+    query = get_db().query(kind="Schedule")
+    query.add_filter(period, '=', teacher)
+
+    return list(map(lambda row: (row['name'], row['handle']), list(query.fetch())))
 
 
-def search_user(query):
-    pattern = '%' + query + '%'
-    return query_db('select name,handle from schedule where name like ? or handle like ?', (pattern, pattern))
+def search_user(search_query):
+    query = get_db().query(kind="Schedule")
+    users = list(query.fetch())
+
+    return list(filter(lambda user: search_query.lower() in user['name'].lower() or search_query.lower() in user['handle'], users))

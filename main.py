@@ -32,8 +32,8 @@ def error_not_logged_in():
     return redirect('/login?redirect=' + escape(request.path))
 
 
-def render_login_optional(template):
-    return render_template(template, logged_in=logged_handle() is not None, handle=logged_handle())
+def render_login_optional(template, **kwargs):
+    return render_template(template, logged_in=logged_handle() is not None, handle=logged_handle(), **kwargs)
 
 
 app = Flask(__name__)
@@ -42,7 +42,7 @@ set_secret_key(app)
 
 @app.route('/')
 def front_page():
-    return render_login_optional('index.html')
+    return render_login_optional('index.html', schedule_count=database.schedule_count())
 
 
 @app.route('/about')
@@ -191,12 +191,12 @@ def do_search():
     return render_template('search-result.html', query=query, results=results, handle=logged_handle())
 
 
-@app.teardown_appcontext
-def close_connection(_):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.commit()
-        db.close()
+# Reserved for SQL
+#@app.teardown_appcontext
+#def close_connection(_):
+#    db = getattr(g, '_database', None)
+#    if db is not None:
+#        db.close()
 
 
 if __name__ == "__main__":
