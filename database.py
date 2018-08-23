@@ -3,6 +3,7 @@ from flask import g
 
 PERIODS = 'ABCDEFG'
 
+
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
@@ -10,8 +11,14 @@ def get_db():
     return db
 
 
-def get_row_from_handle(handle):
+def db_query():
     query = get_db().query(kind="Schedule")
+    query.order = ['name', 'handle']
+
+    return query
+
+def get_row_from_handle(handle):
+    query = db_query()
     query.add_filter('handle', '=', handle)
 
     results = list(query.fetch())
@@ -70,14 +77,15 @@ def user_name(handle):
 
 
 def class_roster(period, teacher):
-    query = get_db().query(kind="Schedule")
+    query = db_query()
     query.add_filter(period, '=', teacher)
 
     return list(map(lambda row: (row['name'], row['handle']), list(query.fetch())))
 
 
 def search_user(search_query):
-    query = get_db().query(kind="Schedule")
+    query = db_query()
     users = list(query.fetch())
 
-    return list(filter(lambda user: search_query.lower() in user['name'].lower() or search_query.lower() in user['handle'], users))
+    return list(filter(lambda user:
+                       search_query.lower() in user['name'].lower() or search_query.lower() in user['handle'], users))

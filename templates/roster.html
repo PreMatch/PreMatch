@@ -34,7 +34,7 @@
             <td>{{ name }}</td>
             <td>{{ rhandle }}</td>
             <td>
-                <a class="button is-outlined is-primary is-medium" href="/user/{{ rhandle }}">View Schedule</a>
+                <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-medium" href="/user/{{ rhandle }}">View Schedule</a>
             </td>
         </tr>
         {% endfor %}
