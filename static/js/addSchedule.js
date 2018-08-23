@@ -73,13 +73,8 @@ function selectTeacher(period, teacher) {
     notifText.innerHTML = teacher;
     notif.style.display = "block";
 
-    let form = document.getElementById('form-invis');
+    document.getElementById(`input-invis-${period}`).value = teacher;
 
-    let input = form.querySelector(`#input-invis-${period}`);
-
-    if (input.id.endsWith(period)) {
-        input.setAttribute('value', teacher);
-    }
     if (originalMargin !== 0) {
         $(document.getElementById(`dropdown-container-${period}`)).css('margin-top', originalMargin);
         $(document.getElementById(`dropdown-container-${period}`)).css('margin-bottom', originalMargin);
