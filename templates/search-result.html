@@ -7,12 +7,12 @@
 
 {{ nav(True, "/search", handle) }}
 
-<section class="hero is-primary">
+<section class="hero is-primary" style="margin-bottom: 10px;">
     <div class="hero-body">
         <form method="GET" action="/search">
             <div class="columns">
                 <div class="column">
-                    <input type="text" class="input is-large" name="query" id="query" value="{{ query }}" placeholder="Search name or email..." required>
+                    <input type="text" class="input is-large" name="query" id="query" value="{{ query }}" placeholder="Search name or handle..." required>
                 </div>
                 <div class="column is-one-fifth">
                     <input type="submit" class="button is-large is-outlined is-primary is-fullwidth" style="transition: 0.5s all ease;" value="Search Again">
@@ -30,12 +30,12 @@
     </section>
 {% else %}
     {% for row in results %}
-        <section class="section has-background-white" style="margin-bottom: 1px">
+        <section class="section has-background-white {{ 'is-user' if handle == row['handle'] }}" style="margin-bottom: 2px;">
             <div class="container">
-                <a class="button is-outlined is-primary is-large is-pulled-right" href="/user/{{ row['handle'] }}">View
+                <a class="button {{ 'is-outlined' if handle != row['handle'] }} is-primary is-large is-pulled-right" href="/user/{{ row['handle'] }}">View
                     Schedule</a>
-                <h1 class="title">{{ row['name'] }}</h1>
-                <h2 class="subtitle">{{ row['handle'] }}</h2>
+                <h1 class="title {{ 'overridden-white' if handle == row['handle'] }}">{{ row['name'] }}</h1>
+                <h2 class="subtitle {{ 'overridden-white' if handle == row['handle'] }}">{{ row['handle'] }}</h2>
             </div>
         </section>
     {% endfor %}
