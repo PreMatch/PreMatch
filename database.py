@@ -13,8 +13,6 @@ def get_db():
 
 def db_query():
     query = get_db().query(kind="Schedule")
-    query.order = ['name', 'handle']
-
     return query
 
 def get_row_from_handle(handle):
