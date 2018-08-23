@@ -60,6 +60,14 @@ function selectTeacher(period, teacher) {
     dropdown.style.display = "none";
 
     let notif = document.getElementById(`teacher-notif-${period}`);
+
+    let button = document.getElementById(`view-roster-${period}`);
+    if (button !== null) {
+        let currentHref = button.getAttribute('href');
+        let newHref = currentHref + teacher;
+        button.setAttribute('href', newHref);
+    }
+
     let notifText = document.getElementById(`teacher-notif-text-${period}`);
 
     notifText.innerHTML = teacher;

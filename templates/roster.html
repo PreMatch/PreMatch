@@ -30,17 +30,23 @@
         </thead>
         <tbody>
         {% for name, rhandle in roster %}
-            <tr class="{{ 'is-selected' if handle == rhandle }}">
-                <td>{{ name }}</td>
-                <td>{{ rhandle }}</td>
+        <tr class="{{ 'is-selected' if handle == rhandle }}">
+            <td>{{ name }}</td>
+            <td>{{ rhandle }}</td>
             <td>
                 <a class="button is-link is-medium overridden-white" href="/user/{{ rhandle }}">View Schedule</a>
             </td>
-            </tr>
+        </tr>
         {% endfor %}
         </tbody>
     </table>
 </section>
+
+<script type="text/javascript">
+    $(document).ready(() => {
+        $("#body").css("padding-top", $("#nav").innerHeight());
+    });
+</script>
 
 {{ importJs() }}
 
