@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-{% from 'macros.html' import head, nav, importJs %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 
 {{ head('Add Schedule - PreMatch') }}
 <script type="text/javascript" src="/static/js/addSchedule.js"></script>
@@ -8,9 +8,7 @@
 
 {{ nav(True, '/edit', handle) }}
 
-<script type="text/javascript">
-    document.getElementById("body").style.paddingTop = $("#nav").innerHeight() + 'px'
-</script>
+{{ bodyPaddingNav() }}
 
 <section class="section pushed" style="z-index: 9999999;">
     <form method="POST" action="/update" id="form-invis">

@@ -226,7 +226,7 @@ body.bg-primary {
 }
 
 .small-text {
-    font-size: 8px;
+    font-size: 12px;
 }
 
 .notification {
@@ -256,6 +256,12 @@ body.bg-primary {
 }
 
 /*****************MEDIA QUERIES*****************/
+@media screen and (min-width: 1599px) {
+    .small-text {
+        font-size: 16px;
+    }
+}
+
 @media screen and (max-width: 1001px) {
     #nav {
         min-height: 100px;

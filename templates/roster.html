@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 
 {{ head('Roster of Block ' + period + ' with ' + teacher, True) }}
 <body id="body" class="bg-primary">
 
 {{ nav(True, "/roster", handle) }}
+{{ bodyPaddingNav() }}
 
 <section class="hero is-primary section pushed">
     <div class="hero-body">
@@ -41,12 +42,6 @@
         </tbody>
     </table>
 </section>
-
-<script type="text/javascript">
-    $(document).ready(() => {
-        $("#body").css("padding-top", $("#nav").innerHeight());
-    });
-</script>
 
 {{ importJs() }}
 

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 
 {{ head('Log into PreMatch', True) }}
 <body id="body" class="bg-primary" style="">
 
 {{ nav(False, "/login") }}
+{{ bodyPaddingNav() }}
 
 <section class="section pushed">
     <div class="container is-fluid has-text-centered">
@@ -25,12 +26,6 @@
         </div>
     </div>
 </section>
-
-<script type="text/javascript">
-    $(document).ready(() => {
-        $("#body").css("padding-top", $("#nav").innerHeight());
-    });
-</script>
 
 {{ importJs() }}
 

@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 
 {{ head(query + ' - Search PreMatch', True) }}
 <body id="body" class="bg-primary">
 
 {{ nav(True, "/search", handle) }}
+{{ bodyPaddingNav() }}
 
 <section class="hero is-primary" style="margin-bottom: 10px;">
     <div class="hero-body">
         <form method="GET" action="/search">
             <div class="columns">
                 <div class="column">
-                    <input type="text" class="input is-large" name="query" id="query" value="{{ query }}" placeholder="Search name or handle..." required>
+                    <input type="text" class="input is-large" name="query" id="query" value="{{ query }}"
+                           placeholder="Search name or handle..." required>
                 </div>
                 <div class="column is-one-fifth">
-                    <input type="submit" class="button is-large is-outlined is-primary is-fullwidth" style="transition: 0.5s all ease;" value="Search Again">
+                    <input type="submit" class="button is-large is-outlined is-primary is-fullwidth"
+                           style="transition: 0.5s all ease;" value="Search Again">
                 </div>
             </div>
         </form>
@@ -23,30 +26,26 @@
 </section>
 
 {% if results|length == 0 %}
-    <section class="section has-background-white">
-        <div class="has-text-centered">
-            <p class="title">No results were found for "{{ query }}"</p>
-        </div>
-    </section>
+<section class="section has-background-white">
+    <div class="has-text-centered">
+        <p class="title">No results were found for "{{ query }}"</p>
+    </div>
+</section>
 {% else %}
-    {% for row in results %}
-        <section class="section has-background-white {{ 'is-user' if handle == row['handle'] }}" style="margin-bottom: 2px;">
-            <div class="container">
-                <a class="button {{ 'is-outlined' if handle != row['handle'] }} is-primary is-large is-pulled-right" href="/user/{{ row['handle'] }}">View
-                    Schedule</a>
-                <h1 class="title {{ 'overridden-white' if handle == row['handle'] }}">{{ row['name'] }}</h1>
-                <h2 class="subtitle {{ 'overridden-white' if handle == row['handle'] }}">{{ row['handle'] }}</h2>
-            </div>
-        </section>
-    {% endfor %}
+{% for row in results %}
+<section class="section has-background-white {{ 'is-user' if handle == row['handle'] }}" style="margin-bottom: 2px;">
+    <div class="container">
+        <a class="button {{ 'is-outlined' if handle != row['handle'] }} is-primary is-large is-pulled-right"
+           href="/user/{{ row['handle'] }}">View
+            Schedule</a>
+        <h1 class="title {{ 'overridden-white' if handle == row['handle'] }}">{{ row['name'] }}</h1>
+        <h2 class="subtitle {{ 'overridden-white' if handle == row['handle'] }}">{{ row['handle'] }}</h2>
+    </div>
+</section>
+{% endfor %}
 {% endif %}
 
 {{ importJs() }}
 
-<script type="text/javascript">
-    $(document).ready(() => {
-        $("#body").css("padding-top", $("#nav").innerHeight());
-    });
-</script>
 </body>
 </html>

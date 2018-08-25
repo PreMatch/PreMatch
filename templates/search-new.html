@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 
 {{ head('Search within PreMatch', True) }}
 <body id="body" class="bg-primary">
 
 {{ nav(True, "/search", handle) }}
+{{ bodyPaddingNav() }}
 
 <section class="hero section pushed">
     <div class="container is-fluid has-text-centered">
@@ -20,19 +21,14 @@
                                required>
                     </div>
                     <div class="column is-one-quarter">
-                        <input class="button is-outlined is-primary is-large is-fullwidth" style="transition: 0.5s all ease;" type="submit" value="Search">
+                        <input class="button is-outlined is-primary is-large is-fullwidth"
+                               style="transition: 0.5s all ease;" type="submit" value="Search">
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </section>
-
-<script type="text/javascript">
-    $(document).ready(() => {
-        $("#body").css("padding-top", $("#nav").innerHeight());
-    });
-</script>
 
 {{ importJs() }}
 
