@@ -15,12 +15,10 @@ def db_query():
     query = get_db().query(kind="Schedule")
     return query
 
-def get_row_from_handle(handle):
-    query = db_query()
-    query.add_filter('handle', '=', handle)
 
-    results = list(query.fetch())
-    return results[0] if results else None
+def get_row_from_handle(handle):
+    entity = get_db().get(get_db().key('Schedule', handle))
+    return entity
 
 
 def handle_exists(handle):
@@ -35,7 +33,7 @@ def add_schedule(handle, name, sched_list):
     if handle_exists(handle):
         raise Exception('Schedule with handle {} already exists'.format(handle))
 
-    key = get_db().key('Schedule')
+    key = get_db().key('Schedule', handle)
     data = {
         'handle': handle,
         'name': name
@@ -48,8 +46,6 @@ def add_schedule(handle, name, sched_list):
     task.update(data)
 
     get_db().put(task)
-
-    return task.key
 
 
 def update_schedule(handle, sched_list):
