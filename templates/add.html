@@ -51,7 +51,7 @@
                     <div class="link-holder has-text-left" id="link-holder-{{ period }}">
                         {% for teacher in teachers %}
                         <a style="display: none;" id="{{ teacher }}-{{ period }}"
-                           onclick="selectTeacher(&quot;{{ period }}&quot;, &quot;{{ teacher }}&quot;)">{{ teacher }}</a>
+                           onclick="selectTeacher(&quot;{{ period }}&quot;, &quot;{{ teacher|safe }}&quot;)">{{ teacher }}</a>
                         {% endfor %}
                         <p style="display: none;" id="no-results-{{ period }}">No teachers found</p>
                     </div>
@@ -61,7 +61,7 @@
                     <p class="block-label">Block {{ period }}:</p>
                     <p id="teacher-notif-text-{{ period }}"></p>
                     {% if schedule != none %}
-                        <a class="button is-outlined is-primary is-medium" href="/roster/{{ period }}/" id="view-roster-{{ period }}" style="border-radius: 10px;">View Classmates</a>
+                        <a class="button is-outlined is-primary is-medium" data-href-base="/roster/{{ period }}/" id="view-roster-{{ period }}" style="border-radius: 10px;">View Classmates</a>
                     {% endif %}
                 </div>
 

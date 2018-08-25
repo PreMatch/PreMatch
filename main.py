@@ -187,7 +187,7 @@ def do_search():
     if query is None or query.strip() == '':
         return render_template('search-new.html', handle=logged_handle())
 
-    results = database.search_user(str(query))
+    results = database.search_user(query.strip())
     return render_template('search-result.html', query=query, results=results, handle=logged_handle())
 
 
