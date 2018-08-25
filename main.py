@@ -3,8 +3,14 @@ import database
 from auth import *
 from teachers import teachers
 from google_auth import validate_token_for_info
+from google.cloud import storage
 
 PERIODS = list(map(chr, range(65, 72)))
+
+# Google cloud setup
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static',
+                                                            'PreMatch-a4e3963d0366.json')
+storage_client = storage.Client()
 
 
 def empty(string):
@@ -192,8 +198,8 @@ def do_search():
 
 
 # Reserved for SQL
-#@app.teardown_appcontext
-#def close_connection(_):
+# @app.teardown_appcontext
+# def close_connection(_):
 #    db = getattr(g, '_database', None)
 #    if db is not None:
 #        db.close()
