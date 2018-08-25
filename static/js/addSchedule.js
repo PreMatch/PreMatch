@@ -64,7 +64,7 @@ function selectTeacher(period, teacher) {
     let button = document.getElementById(`view-roster-${period}`);
     if (button !== null) {
         let currentHref = button.getAttribute('data-href-base');
-        let newHref = currentHref + teacher;
+        let newHref = currentHref + teacher.replace('&#39;', "'");
         button.setAttribute('href', newHref);
     }
 
