@@ -15,7 +15,6 @@
             <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Find your classmates" id="title-logo">
             <h2 class="title is-size-1">Discover your classmates</h2>
             <h2 class="subtitle is-size-4">{{ schedule_count }} schedules entered and counting!</h2>
-            <br>
             <a class="button is-outlined is-primary is-large" href="/login">Get started</a>
         </div>
     </div>
@@ -25,11 +24,25 @@
         <h1 class="title overridden-white is-size-1">What is PreMatch?</h1>
         <p class="overridden-white is-size-4">PreMatch is a site designed for students at Andover High School, enabling
             them to find out which of their friends are in which of their classes before school starts.</p>
-        <br>
-        <br>
         <a class="button is-outlined is-primary is-large" href="/about">Learn More</a>
     </div>
 </section>
+
+<style>
+    @media screen and (max-width: 600px) {
+        .title {
+            font-size: 2rem !important;
+        }
+
+        .subtitle {
+            font-size: 1rem !important;
+        }
+
+        #title-logo {
+            max-width: 75%;
+        }
+    }
+</style>
 
 {{ importJs() }}
 
