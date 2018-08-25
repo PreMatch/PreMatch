@@ -59,6 +59,7 @@ function toggleNav() {
 }
 
 $("#nav-logo").width($("#nav-logo").innerHeight());
+$('#navbar-brand').css('min-height', $('#nav').innerHeight())
 
 $(document).ready(() => {
     if (!document.getElementById("login-message")) {
@@ -69,6 +70,9 @@ $(document).ready(() => {
         if (navOpen) {
             $("#overlay").width($(window).width() - sideBarWidth);
         }
+
+        $("#nav-logo").width($("#nav-logo").innerHeight());
+        $('#navbar-brand').css('min-height', $('#nav').innerHeight())
     });
 
     $(document).click((event) => {

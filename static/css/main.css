@@ -57,7 +57,7 @@ a.overridden-white:hover {
 }
 
 #navbar-brand {
-    min-height: 156px;
+    min-height: 100%;
     width: 100%;
 }
 
@@ -67,7 +67,7 @@ a.overridden-white:hover {
     min-height: 100%;
 }
 
-#nav-burg {
+.navbar-burger {
     display: block;
     right: 0;
     position: absolute;
@@ -78,33 +78,33 @@ a.overridden-white:hover {
     transition: 1s all ease;
 }
 
-#nav-burg span {
+.navbar-burger.is-large span {
     width: 3rem;
     height: 4px;
     left: calc(50% - 1.5rem);
 }
 
-#nav-burg span:nth-child(1) {
+.navbar-burger.is-large span:nth-child(1) {
     top: calc(50% - 14px) !important;
 }
 
-#nav-burg span:nth-child(2) {
+.navbar-burger.is-large span:nth-child(2) {
     top: calc(50% - 1px) !important;
 }
 
-#nav-burg span:nth-child(3) {
+.navbar-burger.is-large span:nth-child(3) {
     top: calc(50% + 12px) !important;
 }
 
-#nav-burg.is-active span:nth-child(1) {
+.navbar-burger.is-large.is-active span:nth-child(1) {
     top: calc(50% - 6px) !important;
 }
 
-#nav-burg.is-active span:nth-child(2) {
+.navbar-burger.is-large.is-active span:nth-child(2) {
     top: calc(50% + (1rem / 2)) !important;
 }
 
-#nav-burg.is-active span:nth-child(3) {
+.navbar-burger.is-large.is-active span:nth-child(3) {
     top: calc(50% + 4px) !important;
 }
 
@@ -197,6 +197,7 @@ div[id^="teacher-notif-"] {
     margin: 0 auto;
     max-width: 241px;
 }
+
 /*****************MAIN*****************/
 
 .pushed {
@@ -251,18 +252,18 @@ body.bg-primary {
 }
 
 .is-user {
-    background-color: #00d1b2!important;
+    background-color: #00d1b2 !important;
 }
+
 /*****************MEDIA QUERIES*****************/
-@media screen and (min-width: 1499px) {
-    .small-text {
-        font-size: 16px;
+@media screen and (max-width: 1001px) {
+    #nav {
+        min-height: 100px;
+        height: 100px;
     }
 
-}
-
-@media screen and (max-width: 501px) {
-    .small-text {
-        font-size: 16px;
+    .navbar-burger {
+        width: 90px;
+        height: 90px;
     }
 }
