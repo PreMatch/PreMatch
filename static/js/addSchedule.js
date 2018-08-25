@@ -55,6 +55,12 @@ function selectInput(period) {
     });
 }
 
+function decodeEscapes(str) {
+    return str.replace(/&#(\d+);/g, function (match, dec) {
+        return String.fromCharCode(dec);
+    });
+}
+
 function selectTeacher(period, teacher) {
     let dropdown = document.getElementById(`teacher-dropdown-${period}`);
     dropdown.style.display = "none";
@@ -64,7 +70,7 @@ function selectTeacher(period, teacher) {
     let button = document.getElementById(`view-roster-${period}`);
     if (button !== null) {
         let currentHref = button.getAttribute('data-href-base');
-        let newHref = currentHref + teacher.replace('&#39;', "'");
+        let newHref = currentHref + decodeEscapes(teacher);
         button.setAttribute('href', newHref);
     }
 
