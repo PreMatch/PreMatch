@@ -100,7 +100,7 @@ def show_user(handle):
 
     if not database.handle_exists(handle):
         if logged_handle() == handle:
-            flash('You need to enter your schedule first')
+            flash('You need to enter your schedule first', 'error')
             return redirect('/update')
 
         return render_template('profile_not_found.html', bad_handle=handle)
@@ -108,6 +108,25 @@ def show_user(handle):
     schedule = database.user_schedule(handle)
     name = database.user_name(handle)
     return render_template('user.html', schedule=schedule, name=name, handle=handle, teachers=teachers)
+
+
+@app.route('/dashboard/<handle>')
+def show_dashboard(handle):
+    user_handle = logged_handle()
+    if user_handle is None:
+        return error_not_logged_in()
+
+    if not database.handle_exists(handle):
+        flash(f'The schedule for {handle} cannot be found', 'error')
+        return redirect('/update')
+
+    schedule = database.user_schedule(handle)
+    name = database.user_name(handle)
+    rosters = {}
+    for period in PERIODS:
+        rosters[period] = database.class_roster(period, schedule[period])
+
+    return render_template('dashboard.html', handle=handle, name=name, schedule=schedule, rosters=rosters)
 
 
 @app.route('/update', methods=['GET', 'POST'])

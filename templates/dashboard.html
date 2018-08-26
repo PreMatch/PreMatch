@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard for {{ name }}</title>
+</head>
+<body>
+<h1>Dashboard for {{ name }}</h1>
+<i>{{ handle }}</i>
+
+{% for period in 'ABCDEFG' %}
+    <hr>
+    <h2>{{ schedule[period] }}</h2>
+    <h3>Block {{ period }}, {{ rosters[period]|length }} students</h3>
+    {% for name, roster_handle in rosters[period] %}
+        <div>{{ name }} ({{ roster_handle }})</div>
+    {% endfor %}
+{% endfor %}
+
+</body>
+</html>
