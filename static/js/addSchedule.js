@@ -43,9 +43,10 @@ function filterTeachers(period) {
 }
 
 function selectInput(period) {
-    $("#form").children().each((index) => {
-        if (document.getElementById('form').children[index].tagName === "DIV") {
-            let contentDiv = document.getElementById('form').children[index].children[0];
+    let form = document.getElementById('form');
+    $(form).children().each((index) => {
+        if (form.children[index].tagName === "DIV") {
+            let contentDiv = form.children[index].children[0];
             if (!contentDiv.id.endsWith(period)) {
                 contentDiv.getElementsByTagName('div')[0].style.display = "None";
                 let container = document.getElementById(`dropdown-container-${contentDiv.id.slice(-1)}`);
@@ -81,13 +82,13 @@ function selectTeacher(period, teacher) {
 
     document.getElementById(`input-invis-${period}`).value = teacher;
 
+    let dropdownContainer = document.getElementById(`dropdown-container-${period}`);
+
     if (originalMargin !== 0) {
-        $(document.getElementById(`dropdown-container-${period}`)).css('margin-top', originalMargin);
-        $(document.getElementById(`dropdown-container-${period}`)).css('margin-bottom', originalMargin);
+        $(dropdownContainer).css('margin', `${originalMargin}px 0`);
     } else {
         originalMargin = 45;
-        $(document.getElementById(`dropdown-container-${period}`)).css('margin-top', originalMargin);
-        $(document.getElementById(`dropdown-container-${period}`)).css('margin-bottom', originalMargin);
+        $(dropdownContainer).css('margin', `${originalMargin}px 0`);
     }
 }
 
