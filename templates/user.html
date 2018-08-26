@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 
 {{ head('Schedule of ' + name, True) }}
 <body id="body" class="bg-primary">
@@ -28,25 +28,86 @@
             <th>Roster</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="table-body">
         {% for period in 'ABCDEFG' %}
-            <tr>
-                <td>{{ period }}</td>
-                <td>{{ schedule[period] }}</td>
-            <td>
-                <a class="button is-link is-outlined is-primary is-medium overridden-white" href="/roster/{{ period }}/{{ schedule[period] }}">View Roster</a>
+        <tr id="class-row-{{ period }}">
+            <td>{{ period }}</td>
+            <td>{{ schedule[period] }}</td>
+            <td id="roster-data-{{ period }}">
+                <a class="button is-link is-outlined is-primary is-medium overridden-white"
+                   href="/roster/{{ period }}/{{ schedule[period] }}">View Roster</a>
             </td>
-            </tr>
+        </tr>
         {% endfor %}
         </tbody>
     </table>
 </section>
 
+<style>
+    @media screen and (max-width: 760px) {
+        .title {
+            font-size: 2rem !important;
+        }
+
+        .subtitle {
+            font-size: 1rem !important;
+        }
+    }
+
+    @media screen and (max-width: 700px) {
+        tr {
+            font-size: 20px;
+        }
+
+        tr td a {
+            font-size: 0.75rem !important;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        .title {
+            font-size: 1.5rem !important;
+        }
+
+        .subtitle {
+            font-size: 0.75rem !important;
+        }
+    }
+
+    @media screen and (max-width: 560px) {
+        tr {
+            font-size: 16px;
+        }
+    }
+
+    @media screen and (max-width: 450px) {
+        tr {
+            font-size: 14px;
+        }
+    }
+</style>
 <script type="text/javascript">
-    $(document).ready(() => {
-        $("#body").css("padding-top", $("#nav").innerHeight());
+    $(window).resize(() => {
+        let periodsArray = 'ABCDEFG'.split('');
+
+        if ($(window).width() <= 480) {
+            $('#table-body').children().each((index) => {
+                let period = periodsArray[index];
+                let lastTD = document.getElementById(`roster-data-${period}`);
+                let button = lastTD.getElementsByTagName('a')[0];
+                button.innerHTML = "Roster"
+            });
+        } else {
+            $('#table-body').children('tr').each((index) => {
+                let period = periodsArray[index];
+                let lastTD = document.getElementById(`roster-data-${period}`);
+                let button = lastTD.getElementsByTagName('a')[0];
+                button.innerHTML = "View Roster"
+            });
+        }
     });
 </script>
+{{  bodyPaddingNav() }}
 {{ importJs() }}
 
 </body>

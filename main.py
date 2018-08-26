@@ -70,7 +70,7 @@ def do_login():
         handle, name = validate_token_for_info(request.form['id_token'])
         log_in(handle)
 
-        flash('Logged in successfully as ' + name)
+        flash('Successfully logged in as ' + name)
         default = '/update'
 
         if not database.handle_exists(handle):

@@ -1,33 +1,41 @@
 let navOpen = false;
 const sideBarWidth = 250;
 
+let sidenav = $("#sidenav");
+let overlay = $("#overlay");
+let nav = $('#nav');
+let navLogo = $("#nav-logo");
+let navBrand = $('#navbar-brand');
+let burger = $("#nav-burg");
+
 function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 function openNav() {
-    $("#sidenav").width(sideBarWidth);
+    sidenav.width(sideBarWidth);
 
     let pushed = document.getElementsByClassName("pushed");
 
     if ($(window).width() > 510) {
         Array.prototype.forEach.call(pushed, (element) => {
-            element.style.marginRight = `${sideBarWidth}px`
+            element.style.marginRight = `${sideBarWidth}px`;
         });
     }
 
-    $("#overlay").width($(window).width() - sideBarWidth);
+    overlay.width($(window).width() - sideBarWidth);
 
-    $(".navbar-burger:first").addClass("is-active overridden-white");
+    burger.addClass("is-active overridden-white");
     if ($("#body").hasClass("bg-primary")) {
-        $(".navbar-burger:first").css("cssText", "color: #03A9F4 !important;")
+        burger.css("cssText", "color: #03A9F4 !important;");
+        burger.css("cssText", "color: #03A9F4 !important;");
     }
     sleep(1000);
     navOpen = true;
 }
 
 function closeNav() {
-    $("#sidenav").width(0);
+    sidenav.width(0);
     let pushed = document.getElementsByClassName("pushed");
 
     if ($(window).width() > 510) {
@@ -36,15 +44,15 @@ function closeNav() {
         });
     }
 
-    $("#overlay").width(0);
+    overlay.width(0);
 
 
-    $(".navbar-burger:first").removeClass("is-active overridden-white");
+    burger.removeClass("is-active overridden-white");
 
     if ($("#body").hasClass("bg-primary")) {
-        $("#nav-burg").css("cssText", "color: white !important;");
+        burger.css("cssText", "color: white !important;");
     } else {
-        $("#nav-burg").css("cssText", "");
+        burger.css("cssText", "");
     }
     sleep(1000);
     navOpen = false;
@@ -58,24 +66,36 @@ function toggleNav() {
     }
 }
 
-$("#nav-logo").width($("#nav-logo").innerHeight());
-$('#navbar-brand').css('min-height', $('#nav').innerHeight());
+navLogo.width(navLogo.innerHeight());
+navBrand.css('min-height', nav.innerHeight());
 
 $(document).ready(() => {
-    $("#nav-logo").width($("#nav-logo").innerHeight());
-    $('#navbar-brand').css('min-height', $('#nav').innerHeight());
+    navLogo.width(navLogo.innerHeight());
+    navBrand.css('min-height', nav.innerHeight());
 
-    if (!document.getElementById("login-message")) {
-        $("#sidenav").css("padding-top", $("#nav").innerHeight());
+    let flash = document.getElementById("flashes");
+
+    if (!flash) {
+        sidenav.css("padding-top", nav.innerHeight());
+    } else {
+        sidenav.css("padding-top", $(flash).innerHeight() + nav.innerHeight());
     }
 
     $(window).resize(() => {
         if (navOpen) {
-            $("#overlay").width($(window).width() - sideBarWidth);
+            overlay.addClass('notransition'); // Disable transitions
+            overlay.width($(window).width() - sideBarWidth);
+            overlay[0].offsetHeight; // Trigger a reflow, flushing the CSS changes
+            overlay.removeClass('notransition'); // Re-enable transitions
         }
 
-        $("#nav-logo").width($("#nav-logo").innerHeight());
-        $('#navbar-brand').css('min-height', $('#nav').innerHeight())
+        navLogo.width(navLogo.innerHeight());
+        navBrand.css('min-height', nav.innerHeight());
+        if (flash) {
+            sidenav.css("padding-top", $(flash).innerHeight() + nav.innerHeight());
+        } else {
+            sidenav.css("padding-top", nav.innerHeight());
+        }
     });
 
     $(document).click((event) => {
@@ -85,10 +105,10 @@ $(document).ready(() => {
     });
 
     if ($("#body").hasClass("bg-primary")) {
-        $("#sidenav").css("background-color", "white");
-        $("#nav-burg").css("cssText", "color: white !important;");
+        sidenav.css("background-color", "white");
+        burger.css("cssText", "color: white !important;");
 
-        $("#sidenav").children('a').each((_, domChild) => {
+        sidenav.children('a').each((_, domChild) => {
             const child = $(domChild);
 
             if (child.hasClass('sidenav-active')) {

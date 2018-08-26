@@ -1,21 +1,28 @@
+let flash = $("#flashes");
+let nav = $("#nav");
+let body = $("#body");
+let sidenav = $("#sidenav");
+
 function isScrolledIntoView(elm) {
-  var rect = elm.getBoundingClientRect();
-  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
-  return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
+    let rect = elm.getBoundingClientRect();
+    let viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+    return !(rect.bottom < 0 || rect.top - viewHeight >= 0);
 }
 
 $(document).ready(() => {
     if (document.getElementById("flashes")) {
-        let flashes = $("#flashes");
+        let flashes = flash;
         let msgHeight = flashes.innerHeight();
-        document.getElementById("nav").style.top = `${msgHeight}px`;
-        $("#body").css("padding-top", "0");
-        flashes.css("margin-bottom", $("#nav").innerHeight());
-        document.getElementById("sidenav").style.paddingTop = `${msgHeight + $("#nav").innerHeight()}px`;
+        let navHeight = nav.innerHeight();
+        nav.css('top', msgHeight);
+        body.css("padding-top", "0");
+        flashes.css("margin-bottom", navHeight);
+        sidenav.css('paddingTop', msgHeight + navHeight);
         flashes.css('display', 'block');
         $(window).scroll(() => {
-            if(document.getElementById("flashes")) {
-                if (!isScrolledIntoView(document.getElementById("flashes"))) {
+            let flashDOM = document.getElementById("flashes");
+            if (flashDOM) {
+                if (!isScrolledIntoView(flashDOM)) {
                     closeFlash();
                 }
             }
@@ -25,12 +32,12 @@ $(document).ready(() => {
 });
 
 function closeFlash() {
-    $("#flashes").remove();
-    document.getElementById("nav").style.top = "0";
-    let navHeight = $("#nav").innerHeight();
-    $("#body").css("padding-top", navHeight);
-    document.getElementById("sidenav").style.paddingTop = `${navHeight}px`;
+    let navHeight = nav.innerHeight();
+    flash.remove();
+    nav.css('top', 0);
+    body.css("padding-top", navHeight);
+    sidenav.css('paddingTop', navHeight);
     $(window).resize(() => {
-        $("#body").css("padding-top", $("#nav").innerHeight());
+        body.css("padding-top", navHeight);
     });
 }

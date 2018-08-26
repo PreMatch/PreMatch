@@ -255,6 +255,13 @@ body.bg-primary {
     background-color: #00d1b2 !important;
 }
 
+.notransition {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+}
+
 /*****************MEDIA QUERIES*****************/
 @media screen and (min-width: 1600px) {
     .small-text {
@@ -274,9 +281,19 @@ body.bg-primary {
     }
 }
 
+@media screen and (max-width: 400px) {
+    #flashes {
+        font-size: 12px;
+    }
+}
+
 @media screen and (max-width: 340px) {
     input[id^="teacherInput"] {
         max-width: 80%;
         font-size: 12px;
+    }
+
+    .link-holder {
+        max-width: 80%;
     }
 }
