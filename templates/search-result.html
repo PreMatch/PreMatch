@@ -8,15 +8,15 @@
 {{ nav(True, "/search", handle) }}
 {{ bodyPaddingNav() }}
 
-<section class="hero is-primary" style="margin-bottom: 10px;">
+<section class="hero pushed is-primary" style="margin-bottom: 10px;">
     <div class="hero-body">
         <form method="GET" action="/search">
-            <div class="columns">
+            <div class="columns is-tablet">
                 <div class="column">
                     <input type="text" class="input is-large" name="query" id="query" value="{{ query }}"
                            placeholder="Search name or handle..." required>
                 </div>
-                <div class="column is-one-fifth">
+                <div class="column is-one-quarter">
                     <input type="submit" class="button is-large is-outlined is-primary is-fullwidth"
                            style="transition: 0.5s all ease;" value="Search Again">
                 </div>
@@ -26,24 +26,54 @@
 </section>
 
 {% if results|length == 0 %}
-<section class="section has-background-white">
-    <div class="has-text-centered">
-        <p class="title">No results were found for "{{ query }}"</p>
-    </div>
-</section>
+    <section class="section pushed has-background-white">
+        <div class="has-text-centered">
+            <p class="title">No results were found for "{{ query }}"</p>
+        </div>
+    </section>
 {% else %}
-{% for row in results %}
-<section class="section has-background-white {{ 'is-user' if handle == row['handle'] }}" style="margin-bottom: 2px;">
-    <div class="container">
-        <a class="button {{ 'is-outlined' if handle != row['handle'] }} is-primary is-large is-pulled-right"
-           href="/user/{{ row['handle'] }}">View
-            Schedule</a>
-        <h1 class="title {{ 'overridden-white' if handle == row['handle'] }}">{{ row['name'] }}</h1>
-        <h2 class="subtitle {{ 'overridden-white' if handle == row['handle'] }}">{{ row['handle'] }}</h2>
-    </div>
-</section>
-{% endfor %}
+    {% for row in results %}
+        <section class="section pushed has-background-white {{ 'is-user' if handle == row['handle'] }}"
+                 style="margin-bottom: 4px;">
+            <div class="container">
+                <div class="columns is-tablet">
+                    <div class="column">
+                        <h1 class="title {{ 'overridden-white' if handle == row['handle'] }}">{{ row['name'] }}</h1>
+                        <h2 class="subtitle {{ 'overridden-white' if handle == row['handle'] }}">{{ row['handle'] }}</h2>
+                    </div>
+                    <div class="column is-one-fourth">
+                        <a class="button {{ 'is-outlined' if handle != row['handle'] }} is-primary is-large is-pulled-right"
+                           href="/user/{{ row['handle'] }}">View Schedule</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endfor %}
 {% endif %}
+
+<style>
+    @media screen and (max-width: 768px) {
+        .columns {
+            flex-direction: column;
+        }
+
+        .column {
+            text-align: center;
+        }
+
+        .button {
+            display: flex;
+            width: 100%;
+            float: none!important;
+        }
+    }
+
+    @media screen and (max-width: 380px) {
+        input {
+            font-size: 18px !important;
+        }
+    }
+</style>
 
 {{ importJs() }}
 

@@ -12,10 +12,10 @@
     <div class="container is-fluid has-text-centered">
         <div id="login-box" class="box">
             <h1 class="title is-1">Search PreMatch</h1>
-            <h2 class="subtitle is-4">You may search using name or email handle (like jsmith2020)</h2>
+            <h2 class="subtitle is-4">You may search using name or email handle (like jdoe2010)</h2>
 
             <form method="GET" action="/search">
-                <div class="columns">
+                <div class="columns is-tablet">
                     <div class="column">
                         <input class="input is-large" type="text" placeholder="Name or handle here..." name="query"
                                required>
@@ -29,6 +29,20 @@
         </div>
     </div>
 </section>
+
+<style>
+    @media screen and (max-width: 768px){
+        .columns {
+            flex-direction: column;
+        }
+    }
+
+    @media screen and (max-width: 380px){
+        input {
+            font-size: 18px!important;
+        }
+    }
+</style>
 
 {{ importJs() }}
 
