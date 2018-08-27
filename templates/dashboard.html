@@ -1,24 +1,69 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Dashboard for {{ name }}</title>
-</head>
-<body>
-<h1>Dashboard for {{ name }}</h1>
-<i>{{ handle }}</i>
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 
-{% for period in 'ABCDEFG' %}
-    <hr>
-    <h2>{{ schedule[period] }}</h2>
-    <h3>Block {{ period }}, {{ rosters[period]|length }} students</h3>
-    {% for name, roster_handle in rosters[period] %}
-        <div>{{ name }} ({{ roster_handle }})</div>
-    {% endfor %}
-{% endfor %}
+{{ head('Dashboard for ' + name, True) }}
+<body id="body" class="bg-primary">
+
+{{ nav(True, "/dashboard", handle) }}
+{{ bodyPaddingNav() }}
+
+{% macro rosterCard(period) %}
+    <div class="card roster-card">
+        <header class="card-header">
+
+            <p class="card-header-title is-size-3">Block {{ period }} with {{ schedule[period] }}</p>
+            <a href="/roster/{{ period }}/{{ schedule[period]|safe }}" class="card-header-icon"
+               aria-label="more options">
+                <span class="icon">
+        <i class="fas fa-list" aria-hidden="true"></i>
+      </span>
+            </a>
+        </header>
+        <div class="card-content">
+            <table class="table is-fullwidth">
+                {% for name, roster_handle in rosters[period] %}
+                <tr>
+                    <td>{{ name }}</td>
+                    <td>{{ roster_handle }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endmacro %}
+
+<section class="hero is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="is-size-2 overridden-white title">Dashboard for {{ name }}</h1>
+            <h2 class="is-size-4 overridden-white subtitle">{{ handle }}</h2>
+        </div>
+    </div>
+</section>
+<div class="columns is-gapless is-desktop is-block-mobile">
+    <div class="column is-half-tablet is-one-third-desktop">
+        {{ rosterCard('A') }}
+        {{ rosterCard('B') }}
+        {{ rosterCard('C') }}
+    </div>
+    <div class="column is-half-tablet is-one-third-desktop">
+        {{ rosterCard('D') }}
+        {{ rosterCard('E') }}
+        {{ rosterCard('F') }}
+    </div>
+    <div class="column is-one-third-desktop">
+        {{ rosterCard('G') }}
+    </div>
+</div>
+
+{{ importJs() }}
+
+<style>
+    .roster-card {
+        margin: 1rem;
+    }
+</style>
 
 </body>
 </html>
