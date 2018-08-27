@@ -10,30 +10,36 @@
 
 {% macro rosterCard(period) %}
     <div class="card roster-card">
-        <header class="card-header">
-
-            <p class="card-header-title is-size-3">Block {{ period }} with {{ schedule[period] }}</p>
+        <header class="card-header" style="flex-direction: column; padding: 0.5rem;">
+            <h1 class="card-header-title is-size-3">{{ schedule[period] }}</h1>
+            <h1 class="card-header-title is-size-5 card-header-subtitle">Block {{ period }}
+                | {{ rosters[period]|length - 1 }} other student{{ 's' if rosters[period]|length - 1 != 1 }}</h1>
             <a href="/roster/{{ period }}/{{ schedule[period]|safe }}" class="card-header-icon"
-               aria-label="more options">
-                <span class="icon">
-        <i class="fas fa-list" aria-hidden="true"></i>
-      </span>
-            </a>
+               aria-label="more options" style="display: block; position:absolute; top: 0; right: 0;"
+               title="Visit {{ schedule[period] }}, Block {{ period }}'s roster page"><span
+                    class="icon is-large"><i class="fas fa-2x fa-list"
+                                             aria-hidden="true"></i></span></a>
         </header>
         <div class="card-content">
             <table class="table is-fullwidth">
-                {% for name, roster_handle in rosters[period] %}
-                <tr>
-                    <td>{{ name }}</td>
-                    <td>{{ roster_handle }}</td>
-                </tr>
+                {% for name, roster_handle in rosters[period] if roster_handle != handle %}
+                    {% if loop.index <= 10 %}
+                        <tr>
+                            <td>{{ name }}</td>
+                            <td>{{ roster_handle }}</td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </table>
+            <br>
+            <br>
+            <a class="button is-outlined is-primary is-fullwidth is-medium view-button"
+               href="#">View{{ ' Full' if rosters[period]|length > 10 }} Class</a>
         </div>
     </div>
 {% endmacro %}
 
-<section class="hero is-primary">
+<section class="hero is-primary pushed">
     <div class="hero-body">
         <div class="container">
             <h1 class="is-size-2 overridden-white title">Dashboard for {{ name }}</h1>
@@ -41,27 +47,61 @@
         </div>
     </div>
 </section>
-<div class="columns is-gapless is-desktop is-block-mobile">
-    <div class="column is-half-tablet is-one-third-desktop">
-        {{ rosterCard('A') }}
-        {{ rosterCard('B') }}
-        {{ rosterCard('C') }}
+<section class="pushed" style="margin: 0 10%;">
+    <div class="roster-container">
+        <div class="roster-row">
+            {{ rosterCard('A') }}
+            {{ rosterCard('B') }}
+            {{ rosterCard('C') }}
+        </div>
+        <div class="roster-row">
+            {{ rosterCard('D') }}
+            {{ rosterCard('E') }}
+            {{ rosterCard('F') }}
+        </div>
+        <div class="roster-row">
+            {{ rosterCard('G') }}
+        </div>
     </div>
-    <div class="column is-half-tablet is-one-third-desktop">
-        {{ rosterCard('D') }}
-        {{ rosterCard('E') }}
-        {{ rosterCard('F') }}
-    </div>
-    <div class="column is-one-third-desktop">
-        {{ rosterCard('G') }}
-    </div>
-</div>
+</section>
 
 {{ importJs() }}
 
 <style>
     .roster-card {
-        margin: 1rem;
+        flex: 4;
+        display: flex;
+        flex-flow: column wrap;
+        margin: 20px;
+    }
+
+    .card-header-title {
+        padding: 0 0.75rem;
+    }
+
+    .card-header-subtitle {
+        font-weight: normal;
+        color: #009688 !important;
+    }
+
+    .roster-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .roster-row {
+        flex: 5;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .view-button {
+        position: absolute;
+        width: calc(100% - 3rem) !important;
+        bottom: 1.5rem;
+        left: 1.5rem;
+        right: 1.5rem;
     }
 </style>
 

@@ -1,7 +1,7 @@
 let flash = $("#flashes");
-let nav = $("#nav");
+let navigation = $("#nav");
 let body = $("#body");
-let sidenav = $("#sidenav");
+let sideNavigation = $("#sidenav");
 
 function isScrolledIntoView(elm) {
     let rect = elm.getBoundingClientRect();
@@ -13,11 +13,11 @@ $(document).ready(() => {
     if (document.getElementById("flashes")) {
         let flashes = flash;
         let msgHeight = flashes.innerHeight();
-        let navHeight = nav.innerHeight();
-        nav.css('top', msgHeight);
+        let navHeight = navigation.innerHeight();
+        navigation.css('top', msgHeight);
         body.css("padding-top", "0");
         flashes.css("margin-bottom", navHeight);
-        sidenav.css('paddingTop', msgHeight + navHeight);
+        sideNavigation.css('paddingTop', msgHeight + navHeight);
         flashes.css('display', 'block');
         $(window).scroll(() => {
             let flashDOM = document.getElementById("flashes");
@@ -32,11 +32,11 @@ $(document).ready(() => {
 });
 
 function closeFlash() {
-    let navHeight = nav.innerHeight();
+    let navHeight = navigation.innerHeight();
     flash.remove();
-    nav.css('top', 0);
+    navigation.css('top', 0);
     body.css("padding-top", navHeight);
-    sidenav.css('paddingTop', navHeight);
+    sideNavigation.css('paddingTop', navHeight);
     $(window).resize(() => {
         body.css("padding-top", navHeight);
     });
