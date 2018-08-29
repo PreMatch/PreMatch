@@ -1,0 +1,39 @@
+.roster-card {
+    flex: 4;
+    display: flex;
+    flex-flow: column wrap;
+    margin: 20px;
+}
+
+.card-header-title {
+    padding: 0 0.75rem;
+}
+
+.card-header-subtitle {
+    font-weight: normal;
+    color: #009688 !important;
+}
+
+.roster-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.roster-row {
+    flex: 5;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.view-button {
+    position: absolute;
+    width: calc(100% - 3rem) !important;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+}
+
+.table {
+    margin-bottom: 44px!important;
+}
