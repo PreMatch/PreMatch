@@ -35,6 +35,11 @@ def render_login_optional(template, **kwargs):
     return render_template(template, logged_in=logged_handle() is not None, handle=logged_handle(), **kwargs)
 
 
+def error_no_own_schedule():
+    flash('You need to enter your schedule first')
+    return redirect('/update')
+
+
 app = Flask(__name__)
 set_secret_key(app)
 
@@ -93,6 +98,18 @@ def do_logout():
     return redirect('/')
 
 
+@app.route('/user')
+def show_own_user():
+    handle = logged_handle()
+
+    if logged_handle() is None:
+        return error_not_logged_in()
+    if not database.handle_exists(handle):
+        return error_no_own_schedule()
+
+    return show_user(handle)
+
+
 @app.route('/user/<handle>', methods=['GET'])
 def show_user(handle):
     if logged_handle() is None:
@@ -100,14 +117,25 @@ def show_user(handle):
 
     if not database.handle_exists(handle):
         if logged_handle() == handle:
-            flash('You need to enter your schedule first', 'error')
-            return redirect('/update')
+            return error_no_own_schedule()
 
         return render_template('profile_not_found.html', bad_handle=handle)
 
     schedule = database.user_schedule(handle)
     name = database.user_name(handle)
     return render_template('user.html', schedule=schedule, name=name, handle=handle, teachers=teachers)
+
+
+@app.route('/dashboard')
+def show_own_dashboard():
+    handle = logged_handle()
+
+    if handle is None:
+        return error_not_logged_in()
+    if not database.handle_exists(handle):
+        return error_no_own_schedule()
+
+    return show_dashboard(handle)
 
 
 @app.route('/dashboard/<handle>')
@@ -117,11 +145,10 @@ def show_dashboard(handle):
         return error_not_logged_in()
 
     if not database.handle_exists(handle):
-        flash(f'The schedule for {handle} cannot be found', 'error')
-        return redirect('/update')
+        return render_template('profile_not_found.html', bad_handle=handle)
 
-    schedule = database.user_schedule(handle)
-    name = database.user_name(handle)
+    schedule = database.get_row_from_handle(handle)
+    name = schedule['name']
     rosters = {}
     for period in PERIODS:
         rosters[period] = database.class_roster(period, schedule[period])
@@ -207,14 +234,6 @@ def do_search():
 
     results = database.search_user(query.strip())
     return render_template('search-result.html', query=query, results=results, handle=logged_handle())
-
-
-# Reserved for SQL
-# @app.teardown_appcontext
-# def close_connection(_):
-#    db = getattr(g, '_database', None)
-#    if db is not None:
-#        db.close()
 
 
 if __name__ == "__main__":
