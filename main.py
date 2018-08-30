@@ -64,7 +64,7 @@ def do_login():
     if request.method == 'GET':
         if logged_handle() is not None:
             flash('You are already logged in')
-            return redirect(request.args.get('redirect', '/update'))
+            return redirect(request.args.get('redirect', '/dashboard'))
         return render_template('login.html', redirect=request.args.get('redirect', ''))
 
     # expected form argument: id_token, redirect (optional)
@@ -76,10 +76,11 @@ def do_login():
         log_in(handle)
 
         flash('Successfully logged in as ' + name)
-        default = '/update'
+        default = '/dashboard'
 
         if not database.handle_exists(handle):
             session['name'] = name
+            default = '/update'
 
         if missing_form_field('redirect'):
             return redirect(default)
@@ -177,9 +178,9 @@ def do_update():
                                teachers=teachers)
     else:
         # Redirect path reading from args
-        redirect_path = request.args.get('from', '/update')
+        redirect_path = request.args.get('from', '/dashboard')
         if empty(redirect_path):
-            redirect_path = '/update'
+            redirect_path = '/dashboard'
 
         if any(map(missing_form_field, PERIODS)):
             return error(400, 'One or more periods missing')
@@ -218,7 +219,7 @@ def show_roster(period, teacher):
     roster = database.class_roster(period, teacher)
     if len(roster) == 0:
         flash('That class is either empty or nonexistent', 'error')
-        return redirect('/update')
+        return redirect('/')
 
     return render_template('roster.html', period=period, teacher=teacher, roster=roster, handle=logged_handle())
 
