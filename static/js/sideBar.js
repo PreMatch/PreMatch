@@ -19,6 +19,7 @@ function openNav() {
 
     if ($(window).width() > 510) {
         Array.prototype.forEach.call(pushed, (element) => {
+            element.setAttribute('data-initial-margin-right', element.style.marginRight);
             element.style.marginRight = `${sideBarWidth}px`;
         });
     }
@@ -40,7 +41,7 @@ function closeNav() {
 
     if ($(window).width() > 510) {
         Array.prototype.forEach.call(pushed, (element) => {
-            element.style.marginRight = "0"
+            element.style.marginRight = element.getAttribute('data-initial-margin-right');
         });
     }
 

@@ -53,7 +53,7 @@ a[id^="roster-btn-"] {
 }
 
 .table {
-    margin-bottom: 44px !important;
+    margin-bottom: 40px !important;
 }
 
 #nav {
@@ -80,7 +80,6 @@ tr td {
 }
 
 .handle {
-    border-bottom: 1px solid #dbdbdb !important;
     margin-top: -1rem;
 }
 

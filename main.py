@@ -154,7 +154,11 @@ def show_dashboard(handle):
     for period in PERIODS:
         rosters[period] = database.class_roster(period, schedule[period])
 
-    return render_template('dashboard.html', handle=handle, name=name, schedule=schedule, rosters=rosters)
+    most_common, hit_rate = database.most_common_classmates(handle)
+
+    return render_template('dashboard.html',
+                           handle=handle, name=name, schedule=schedule, rosters=rosters,
+                           common_users=most_common, common_rate=hit_rate)
 
 
 @app.route('/update', methods=['GET', 'POST'])

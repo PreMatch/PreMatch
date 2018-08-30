@@ -19,8 +19,8 @@
             <a href="/roster/{{ period }}/{{ schedule[period]|safe }}" class="card-header-icon"
                aria-label="more options" style="display: block; position:absolute; top: 0; right: 0;"
                title="Visit {{ schedule[period] }}, Block {{ period }}'s roster page"><span
-                    class="icon is-large"><i class="fas fa-2x fa-list"
-                                             aria-hidden="true"></i></span></a>
+                    class="icon is-large-desktop is-medium-touch"><i class="fas fa-2x fa-list"
+                                                                     aria-hidden="true"></i></span></a>
         </header>
         <div class="card-content" id="card-{{ period }}">
             <div class="table-container" id="table-container-{{ period }}">
@@ -28,7 +28,7 @@
                     {% for name, roster_handle in rosters[period] if roster_handle != handle %}
                         <tr style="{{ 'display: none;' if loop.index > 10 }}">
                             <td class="name">{{ name }}</td>
-                            <td class="handle">{{ roster_handle }}</td>
+                            <td class="handle is-size-7">{{ roster_handle }}</td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -91,6 +91,24 @@
         </div>
         <div class="roster-row" id="row-3">
             {{ rosterCard('G') }}
+            <div class="stat-container roster-card">
+                <div class="card" id="stat-common">
+                    <header class="card-header">
+                        <h2 class="card-header-title is-size-4-desktop is-size-5-tablet is-size-6-mobile">You share the
+                            most ({{ common_rate }}) classes with</h2>
+                    </header>
+                    <div class="card-content">
+                        <table class="table is-fullwidth student-list">
+                            {% for entry in common_users %}
+                                <tr>
+                                    <td class="name">{{ entry['name'] }}</td>
+                                    <td class="handle is-size-7">{{ entry['handle'] }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

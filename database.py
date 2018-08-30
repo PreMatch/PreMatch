@@ -89,7 +89,7 @@ def search_user(search_query):
                        search_query.lower() in user['name'].lower() or search_query.lower() in user['handle'], users))
 
 
-def common_classmates(handle):
+def most_common_classmates(handle):
     frequency = {}
     max_hit_rate = 0
     max_users = []
@@ -116,4 +116,4 @@ def common_classmates(handle):
     if max_hit_rate < 2:
         return None
 
-    return list(map(lambda i: i['name'], max_users)), max_hit_rate
+    return list(max_users), max_hit_rate
