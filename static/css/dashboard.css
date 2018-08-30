@@ -3,6 +3,16 @@
     display: flex;
     flex-flow: column wrap;
     margin: 20px;
+    transition: 1s all ease;
+}
+
+.table-container {
+    overflow-y: hidden;
+    transition: 1s all ease;
+}
+
+.card-header {
+    padding-right: 3rem !important;
 }
 
 .card-header-title {
@@ -34,6 +44,88 @@
     right: 1.5rem;
 }
 
+a[id^="roster-btn-"] {
+    position: absolute;
+    width: calc(100% - 7rem) !important;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 4rem;
+}
+
 .table {
-    margin-bottom: 44px!important;
+    margin-bottom: 44px !important;
+}
+
+#nav {
+    z-index: 20 !important;
+}
+
+tr {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 18px;
+    color: #03A9F4;
+    font-weight: bold;
+}
+
+tr td {
+    flex: 1;
+    text-align: center;
+    color: #009688;
+    border: none !important;
+    font-size: 16px;
+}
+
+.handle {
+    border-bottom: 1px solid #dbdbdb !important;
+    margin-top: -1rem;
+}
+
+@media screen and (max-width: 1399px) {
+    .roster-row {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .is-size-2 {
+        font-size: 1.5rem !important;
+    }
+
+    .is-size-3 {
+        font-size: 1.25rem !important;
+    }
+
+    .is-size-4 {
+        font-size: 1rem !important;
+    }
+
+    .is-size-5 {
+        font-size: 0.75rem !important;
+    }
+
+    .card-header {
+        padding: 0.125rem !important;
+        padding-right: 3rem !important;
+    }
+
+    .card-content {
+        padding: 0.05rem !important;
+    }
+
+    .button.is-medium {
+        font-size: 14px !important;
+    }
+
+    .name {
+        font-size: 14px;
+    }
+
+    tr td {
+        font-size: 12px;
+    }
+
 }
