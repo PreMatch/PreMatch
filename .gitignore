@@ -4,3 +4,4 @@ __pycache__/
 users.db
 .idea/*
 venv/*
+PreMatch-*.json
