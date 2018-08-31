@@ -94,11 +94,10 @@
             <div class="stat-container roster-card">
                 <div class="card" id="stat-common">
                     <header class="card-header">
-                        <h2 class="card-header-title is-size-4-desktop is-size-5-tablet is-size-6-mobile">You share the
-                            most ({{ common_rate }}) classes with</h2>
+                        <h2 class="card-header-title is-size-4-desktop is-size-5-tablet is-size-6-mobile">Most common classmates ({{ common_rate }} classes together): </h2>
                     </header>
                     <div class="card-content">
-                        <table class="table is-fullwidth student-list">
+                        <table class="table is-fullwidth student-list" style="margin-bottom: 0!important;">
                             {% for entry in common_users %}
                                 <tr>
                                     <td class="name">{{ entry['name'] }}</td>

@@ -7,6 +7,7 @@ let nav = $('#nav');
 let navLogo = $("#nav-logo");
 let navBrand = $('#navbar-brand');
 let burger = $("#nav-burg");
+let sideBurger = $('#nav-burg-sidenav');
 
 function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
@@ -26,10 +27,12 @@ function openNav() {
 
     overlay.width($(window).width() - sideBarWidth);
 
+    sideBurger.addClass("is-active overridden-white");
     burger.addClass("is-active overridden-white");
+    burger.hide();
     if ($("#body").hasClass("bg-primary")) {
         burger.css("cssText", "color: #03A9F4 !important;");
-        burger.css("cssText", "color: #03A9F4 !important;");
+        sideBurger.css("cssText", "color: #03A9F4 !important;");
     }
     sleep(1000);
     navOpen = true;
@@ -47,13 +50,17 @@ function closeNav() {
 
     overlay.width(0);
 
-
+    sideBurger.removeClass("is-active overridden-white");
     burger.removeClass("is-active overridden-white");
+    sideBurger.hide();
+    burger.show();
 
     if ($("#body").hasClass("bg-primary")) {
         burger.css("cssText", "color: white !important;");
+        sideBurger.css("cssText", "color: white !important;");
     } else {
         burger.css("cssText", "");
+        sideBurger.css("cssText", "");
     }
     sleep(1000);
     navOpen = false;
@@ -97,6 +104,7 @@ $(document).ready(() => {
         } else {
             sidenav.css("padding-top", nav.innerHeight());
         }
+
     });
 
     $(document).click((event) => {

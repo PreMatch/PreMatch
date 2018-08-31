@@ -31,18 +31,121 @@
         </thead>
         <tbody>
         {% for name, rhandle in roster %}
-        <tr class="{{ 'is-selected' if handle == rhandle }}">
-            <td>{{ name }}</td>
-            <td>{{ rhandle }}</td>
-            <td>
-                <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-medium" href="/user/{{ rhandle }}">View Schedule</a>
-            </td>
-        </tr>
+            <tr class="{{ 'is-selected' if handle == rhandle }}">
+                <td class="name">{{ name }}</td>
+                <td class="handle">{{ rhandle }}</td>
+                <td class="roster-link">
+                    <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-medium"
+                       href="/user/{{ rhandle }}">View Schedule</a>
+                </td>
+            </tr>
         {% endfor %}
         </tbody>
     </table>
 </section>
 
+<style>
+
+    table {
+        margin: 0 auto;
+    }
+
+    @media screen and (max-width: 760px) {
+        .title {
+            font-size: 2rem !important;
+        }
+
+        .subtitle {
+            font-size: 1rem !important;
+        }
+    }
+
+    @media screen and (max-width: 700px) {
+        tr {
+            font-size: 20px;
+        }
+
+        tr td a {
+            font-size: 0.75rem !important;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        .title {
+            font-size: 1.5rem !important;
+        }
+
+        .subtitle {
+            font-size: 0.75rem !important;
+        }
+
+        tr {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .name {
+            font-size: 18px;
+            color: #03A9F4;
+            font-weight: bold;
+        }
+
+        tr td {
+            flex: 1;
+            text-align: center;
+            color: #009688;
+            border: none !important;
+            font-size: 16px;
+        }
+
+        .handle {
+            margin-top: -1rem;
+        }
+
+        thead {
+            display: none;
+        }
+
+        tr td a {
+            font-size: 1.125rem !important;
+        }
+
+        .roster-link {
+            border-bottom: 1px solid #bdbdbd !important;
+        }
+
+        table {
+            max-width: 50%;
+        }
+    }
+
+    @media screen and (max-width: 560px) {
+        tr {
+            font-size: 16px;
+        }
+    }
+
+    @media screen and (max-width: 450px) {
+        tr {
+            font-size: 14px;
+        }
+    }
+</style>
+<script type="text/javascript">
+    $(window).resize(() => {
+        if ($(window).width() <= 480) {
+            $('.roster-link').each((indx, td) => {
+                let button = td.getElementsByTagName('a')[0];
+                button.innerHTML = "Schedule"
+            });
+        } else {
+            $('.roster-link').each((indx, td) => {
+                let button = td.getElementsByTagName('a')[0];
+                button.innerHTML = "View Schedule"
+            });
+        }
+    });
+</script>
 {{ importJs() }}
 
 </body>

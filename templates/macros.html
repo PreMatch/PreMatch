@@ -63,15 +63,14 @@
         </div>
         {% endif %}
     {% endwith %}
-    <nav class="navbar is-transparent" role="navigation" aria-label="main navigation" id="nav" style="z-index: 0;">
+    <nav class="navbar is-transparent" role="navigation" aria-label="main navigation" id="nav">
         <div id="navbar-brand" class="navbar-brand">
             <a class="navbar-item overridden-white" href="/" title="Visit the PreMatch homepage">
                 <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Discover your classmates" id="nav-logo">
             </a>
 
             <a role="button" class="navbar-burger is-large" aria-label="menu" aria-expanded="false"
-               onclick="toggleNav()"
-               id="nav-burg">
+               onclick="toggleNav()" id="nav-burg">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -86,25 +85,32 @@
             }
         </script>
 
-        <div id="sidenav" class="sidenav is-size-2">
-            <a class="" href="/">Home</a>
-            <a class="" href="/about">About</a>
-            {% if loggedIn %}
-                <hr>
-                <a class="" href="/dashboard">My Classes</a>
-                <a class="" href="/update">Update</a>
-                <a class="" href="/search">Search</a>
-                <hr>
-                <a class="" onclick="signOutAndRedirect('/logout')">Logout</a>
-            {% else %}
-                <a class="" href="/login">Login</a>
-            {% endif %}
-        </div>
+    </nav>
+    <div id="overlay"></div>
+    <div id="sidenav" class="sidenav is-size-2">
+        <a role="button" class="navbar-burger is-large" aria-label="menu" aria-expanded="false"
+           onclick="toggleNav()" id="nav-burg-sidenav">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        <a class="" href="/">Home</a>
+        <a class="" href="/about">About</a>
+        {% if loggedIn %}
+            <hr>
+            <a class="" href="/dashboard">My Classes</a>
+            <a class="" href="/update">Update</a>
+            <a class="" href="/search">Search</a>
+            <hr>
+            <a class="" onclick="signOutAndRedirect('/logout')">Logout</a>
+        {% else %}
+            <a class="" href="/login">Login</a>
+        {% endif %}
+
         <script type="text/javascript">
             setActive("{{ currentHref }}");
         </script>
-    </nav>
-    <div id="overlay"></div>
+    </div>
 {% endmacro %}
 
 {% macro bodyPaddingNav() %}

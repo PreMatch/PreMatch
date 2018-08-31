@@ -12,7 +12,7 @@
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 999999;
     top: 0;
     right: 0;
     background-color: #03A9F4;
@@ -70,12 +70,11 @@ a.overridden-white:hover {
 .navbar-burger {
     display: block;
     right: 0;
+    top: 0;
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     width: 156px;
     height: 156px;
-    transition: 1s all ease;
+    transition: none;
 }
 
 .navbar-burger.is-large span {
@@ -184,7 +183,7 @@ input[id^="teacherInput"]:focus {
 
 div[id^="teacher-notif-"] {
     display: none;
-    z-index: 5;
+    z-index: 999;
 }
 
 .block-label {
