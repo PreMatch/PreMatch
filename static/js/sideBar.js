@@ -20,8 +20,17 @@ function openNav() {
 
     if ($(window).width() > 510) {
         Array.prototype.forEach.call(pushed, (element) => {
-            element.setAttribute('data-initial-margin-right', element.style.marginRight);
-            element.style.marginRight = `${sideBarWidth}px`;
+            if (element.tagName.toLowerCase() !== 'iframe') {
+                element.setAttribute('data-initial-margin-right', element.style.marginRight);
+                element.style.marginRight = `${sideBarWidth}px`;
+            } else {
+                let width = $(element).innerWidth();
+                let height = $(element).innerHeight();
+
+                let ratio = width / height;
+
+                element.style.padding = `${sideBarWidth * (1 / ratio) / 2}px ${sideBarWidth}px ${sideBarWidth * (1 / ratio) / 2}px 0`;
+            }
         });
     }
 
@@ -44,7 +53,12 @@ function closeNav() {
 
     if ($(window).width() > 510) {
         Array.prototype.forEach.call(pushed, (element) => {
-            element.style.marginRight = element.getAttribute('data-initial-margin-right');
+            if (element.tagName.toLowerCase() !== 'iframe') {
+
+                element.style.marginRight = element.getAttribute('data-initial-margin-right');
+            } else {
+                element.style.padding = '0';
+            }
         });
     }
 
@@ -104,6 +118,27 @@ $(document).ready(() => {
         } else {
             sidenav.css("padding-top", nav.innerHeight());
         }
+
+        $("#body").css("padding-top", $("#nav").innerHeight());
+
+        $(document).ready(() => {
+
+            if (document.getElementById("flashes")) {
+                const $flashes = $("#flashes");
+                const $nav = $("#nav");
+
+                let msgHeight = $flashes.innerHeight();
+                document.getElementById("nav").style.top = `${msgHeight}px`;
+                $("#body").css("padding-top", "0");
+                $flashes.css("margin-bottom", $nav.innerHeight());
+                document.getElementById("sidenav").style.paddingTop = `${msgHeight + $nav.innerHeight()}px`;
+                $flashes.css('display', 'block');
+            } else {
+                $(window).resize(() => {
+                    $("#body").css("padding-top", $("#nav").innerHeight());
+                });
+            }
+        });
 
     });
 

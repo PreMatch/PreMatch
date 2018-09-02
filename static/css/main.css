@@ -117,7 +117,7 @@ a.overridden-white:hover {
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
-    z-index: 31;
+    z-index: 999999;
     cursor: pointer; /* Add a pointer on hover */
     transition: 0.5s all;
 }
