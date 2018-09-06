@@ -1,20 +1,20 @@
 require 'calendar_days'
 
 class Exclusion
-  attr_reader :start_date, :end_date, :description
+  attr_reader :start_date, :end_date
 
-  def initialize(start, _end, day_gen)
+  def initialize(start, end_date, day)
     @start_date = start
-    @end_date = _end
-    @day = day_gen
+    @end_date = end_date
+    @day = day
   end
 
   def includes?(date)
-    date >= @start_date and date <= @end_date
+    (date >= @start_date) && (date <= @end_date)
   end
 
   def included_day
-    @day.call
+    @day.clone
   end
 end
 
@@ -22,17 +22,18 @@ require 'current_calendar'
 
 class Calendar
   def self.current
-    Calendar.new([], CurrentCalendar.exclusions, CurrentCalendar.start_date, CurrentCalendar.end_date)
+    Calendar.new([],
+                 CurrentCalendar.exclusions,
+                 CurrentCalendar.start_date,
+                 CurrentCalendar.end_date)
   end
 
-  attr_reader :exclusions
+  attr_reader :overrides, :exclusions
 
-  # @param [Array[Exclusion]] overrides
-  # @param [Array[Exclusion]] exclusions
   def initialize(overrides, exclusions, start_date, end_date)
     @overrides = overrides
     @exclusions = exclusions
-    @correlations = {start_date => 1}
+    @correlations = { start_date => 1 }
 
     @start_date = start_date
     @end_date = end_date
@@ -43,17 +44,13 @@ class Calendar
   end
 
   def day_on(date)
-    return weekend if weekend?(date)
+    throw ArgumentError.new('Date out of range') unless includes?(date)
 
     (@overrides + @exclusions).each do |holiday|
-      if holiday.includes? date
-        return holiday.included_day
-      end
+      return holiday.included_day if holiday.includes? date
     end
 
-    unless includes?(date)
-      throw ArgumentError.new('Date out of range')
-    end
+    return weekend if weekend?(date)
 
     day_of_date = iterate_for_day(date)
     @correlations[date] = day_of_date
@@ -67,14 +64,12 @@ class Calendar
   end
 
   def includes?(date)
-    date >= @start_date and date <= @end_date
+    (date >= @start_date) && (date <= @end_date)
   end
 
   def most_recent_correlation(query_date)
     date = query_date.clone
-    until @correlations.key? date
-      date -= 1
-    end
+    date -= 1 until @correlations.key? date
     date
   end
 
@@ -84,7 +79,7 @@ class Calendar
 
     while date != query_date
       date += 1
-      unless excluded? date or weekend? date
+      unless excluded?(date) || weekend?(date)
         day += 1
         day = 1 if day == 9
       end
@@ -97,6 +92,7 @@ end
 def day(number)
   StandardDay.new(number)
 end
+
 def weekend
   Holiday.new('Weekend')
 end

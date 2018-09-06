@@ -1,8 +1,8 @@
 require 'calendar'
 require 'date'
 
-def holiday(start, _end, description)
-  Exclusion.new(start, _end, lambda {Holiday.new(description)})
+def holiday(start, end_date, description)
+  Exclusion.new(start, end_date, Holiday.new(description))
 end
 
 def single_holiday(date, description)
@@ -10,15 +10,15 @@ def single_holiday(date, description)
 end
 
 def half_day(date)
-  Exclusion.new(date, date, lambda {HalfDay.new})
+  Exclusion.new(date, date, HalfDay.new)
 end
 
 def unknown_day(date, letter)
-  Exclusion.new(date, date, lambda {UnknownDay.new("Day #{letter}")})
+  Exclusion.new(date, date, UnknownDay.new("Day #{letter}"))
 end
 
 def exam_day(date, block1, block2)
-  Exclusion.new(date, date, lambda {ExamDay.new([block1, block2])})
+  Exclusion.new(date, date, ExamDay.new([block1, block2]))
 end
 
 module CurrentCalendar
@@ -67,7 +67,7 @@ module CurrentCalendar
         exam_day(Date.new(2019, 6, 11), 'A', 'E'),
         exam_day(Date.new(2019, 6, 12), 'B', 'F'),
         exam_day(Date.new(2019, 6, 13), 'C', 'G'),
-        exam_day(Date.new(2019, 6, 14), 'D', 'Makeup'),
+        exam_day(Date.new(2019, 6, 14), 'D', 'Makeup')
     ]
   end
 end

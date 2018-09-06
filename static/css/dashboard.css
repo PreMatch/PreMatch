@@ -73,7 +73,6 @@ tr {
 
 tr td {
     flex: 1;
-    text-align: center;
     color: #009688;
     border: none !important;
     font-size: 16px;

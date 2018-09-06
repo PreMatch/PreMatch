@@ -15,7 +15,7 @@ end
 class StandardDay < Day
   attr_reader :number
 
-  def initialize(day_number, delayed=false)
+  def initialize(day_number, delayed = false)
     @number = day_number
     @delayed = delayed
   end
@@ -24,8 +24,10 @@ class StandardDay < Day
     "Day #{@number}#{' (Delayed)' if @delayed}"
   end
 end
+
 class HalfDay < Day
 end
+
 class UnknownDay < Day
   attr_reader :name
 
@@ -37,6 +39,7 @@ class UnknownDay < Day
     "#{@name} (Unknown schedule)"
   end
 end
+
 class ExamDay < Day
   # Each exam day consists of finals from two blocks (e.g. C and F)
   # :test_blocks is an array of two str's
@@ -50,6 +53,7 @@ class ExamDay < Day
     "Exam Day with blocks #{@test_blocks[0]} and #{@test_blocks[1]}"
   end
 end
+
 class Holiday < Day
 
   def initialize(description)
