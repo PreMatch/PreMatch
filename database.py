@@ -1,14 +1,11 @@
 from google.cloud import datastore
-from flask import g
 
 PERIODS = 'ABCDEFG'
+DATABASE = datastore.Client()
 
 
 def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = datastore.Client()
-    return db
+    return DATABASE
 
 
 def db_query():
@@ -117,3 +114,28 @@ def most_common_classmates(handle):
         return None
 
     return list(max_users), max_hit_rate
+
+
+def lunch_exists_for_handle(handle):
+    key = get_db().key('Lunch', handle)
+
+    return get_db().get(key) is not None
+
+
+def upsert_lunch(handle, lunch):
+    if not handle_exists(handle):
+        raise Exception(f'Schedule with handle {handle} does not exist')
+
+    client = get_db()
+
+    key = client.key('Lunch', handle)
+    task = datastore.Entity(key=key)
+
+    contents = {
+        'handle': handle
+    }
+    for block in PERIODS[2:]:
+        contents[block] = lunch[block]
+
+    task.update(contents)
+    client.put(task)
