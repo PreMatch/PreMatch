@@ -122,20 +122,57 @@ def lunch_exists_for_handle(handle):
     return get_db().get(key) is not None
 
 
-def upsert_lunch(handle, lunch):
+def upsert_lunch(handle, lunch_numbers):
     if not handle_exists(handle):
         raise Exception(f'Schedule with handle {handle} does not exist')
 
-    client = get_db()
+    schedule = user_schedule(handle)
 
-    key = client.key('Lunch', handle)
-    task = datastore.Entity(key=key)
-
-    contents = {
-        'handle': handle
-    }
     for block in PERIODS[2:]:
-        contents[block] = lunch[block]
+        number = lunch_numbers.get(block)
+        if number is not None:
+            teacher = schedule[block]
+            add_lunch_number(teacher, block, number)
 
-    task.update(contents)
+
+def add_lunch_number(teacher, block, number):
+    client = get_db()
+    key = client.key('Lunch', teacher)
+    task = client.get(key)
+
+    if task:
+        task[block] = number
+    else:
+        task = datastore.Entity(key)
+        task.update({
+            'teacher': teacher,
+            block: number
+        })
+
     client.put(task)
+
+
+def lunch_roster(block, number):
+    query = get_db().query(kind='Lunch')
+    query.add_filter(block, '=', number)
+    applicable_teachers = map(
+        lambda entity: entity['teacher'], query.fetch())
+
+    roster = []
+    for teacher in applicable_teachers:
+        roster += class_roster(block, teacher)
+
+    return roster
+
+
+def lunch_number(block, teacher):
+    key = get_db().key('Lunch', teacher)
+    entity = get_db().get(key)
+
+    return entity.get(block)
+
+
+def lunch_numbers(handle):
+    if not handle_exists(handle):
+        raise Exception(f'Schedule with handle {handle} does not exist')
+

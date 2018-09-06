@@ -1,7 +1,6 @@
 require 'rspec'
 
-$LOAD_PATH << 'src'
-require 'calendar'
+require './calendar'
 require 'date'
 
 def day_on_current_calendar(year, month, day)

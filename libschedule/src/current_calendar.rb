@@ -1,4 +1,4 @@
-require 'calendar'
+require './calendar'
 require 'date'
 
 def holiday(start, end_date, description)
