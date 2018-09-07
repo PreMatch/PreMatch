@@ -4,6 +4,7 @@ require './calendar_days'
 def time(hour, minute)
   Time.new(1970, 1, 1, hour, minute, 0)
 end
+
 def without_date(ruby_time)
   time(ruby_time.hour, ruby_time.min)
 end
@@ -24,7 +25,7 @@ end
 class Period < TimeRange
   attr_reader :block
 
-  def Period.from_range(range, block)
+  def self.from_range(range, block)
     Period.new(range.start_time, range.end_time, block)
   end
 
@@ -38,7 +39,7 @@ end
 require './current_schedule'
 
 class Schedule < TimeRange
-  def Schedule.of_day(day)
+  def self.of_day(day)
     if day.is_a? StandardDay
       return Schedule.new(CurrentSchedule.periods_of_day(day.number))
     end
@@ -63,7 +64,7 @@ class Schedule < TimeRange
   def period_at_time(time)
     index = period_index_at_time(time)
 
-    if index == nil
+    if index.nil?
       nil
     else
       @periods[index]

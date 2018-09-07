@@ -7,7 +7,7 @@ module CurrentSchedule
       TimeRange.new(time(10, 7), time(11, 7)),
       TimeRange.new(time(11, 11), time(13, 1)),
       TimeRange.new(time(13, 5), time(14, 5))
-  ]
+  ].freeze
 
   def CurrentSchedule.periods_of_day(day_num)
     BLOCKS[day_num - 1].zip(PERIOD_RANGES).map do |block, range|
@@ -24,6 +24,6 @@ module CurrentSchedule
       %w[A H E F C],
       %w[B A D E G],
       %w[C B H F D]
-  ]
+  ].freeze
 
 end
