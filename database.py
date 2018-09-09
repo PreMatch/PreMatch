@@ -74,8 +74,11 @@ def users_in_class(period, teacher):
     return list(query.fetch())
 
 
-def class_roster(period, teacher):
-    return list(map(lambda row: (row['name'], row['handle']), users_in_class(period, teacher)))
+def class_roster(period, teacher, sort=True):
+    matrix = list(map(lambda row: (row['name'], row['handle']),
+                      users_in_class(period, teacher)))
+
+    return sorted(matrix, key=lambda row: row[0]) if sort else matrix
 
 
 def search_user(search_query):
@@ -152,7 +155,7 @@ def add_lunch_number(teacher, block, number):
     client.put(task)
 
 
-def lunch_roster(block, number):
+def lunch_roster(block, number, sort=True):
     query = get_db().query(kind='Lunch')
     query.add_filter(block, '=', number)
     applicable_teachers = map(
@@ -160,9 +163,9 @@ def lunch_roster(block, number):
 
     roster = []
     for teacher in applicable_teachers:
-        roster += class_roster(block, teacher)
+        roster += class_roster(block, teacher, sort=False)
 
-    return roster
+    return sorted(roster, key=lambda row: row[0]) if sort else roster
 
 
 def lunch_number(block, teacher):

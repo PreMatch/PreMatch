@@ -1,9 +1,9 @@
-$LOAD_PATH << 'src'
+#$LOAD_PATH << 'src'
 require 'time'
 require './calendar'
+require 'discordrb'
 require './schedule'
 
-require 'discordrb'
 
 today = Calendar.current.day_on(Date.today)
 puts "It is day #{today.number}"
