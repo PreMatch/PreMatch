@@ -159,9 +159,15 @@ def show_dashboard(handle):
   for period in PERIODS:
     rosters[period] = database.class_roster(period, schedule[period])
 
+  # TODO handle no lunch number situation
+  lunch_rosters = map(lambda block: database.lunch_roster(block, database.lunch_number(block, schedule[block])),
+                      PERIODS[2:])
+
   return render_template('dashboard.html',
                          handle=handle, name=name, schedule=schedule,
-                         rosters=rosters)
+                         rosters=rosters,
+                         lunch_periods=PERIODS[2:], lunches=[1, 2, 3, 4],
+                         lunch_rosters=lunch_rosters)
 
 
 @app.route('/update', methods=['GET', 'POST'])
@@ -182,7 +188,9 @@ def do_update():
                            handle=handle,
                            name=session.get('name', database.user_name(handle)),
                            schedule=schedule,
-                           teachers=teachers)
+                           teachers=teachers,
+                           lunch_periods=PERIODS[2:], lunches=[1, 2, 3, 4],
+                           lunch_numbers=database.lunch_numbers(handle))
   else:
     # Redirect path reading from args
     redirect_path = request.args.get('from', '/dashboard')

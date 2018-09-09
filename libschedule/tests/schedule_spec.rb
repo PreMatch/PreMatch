@@ -11,7 +11,7 @@ def period_reflects(one, start_time, end_time, block)
 end
 
 def expect_blocks_of_day(day_number)
-  schedule = Schedule.of_day(StandardDay.new(day_number))
+  schedule = standard_schedule(day_number)
   expect(schedule.periods.map(&:block))
 end
 
