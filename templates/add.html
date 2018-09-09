@@ -15,6 +15,9 @@
         {% for period in 'ABCDEFG' %}
             <input type="hidden" name="{{ period }}" id="input-invis-{{ period }}">
         {% endfor %}
+        {% for lunch in 'CDEFG' %}
+            <input type="hidden" name="lunch{{ lunch }}" id="lunch-invis-{{ lunch }}">
+        {% endfor %}
     </form>
 
     <div class="box has-text-centered">
@@ -57,12 +60,35 @@
                     </div>
                     <div class="notification is-primary" id="teacher-notif-{{ period }}">
                         <button type="button" class="delete" onclick="unselectTeacher('{{ period }}')"></button>
-                        <p class="block-label">Block {{ period }}:</p>
-                        <p id="teacher-notif-text-{{ period }}"></p>
+                        <p class="block-label title">Block {{ period }}:</p>
+                        <p class="subtitle" id="teacher-notif-text-{{ period }}"></p>
+
+                        <label class="is-size-7" for="lunch-container-{{ period }}">(Optional) Add your
+                            lunch:</label>
+                        <div id="lunch-container-{{ period }}">
+                            <a class="lunch-dropdown button is-accent is-outlined is-small"
+                               id="lunch-opener-{{ period }}" onclick="openLunchDropdown(&quot;{{ period }}&quot;)">Select
+                                lunch... <i class="fas fa-caret-down" style="margin-left: 4px;"></i></a>
+                            <div class="lunch-options" id="lunch-options-{{ period }}">
+                                {% for lunch in '1234' %}
+                                    <a class="lunch-option button is-accent is-outlined is-small"
+                                       id="lunch-select-{{ period }}-{{ lunch }}"
+                                       onclick="selectLunch(&quot;{{ period }}&quot;, &quot;{{ lunch }}&quot;)">Lunch {{ lunch }}</a>
+                                {% endfor %}
+                                <a class="lunch-option button is-accent is-outlined is-small"
+                                   onclick="closeLunchDropdown(&quot;{{ period }}&quot;)">Close <i
+                                        class="fas fa-caret-up" style="margin-left: 4px"></i></a>
+                            </div>
+                        </div>
                         {% if schedule != none %}
                             <a class="button is-outlined is-primary is-medium" data-href-base="/roster/{{ period }}/"
                                id="view-roster-{{ period }}" style="border-radius: 10px;">View Classmates</a>
                         {% endif %}
+                        <script type="text/javascript">
+                            $(document).ready(() => {
+                                $("#lunch-options-{{ period }}").css('max-width', $('#lunch-opener-{{ period }}').innerWidth())
+                            });
+                        </script>
                     </div>
 
                 </div>

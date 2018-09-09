@@ -55,6 +55,50 @@ strong {
     color: white !important;
 }
 
+.button.is-secondary {
+    background-color: #009688 !important;
+    color: white !important;
+}
+
+.button.is-secondary:hover {
+    background-color: white !important;
+    color: #009688 !important;
+    border: 1px solid #009688;
+}
+
+.button.is-secondary.is-outlined {
+    background-color: white !important;
+    color: #009688 !important;
+    border: 1px solid #009688 !important;
+}
+
+.button.is-secondary.is-outlined:hover {
+    background-color: #009688 !important;
+    color: white !important;
+}
+
+.button.is-accent {
+    background-color: #00BCD4 !important;
+    color: white !important;
+}
+
+.button.is-accent:hover {
+    background-color: white !important;
+    color: #00BCD4 !important;
+    border: 1px solid #00BCD4;
+}
+
+.button.is-accent.is-outlined {
+    background-color: white !important;
+    color: #00BCD4 !important;
+    border: 1px solid #00BCD4 !important;
+}
+
+.button.is-accent.is-outlined:hover {
+    background-color: #00BCD4 !important;
+    color: white !important;
+}
+
 .columns {
     display: flex;
 }

@@ -186,15 +186,43 @@ div[id^="teacher-notif-"] {
     z-index: 999;
 }
 
+div[id^="teacher-notif-"] .subtitle {
+    font-size: 1rem !important;
+    margin-bottom: 0 !important;
+}
+
 .block-label {
     color: #009688;
     font-weight: bold;
     font-size: 16px;
+    margin-bottom: 0 !important;
 }
 
 .teacher-dropdown .notification {
     margin: 0 auto;
     max-width: 241px;
+}
+
+.lunch-dropdown, .lunch-option {
+    border-radius: 5px !important;
+}
+
+.lunch-dropdown {
+    padding: 0.5rem;
+    font-size: 12px;
+    border-color: #009688;
+    color: #009688;
+}
+
+.lunch-options {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto 10px auto;
+}
+
+.lunch-option {
+    flex: 1;
+    display: none;
 }
 
 /*****************MAIN*****************/

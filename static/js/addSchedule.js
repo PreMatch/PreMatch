@@ -110,6 +110,38 @@ function unselectTeacher(period) {
     filterTeachers(period);
 }
 
+function openLunchDropdown(period) {
+    //Close all other dropdowns
+    $('.lunch-options').each((indx, btn) => {
+        let split = btn.id.split('-');
+        let btnPeriod = split[split.length - 1];
+        if (btnPeriod !== period) {
+            closeLunchDropdown(btnPeriod);
+        }
+    });
+
+    let optionsContainer = $(`#lunch-options-${ period }`);
+    $(`#lunch-opener-${ period }`).css('display', 'none');
+    optionsContainer.children('a').each((indx, lunch) => {
+        $(lunch).show();
+    });
+}
+
+function closeLunchDropdown(period) {
+    let optionsContainer = $(`#lunch-options-${ period }`);
+    $(`#lunch-opener-${ period }`).css('display', 'inline-flex');
+    optionsContainer.children('a').each((indx, lunch) => {
+        $(lunch).hide();
+    });
+}
+
+function selectLunch(period, lunch) {
+    closeLunchDropdown(period);
+    let text = $(`#lunch-select-${ period }-${ lunch }`).html();
+    $(`#lunch-opener-${ period }`).html(text + ' <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
+    document.getElementById(`lunch-invis-${period}`).value = lunch;
+}
+
 function setOriginalMargin() {
     originalMargin = parseInt($(document.getElementsByClassName('teacher-dropdown')[0]).css('margin-bottom').replace("px", ""));
 }
