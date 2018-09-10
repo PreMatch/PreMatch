@@ -213,7 +213,7 @@ def do_update():
     for block in PERIODS[2:]:
       nbr = lunches[block] = request.form.get(f'lunch{block}')
       if nbr is not None:
-        if nbr not in '1234':
+        if nbr not in list('1234'):
           return error(400, f'Invalid lunch number: {nbr}')
         lunches[block] = int(nbr)
 
@@ -260,7 +260,7 @@ def show_lunch(block, number):
 
   if block not in PERIODS[2:]:
     return error(400, f'Invalid lunch block: {block}')
-  if number not in '1234':
+  if number not in list('1234'):
     return error(400, f'Invalid lunch number: {number}')
 
   number = int(number)
