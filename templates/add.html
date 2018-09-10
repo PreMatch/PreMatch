@@ -66,15 +66,21 @@
             <p class="subtitle" id="teacher-notif-text-{{ period }}"></p>
 
             {% if period in lunch_periods %}
-              <label class="is-size-7" for="lunch-container-{{ period }}">(Optional) Add your
-                lunch:</label>
+              <label class="is-size-7" for="lunch-container-{{ period }}">
+                (Optional) {{ 'Add' if lunch_numbers[period] == none else 'Update' }} your lunch:
+              </label>
               <div id="lunch-container-{{ period }}">
                 <a class="lunch-dropdown button is-accent is-outlined is-small"
                    id="lunch-opener-{{ period }}"
-                   onclick="openLunchDropdown(&quot;{{ period }}&quot;)">Select
-                  lunch... <i class="fas fa-caret-down" style="margin-left: 4px;"></i></a>
+                   onclick="openLunchDropdown(&quot;{{ period }}&quot;)">
+                  {% if lunch_numbers[period] == none %}
+                    Select lunch...
+                  {% else %}
+                    Lunch {{ lunch_numbers[period] }}
+                  {% endif %}
+                  <i class="fas fa-caret-down" style="margin-left: 4px;"></i></a>
                 <div class="lunch-options" id="lunch-options-{{ period }}">
-                  {% for lunch in '1234' %}
+                  {% for lunch in lunches %}
                     <a class="lunch-option button is-accent is-outlined is-small"
                        id="lunch-select-{{ period }}-{{ lunch }}"
                        onclick="selectLunch(&quot;{{ period }}&quot;, &quot;{{ lunch }}&quot;)">Lunch {{ lunch }}</a>
@@ -146,13 +152,11 @@
         }
       }
     </script>
-    {% if schedule != none %}
-      <a class="button is-outlined is-primary is-large"
-         onclick="submitChanges('ABCDEFG'.split(''))">Update</a>
-    {% else %}
-      <a class="button is-outlined is-primary is-large"
-         onclick="submitChanges('ABCDEFG'.split(''))">Submit</a>
-    {% endif %}
+
+    <a class="button is-outlined is-primary is-large"
+       onclick="submitChanges('ABCDEFG'.split(''))">
+      {{ 'Submit' if schedule == none else 'Update' }}
+    </a>
 
     <h1 id="err-msg" style="margin-top: 20px; font-size: 20px;"></h1>
 

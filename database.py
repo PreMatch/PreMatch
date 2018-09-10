@@ -183,4 +183,5 @@ def lunch_numbers(handle):
         raise Exception(f'Schedule with handle {handle} does not exist')
 
     schedule = user_schedule(handle)
-    return list(map(lambda block: lunch_number(block, schedule[block]), PERIODS[2:]))
+    return dict(map(
+        lambda block: (block, lunch_number(block, schedule[block])), PERIODS[2:]))
