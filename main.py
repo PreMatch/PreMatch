@@ -250,7 +250,8 @@ def show_roster(period, teacher):
     return redirect('/')
 
   return render_template('roster.html', period=period, teacher=teacher,
-                         roster=roster, handle=logged_handle())
+                         roster=roster, handle=logged_handle(),
+                         lunch_number=database.lunch_number(period, teacher))
 
 
 @app.route('/lunch/<block>/<number>')
