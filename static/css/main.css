@@ -203,10 +203,6 @@ div[id^="teacher-notif-"] .subtitle {
     max-width: 241px;
 }
 
-.lunch-dropdown, .lunch-option {
-    border-radius: 5px !important;
-}
-
 .lunch-dropdown {
     padding: 0.5rem;
     font-size: 12px;

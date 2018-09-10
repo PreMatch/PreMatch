@@ -96,6 +96,8 @@ function unselectTeacher(period) {
     let notif = document.getElementById(`teacher-notif-${period}`);
     let notifText = document.getElementById(`teacher-notif-text-${period}`);
 
+    clearLunch(period);
+
     notifText.innerHTML = "";
     notif.style.display = "none";
 
@@ -140,6 +142,11 @@ function selectLunch(period, lunch) {
     let text = $(`#lunch-select-${ period }-${ lunch }`).html();
     $(`#lunch-opener-${ period }`).html(text + ' <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
     document.getElementById(`lunch-invis-${period}`).value = lunch;
+}
+
+function clearLunch(period) {
+    $(`#lunch-opener-${ period }`).html('Select lunch... <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
+    document.getElementById(`lunch-invis-${period}`).value = "";
 }
 
 function setOriginalMargin() {
