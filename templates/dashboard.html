@@ -11,92 +11,98 @@
 {{ bodyPaddingNav() }}
 
 {% macro rosterCard(period) %}
-  <div class="card roster-card" id="roster-card-{{ period }}">
-    <header class="card-header" style="flex-direction: column; padding: 0.5rem;">
-      <h1 class="card-header-title is-size-3">{{ schedule[period] }}</h1>
-      <h1 class="card-header-title is-size-5 card-header-subtitle">Block {{ period }}
-        | {{ rosters[period]|length - 1 }} other
-        student{{ 's' if rosters[period]|length - 1 != 1 }}</h1>
-      <a href="/roster/{{ period }}/{{ schedule[period]|safe }}" class="card-header-icon"
-         aria-label="more options" style="display: block; position:absolute; top: 0; right: 0;"
-         title="Visit {{ schedule[period] }}, Block {{ period }}'s roster page"><span
-          class="icon is-large-desktop is-medium-touch"><i class="fas fa-2x fa-list"
-                                                           aria-hidden="true"></i></span></a>
-    </header>
-    <div class="card-content" id="card-{{ period }}">
-      <div class="table-container" id="table-container-{{ period }}">
-        <table class="table is-fullwidth" id="card-table-{{ period }}">
-          {% for name, roster_handle in rosters[period] if roster_handle != handle %}
-            <tr style="{{ 'display: none;' if loop.index > 10 }}">
-              <td class="name">{{ name }}</td>
-              <td class="handle is-size-7">{{ roster_handle }}</td>
-            </tr>
-          {% endfor %}
-        </table>
-      </div>
+    <div class="card roster-card" id="roster-card-{{ period }}">
+        <header class="card-header" style="flex-direction: column; padding: 0.5rem;">
+            <h1 class="card-header-title is-size-3">{{ schedule[period] }}</h1>
+            <h1 class="card-header-title is-size-5 card-header-subtitle">Block {{ period }}
+                | {{ rosters[period]|length - 1 }} other
+                student{{ 's' if rosters[period]|length - 1 != 1 }}</h1>
+            <a href="/roster/{{ period }}/{{ schedule[period]|safe }}" class="card-header-icon"
+               aria-label="more options" style="display: block; position:absolute; top: 0.5rem; right: 0.5rem;"
+               title="Visit {{ schedule[period] }}, Block {{ period }}'s roster page"><span
+                    class="icon is-large-desktop is-medium-touch"><i class="fas fa-2x fa-list"
+                                                                     aria-hidden="true"></i></span></a>
+        </header>
+        <div class="card-content" id="card-{{ period }}">
+            <div class="table-container" id="table-container-{{ period }}">
+                <table class="table is-fullwidth" id="card-table-{{ period }}">
+                    {% for name, roster_handle in rosters[period] if roster_handle != handle %}
+                        <tr style="{{ 'display: none;' if loop.index > 10 }}">
+                            <td class="name">{{ name }}</td>
+                            <td class="handle is-size-7">{{ roster_handle }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
 
-      {% if rosters[period]|length - 1 > 10 %}
-        <a class="button is-outlined is-primary is-fullwidth is-medium view-button"
-           onclick="expandCard('{{ period }}')" id="expand-btn-{{ period }}"
-           style="{{ 'display: none;' if rosters[period]|length - 1 < 10 }}"
-           title="Expand list to show all {{ rosters[period]|length - 1 }} other students instead of the first 10">View
-          Full Class <i class="fas fa-chevron-circle-down" style="margin-left: 6px;"></i></a>
-      {% endif %}
+            {% if rosters[period]|length - 1 > 10 %}
+                <a class="button is-outlined is-primary is-fullwidth is-medium view-button"
+                   onclick="expandCard('{{ period }}')" id="expand-btn-{{ period }}"
+                   style="{{ 'display: none;' if rosters[period]|length - 1 < 10 }}"
+                   title="Expand list to show all {{ rosters[period]|length - 1 }} other students instead of the first 10">View
+                    Full Class <i class="fas fa-chevron-circle-down" style="margin-left: 6px;"></i></a>
+            {% endif %}
 
-      {% if rosters[period]|length - 1 <= 10 %}
-        <script type="text/javascript">
-          adjustMargin(getRowFromPeriod("{{ period }}"));
-        </script>
-      {% endif %}
+            {% if rosters[period]|length - 1 <= 10 %}
+                <script type="text/javascript">
+                    adjustMargin(getRowFromPeriod("{{ period }}"));
+                </script>
+            {% endif %}
 
-      <div class="bottom-container" id="btm-container-{{ period }}"
-           style="{{ 'display: none;' if rosters[period]|length - 1 > 10 }}">
-        <a class="button is-outlined is-primary is-fullwidth is-medium view-button"
-           href="/roster/{{ period }}/{{ schedule[period]|safe }}" id="roster-btn-{{ period }}"
-           style="{{ 'position: absolute; width: calc(100% - 3rem) !important; bottom: 1.5rem; left: 1.5rem; right: 1.5rem;' if rosters[period]|length - 1 <= 10 }}"
-           title="Visit {{ schedule[period] }}, Block {{ period }}'s roster page">View Class</a>
+            <div class="bottom-container" id="btm-container-{{ period }}"
+                 style="{{ 'display: none;' if rosters[period]|length - 1 > 10 }}">
+                <a class="button is-outlined is-primary is-fullwidth is-medium view-button"
+                   href="/roster/{{ period }}/{{ schedule[period]|safe }}" id="roster-btn-{{ period }}"
+                   style="{{ 'position: absolute; width: calc(100% - 3rem) !important; bottom: 1.5rem; left: 1.5rem; right: 1.5rem;' if rosters[period]|length - 1 <= 10 }}"
+                   title="Visit {{ schedule[period] }}, Block {{ period }}'s roster page">View Class</a>
 
-        {% if rosters[period]|length - 1 > 10 %}
-          <a class="button is-outlined is-primary is-medium" onclick="collapseCard('{{ period }}')"
-             style="position: absolute; right: 1.5rem; bottom: 1.5rem;"
-             title="Collapse list to show only the first 10 students"><i
-              class="fas fa-chevron-circle-up"></i></a>
-        {% endif %}
-      </div>
+                {% if rosters[period]|length - 1 > 10 %}
+                    <a class="button is-outlined is-primary is-medium" onclick="collapseCard('{{ period }}')"
+                       style="position: absolute; right: 1.5rem; bottom: 1.5rem;"
+                       title="Collapse list to show only the first 10 students"><i
+                            class="fas fa-chevron-circle-up"></i></a>
+                {% endif %}
+            </div>
+        </div>
     </div>
-  </div>
 {% endmacro %}
 
 <section class="hero is-primary pushed">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="is-size-2 overridden-white title">Dashboard for {{ name }}</h1>
-      <h2 class="is-size-4 overridden-white subtitle">{{ handle }}</h2>
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="is-size-2 overridden-white title">Dashboard for {{ name }}</h1>
+            <h2 class="is-size-4 overridden-white subtitle">{{ handle }}</h2>
+        </div>
     </div>
-  </div>
 </section>
 <section class="pushed" style="margin: 0 10%;">
-  <div class="roster-container">
-    <div class="roster-row" id="row-1">
-      {{ rosterCard('A') }}
-      <script type="text/javascript">
-        setOriginalMargin();
-      </script>
-      {{ rosterCard('B') }}
-      {{ rosterCard('C') }}
+    <div class="roster-container">
+        <div class="roster-row" id="row-1">
+            {{ rosterCard('A') }}
+            <script type="text/javascript">
+                setOriginalMargin();
+            </script>
+            {{ rosterCard('B') }}
+            {{ rosterCard('C') }}
+        </div>
+        <div class="roster-row" id="row-2">
+            {{ rosterCard('D') }}
+            {{ rosterCard('E') }}
+            {{ rosterCard('F') }}
+        </div>
+        <div class="roster-row" id="row-3">
+            {{ rosterCard('G') }}
+        </div>
     </div>
-    <div class="roster-row" id="row-2">
-      {{ rosterCard('D') }}
-      {{ rosterCard('E') }}
-      {{ rosterCard('F') }}
-    </div>
-    <div class="roster-row" id="row-3">
-      {{ rosterCard('G') }}
-    </div>
-  </div>
 </section>
+<style>
+    .table td {
+        padding: 0.5rem 0.75rem !important;
+        text-align: center;
+    }
+</style>
 
-{{ lunch_rosters }}
+{#{{ lunch_rosters }}#}
 {{ importJs() }}
 
 </body>

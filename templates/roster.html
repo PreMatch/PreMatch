@@ -17,6 +17,18 @@
             <h2 class="subtitle overridden-white is-3">
                 {{ roster|length }} student(s)
             </h2>
+            {% if period in lunch_periods %}
+                {% if lunch_number != none %}
+                    <h3 class="title overridden-white is-5">Lunch {{ lunch_number }}</h3>
+                {% else %}
+                    {% if user_in_class %}
+                        <h3 class="title overridden-white is-5">No lunch set for this class, why not <a
+                                href="/update#teacher-notif-{{ period }}">add it?</a></h3>
+                    {% else %}
+                        <h3 class="title overridden-white is-5">No lunch set for this class.</h3>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 </section>

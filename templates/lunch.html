@@ -1,5 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
+
+{{ head('Block ' + block|string + ', Lunch ' + number|string, True) }}
+<body id="body" class="bg-primary">
+
+{{ nav(True, "/roster", handle) }}
+{{ bodyPaddingNav() }}
 You are {{ handle }}, and this is block {{ block }}, lunch # {{ number }}
 
 {% for (name, rhandle) in roster %}
-{{ name, rhandle }}
+    {{ name, rhandle }}
 {% endfor %}
+
+<section class="hero is-primary section pushed">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title overridden-white is-1">
+                Block {{ block }}, Lunch {{ number }}
+            </h1>
+            <h2 class="subtitle overridden-white is-3">
+                {{ roster|length }} student(s)
+            </h2>
+            {% if period in lunch_periods %}
+                {% if lunch_number != none %}
+                    <h3 class="title overridden-white is-5">Lunch {{ lunch_number }}</h3>
+                {% else %}
+                    {% if user_in_class %}
+                        <h3 class="title overridden-white is-5">No lunch set for this class, why not <a
+                                href="/update#teacher-notif-{{ period }}">add it?</a></h3>
+                    {% else %}
+                        <h3 class="title overridden-white is-5">No lunch set for this class.</h3>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+<section class="section pushed">
+    <form>
+        <input class="input is-large" type="text" placeholder="Name or handle here..." name="query"
+               required>
+        <input class="button is-outlined is-primary is-large is-fullwidth"
+               style="transition: 0.5s all ease;" type="submit" value="Search">
+    </form>
+    <table class="table is-fullwidth is-size-4">
+        <tbody>
+        {% for name, rhandle in roster %}
+            <tr class="{{ 'is-selected' if handle == rhandle }}">
+                <td class="name">{{ name }}</td>
+                <td class="handle">{{ rhandle }}</td>
+                <td class="roster-link" style="{{ 'border: none!important;' if loop.index == roster|length else '' }}">
+                    <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-medium"
+                       href="/user/{{ rhandle }}">View Schedule</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<style>
+
+    table {
+        margin: 0 auto;
+        max-width: 25%;
+        border-radius: 10px;
+    }
+
+    .roster-link {
+        border-bottom: 1px solid #bdbdbd !important;
+    }
+
+    tr td {
+        flex: 1;
+        text-align: center;
+        color: #009688;
+        border: none !important;
+    }
+
+    .handle {
+        margin-top: -1rem;
+    }
+
+    tr {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .name {
+        font-size: 18px;
+        color: #03A9F4;
+        font-weight: bold;
+    }
+
+</style>
+<script type="text/javascript">
+    $(window).resize(() => {
+        if ($(window).width() <= 480) {
+            $('.roster-link').each((indx, td) => {
+                let button = td.getElementsByTagName('a')[0];
+                button.innerHTML = "Schedule"
+            });
+        } else {
+            $('.roster-link').each((indx, td) => {
+                let button = td.getElementsByTagName('a')[0];
+                button.innerHTML = "View Schedule"
+            });
+        }
+    });
+</script>
+{{ importJs() }}
+
+</body>
+</html>
