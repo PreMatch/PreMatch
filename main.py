@@ -249,9 +249,13 @@ def show_roster(period, teacher):
     flash('That class is either empty or nonexistent', 'error')
     return redirect('/')
 
+  user_in_class = logged_handle() in list(map(lambda row: row[1], roster))
+
   return render_template('roster.html', period=period, teacher=teacher,
                          roster=roster, handle=logged_handle(),
-                         lunch_number=database.lunch_number(period, teacher))
+                         lunch_number=database.lunch_number(period, teacher),
+                         lunch_periods=PERIODS[2:],
+                         user_in_class=user_in_class)
 
 
 @app.route('/lunch/<block>/<number>')
