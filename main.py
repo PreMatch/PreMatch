@@ -159,9 +159,11 @@ def show_dashboard(handle):
   for period in PERIODS:
     rosters[period] = database.class_roster(period, schedule[period])
 
-  # TODO handle no lunch number situation
-  lunch_rosters = map(lambda block: database.lunch_roster(block, database.lunch_number(block, schedule[block])),
-                      PERIODS[2:])
+  lunch_rosters = {}
+  for block in PERIODS[2:]:
+    num = database.lunch_number(block, schedule[block])
+    lunch_rosters[block] = database.lunch_roster(block, num) \
+      if num is not None else None
 
   return render_template('dashboard.html',
                          handle=handle, name=name, schedule=schedule,

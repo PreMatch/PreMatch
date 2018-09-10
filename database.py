@@ -156,6 +156,9 @@ def add_lunch_number(teacher, block, number):
 
 
 def lunch_roster(block, number, sort=True):
+    if number is None:
+        return None
+
     query = get_db().query(kind='Lunch')
     query.add_filter(block, '=', number)
     applicable_teachers = map(
@@ -172,7 +175,7 @@ def lunch_number(block, teacher):
     key = get_db().key('Lunch', teacher)
     entity = get_db().get(key)
 
-    return entity.get(block)
+    return entity.get(block) if entity is not None else None
 
 
 def lunch_numbers(handle):
