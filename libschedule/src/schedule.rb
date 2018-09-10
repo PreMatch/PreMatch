@@ -33,21 +33,20 @@ class Period < TimeRange
     super(start_time, end_time)
     @block = block
   end
-
 end
 
 require './current_schedule'
 
 class Schedule < TimeRange
   def self.of_day(day)
-    if day.is_a? StandardDay
-      return Schedule.new(CurrentSchedule.periods_of_day(day.number))
-    end
-
-    if [UnknownDay, Holiday].include? day.class
+    case day
+    when StandardDay, ExamDay, HalfDay
+      Schedule.new(CurrentSchedule.periods_of_day(day))
+    when UnknownDay, Holiday
       return nil
+    else
+      raise Exception, 'Unknown type of day passed to Schedule.of_day'
     end
-
   end
 
   attr_reader :periods

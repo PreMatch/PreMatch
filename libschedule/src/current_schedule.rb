@@ -9,8 +9,8 @@ module CurrentSchedule
       TimeRange.new(time(13, 5), time(14, 5))
   ].freeze
 
-  def CurrentSchedule.periods_of_day(day_num)
-    BLOCKS[day_num - 1].zip(PERIOD_RANGES).map do |block, range|
+  def self.periods_of_day(day)
+    range_block_pairs(day).map do |range, block|
       Period.from_range(range, block)
     end
   end
@@ -26,4 +26,29 @@ module CurrentSchedule
       %w[C B H F D]
   ].freeze
 
+  EXAM_DAY_RANGES = [
+      TimeRange.new(time(8, 0), time(9, 30)),
+      TimeRange.new(time(10, 0), time(11, 30)),
+      TimeRange.new(time(13, 0), time(14, 0))
+  ].freeze
+
+  HALF_DAY_RANGES = [
+      TimeRange.new(time(7, 44), time(8, 29)),
+      TimeRange.new(time(8, 33), time(9, 16)),
+      TimeRange.new(time(9, 20), time(10, 3)),
+      TimeRange.new(time(10, 7), time(10, 50))
+  ].freeze
+
+  def self.range_block_pairs(day)
+    case day
+    when StandardDay
+      PERIOD_RANGES.zip(BLOCKS[day.number - 1])
+    when ExamDay
+      EXAM_DAY_RANGES.zip(day.test_blocks + ['Academic Support'])
+    when HalfDay
+      HALF_DAY_RANGES.zip(day.blocks)
+    else
+      raise ArgumentError, 'Unknown type of day'
+    end
+  end
 end

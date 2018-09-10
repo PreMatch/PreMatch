@@ -9,8 +9,8 @@ def single_holiday(date, description)
   holiday(date, date, description)
 end
 
-def half_day(date)
-  Exclusion.new(date, date, HalfDay.new)
+def half_day(date, blocks)
+  Exclusion.new(date, date, HalfDay.new(blocks))
 end
 
 def unknown_day(date, letter)
@@ -36,12 +36,12 @@ module CurrentCalendar
       single_holiday(Date.new(2018, 9, 10), 'Rosh Hashanah'),
       single_holiday(Date.new(2018, 9, 19), 'Yom Kippur'),
       single_holiday(Date.new(2018, 10, 8), 'Columbus Day'),
-      half_day(Date.new(2018, 10, 19)),
+      half_day(Date.new(2018, 10, 19), %w[A C E G]),
       single_holiday(Date.new(2018, 11, 6), 'Professional Day'),
       single_holiday(Date.new(2018, 11, 12), 'Veterans Day'),
-      half_day(Date.new(2018, 11, 21)),
+      half_day(Date.new(2018, 11, 21), %w[A D C PepRally]),
       holiday(Date.new(2018, 11, 22), Date.new(2018, 11, 23), 'Thanksgiving Break'),
-      half_day(Date.new(2018, 12, 7)),
+      half_day(Date.new(2018, 12, 7), %w[B A G E]),
       holiday(Date.new(2018, 12, 24), Date.new(2019, 1, 1), 'Christmas Break'),
 
       unknown_day(Date.new(2019, 1, 15), 'X'),
@@ -54,15 +54,15 @@ module CurrentCalendar
 
       single_holiday(Date.new(2019, 1, 21), 'Martin Luther King Day'),
 
-      half_day(Date.new(2019, 2, 1)),
+      half_day(Date.new(2019, 2, 1), %w[A E F C]),
       holiday(Date.new(2019, 2, 18), Date.new(2019, 2, 22), 'Winter Break'),
-      half_day(Date.new(2019, 3, 15)),
+      half_day(Date.new(2019, 3, 15), %w[C B F D]),
       holiday(Date.new(2019, 4, 15), Date.new(2019, 4, 19), 'Spring Break'),
-      half_day(Date.new(2019, 5, 3)),
+      half_day(Date.new(2019, 5, 3), %w[A C E G]),
       single_holiday(Date.new(2019, 5, 27), 'Memorial Day'),
 
       unknown_day(Date.new(2018, 6, 6), 'X'),
-      half_day(Date.new(2018, 6, 7)),
+      half_day(Date.new(2018, 6, 7), %w[A D C F]),
       unknown_day(Date.new(2018, 6, 10), 'Y'),
 
       exam_day(Date.new(2019, 6, 11), 'A', 'E'),

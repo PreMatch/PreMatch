@@ -26,6 +26,11 @@ class StandardDay < Day
 end
 
 class HalfDay < Day
+  attr_reader :blocks
+
+  def initialize(blocks)
+    @blocks = blocks
+  end
 end
 
 class UnknownDay < Day

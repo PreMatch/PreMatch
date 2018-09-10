@@ -67,4 +67,9 @@ describe 'Correct calculation of 7+H day from date' do
     expect { day_on_current_calendar(2017, 12, 26) }.to raise_error ArgumentError
     expect { day_on_current_calendar(2019, 6, 27) }.to raise_error ArgumentError
   end
+
+  it 'should have blocks for each half-day' do
+    expect(day_on_current_calendar(2018, 11, 21).blocks).to eql %w[A D C PepRally]
+    expect(day_on_current_calendar(2019, 5, 3).blocks).to eql %w[A C E G]
+  end
 end

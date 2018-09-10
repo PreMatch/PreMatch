@@ -33,14 +33,14 @@ class Calendar
   def initialize(overrides, exclusions, start_date, end_date)
     @overrides = overrides
     @exclusions = exclusions
-    @correlations = { start_date => 1 }
+    @correlations = {start_date => 1}
 
     @start_date = start_date
     @end_date = end_date
   end
 
   def excluded?(date)
-    @exclusions.any? { |out| out.includes? date }
+    @exclusions.any? {|out| out.includes? date}
   end
 
   def day_on(date)
@@ -57,14 +57,22 @@ class Calendar
     day day_of_date
   end
 
+  def includes?(date)
+    (date >= @start_date) && (date <= @end_date)
+  end
+
+  def next_nonholiday(date)
+    loop do
+      date += 1
+      break unless date.is_a? Holiday
+    end
+    date
+  end
+
   private
 
   def weekend?(date)
     date.cwday > 5
-  end
-
-  def includes?(date)
-    (date >= @start_date) && (date <= @end_date)
   end
 
   def most_recent_correlation(query_date)
