@@ -1,87 +1,145 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-  <link rel="stylesheet" href="/static/fonts/whitney.css", rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <link rel="stylesheet" href="/static/fonts/whitney.css">
 
-  <title>PreMatch Discord Integration</title>
+    <title>PreMatch Discord Integration</title>
 </head>
-<body>
-  <div class="columns" id="container">
+<body class="no-padding">
+<div class="columns" id="container">
     <div class="column mobile-is-12 side has-text-centered" id="discord-side">
-      <div class="media">
-        <div class="media-left">
-          <figure class="image">
-            <img src="{{ avatar_src }}" alt="{{ user_name }}">
-          </figure>
+        <div class="column-inner">
+            <img id="logo" src="/static/img/discord.png">
+            <section class="hero">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image">
+                            <img src="{{ avatar_src }}" alt="{{ user_name }}" id="avatar" height="100" width="100">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="title is-size-1 has-text-light is-size-3-mobile">{{ user_name }}</p>
+                        <p class="subtitle is-size-3 has-text-grey is-size-5-mobile">#{{ user_discriminator }}</p>
+                    </div>
+                </div>
+            </section>
         </div>
-        <div class="media-content">
-          <p class="title is-4">{{ user_name }}</p>
-          <p class="subtitle is-6">#{{ user_discriminator }}</p>
-        </div>
-      </div>
-      Discord name
     </div>
     <div class="column is-2 mobile-is-12" id="blend">
-      <div id="chain"></div>
+        <div id="chain"></div>
     </div>
     <div class="column mobile-is-12 side has-text-centered" id="prematch-side">
-      PreMatch name and handle
+        <div class="column-inner">
+            <img id="logo" src="/static/img/PreMatch%20Logo.png">
+            <section class="hero">
+                <div class="container">
+                    <h1 class="title is-size-1 has-text-white is-size-3-mobile">
+                        {{ name }}
+                    </h1>
+                    <h2 class="subtitle is-size-3 is-size-5-mobile" style="color:#ddd">
+                        {{ handle }}
+                    </h2>
+                </div>
+            </section>
+        </div>
     </div>
-  </div>
+</div>
+<section class="hero is-primary" id="bottom-bar">
+    <h1 class="title">SUCCESS!</h1>
+    <h2 class="subtitle">Now try $$myday.</h2>
+</section>
 <style>
-  #discord-side {
-    background-color: #36393f;
-    color: #dcddde;
-    font-family: 'Whitney', sans-serif;
-  }
-  #prematch-side {
-    background-color: #03A9F4;
-    color: #fff;
-  }
-  .side {
-    width: calc((100vw - 200px) / 2);
-  }
-  .column {
-    height: calc(100vh - 100px);
-    padding: 0 0;
-  }
-  #blend {
-    background: linear-gradient(to right, #36393f, #03A9F4);
-    width: 200px;
-    align-content: center;
-  }
-  .columns {
-    min-height: 420px;
-  }
-  #chain {
-    background: url('/static/img/chains.png') repeat-x center;
-    width: 200px;
-    height: 100%;
-    margin: auto auto;
-    align-self: center;
-    vertical-align: center;
-  }
-  @media screen and (max-width: 768px) {
-    #blend {
-      background: linear-gradient(to bottom, #36393f, #03A9F4);
-      height: 200px;
-      width: 100%;
+    #discord-side {
+        background-color: #36393f;
+        color: #dcddde;
+        font-family: 'Whitney', sans-serif;
     }
+
+    #avatar {
+        border-radius: 50%;
+    }
+
+    #prematch-side {
+        background-color: #03A9F4;
+        color: #fff;
+    }
+
+    #logo {
+        height: 150px;
+    }
+
     .side {
-      height: calc((100vh - 300px) / 2);
+        width: calc((100vw - 200px) / 2);
     }
+
     .column {
-      width: 100%;
+        height: calc(100vh - 100px);
+        padding: 0 0;
     }
+
+    .column-inner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    #blend {
+        background: linear-gradient(to right, #36393f, #03A9F4);
+        width: 200px;
+        align-content: center;
+    }
+
+    .columns {
+        min-height: 420px;
+        margin-bottom: 0 !important;
+    }
+
     #chain {
-      background: url('/static/img/chains-vert.png') repeat-y center;
+        background: url('/static/img/chains.png') repeat-x center;
+        width: 200px;
+        height: 100%;
+        margin: auto auto;
+        align-self: center;
+        vertical-align: center;
     }
-  }
+
+    @media screen and (max-width: 768px) {
+        #blend {
+            background: linear-gradient(to bottom, #36393f, #03A9F4);
+            height: 200px;
+            width: 100%;
+        }
+
+        .side {
+            height: calc((100vh - 300px) / 2);
+        }
+
+        .column {
+            width: 100%;
+            padding: 5%;
+        }
+
+        #chain {
+            background: url('/static/img/chains-vert.png') repeat-y center;
+        }
+
+        #logo {
+            height: 80px;
+        }
+
+        #avatar {
+            height: 60px;
+            width: 60px;
+        }
+    }
 </style>
 </body>
 </html>

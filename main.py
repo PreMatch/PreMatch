@@ -4,6 +4,7 @@ import discord
 from auth import *
 from teachers import teachers
 from google_auth import validate_token_for_info
+import requests
 
 PERIODS = list(map(chr, range(65, 72)))
 
@@ -316,19 +317,28 @@ def verify_discord(code, state):
   if handle is None:
     return error_not_logged_in()
 
-  access_token = discord.exchange_code(code)
-  user_info = discord.get('/users/@me', access_token)
-  user_id = user_info.get('id')
+  if not database.handle_exists(handle):
+    flash('You need to enter your schedule before integration', 'error')
+    return redirect('/update')
 
-  if not discord.state_valid(state, user_id):
-    return 'Impersonator!'
+  try:
+    access_token = discord.exchange_code(code)
+    user_info = discord.get('/users/@me', access_token)
+    user_id = user_info.get('id')
+    db_name = database.user_name(handle)
 
-  if database.get_assoc_discord_id(handle) is None:
-    database.record_discord_assoc(handle, user_id)
+    if not discord.state_valid(state, user_id):
+      return "Did you use a link from someone else? Please use $$personalize to get a link, just for you."
 
-  return render_template('discord_integration.html', avatar_src=discord.avatar_url(user_info),
-                         user_name=user_info['username'], user_discriminator=user_info['discriminator'],
-                         handle=handle)
+    if database.get_assoc_discord_id(handle) is None:
+      database.record_discord_assoc(handle, user_id)
+
+    return render_template('discord_integration.html', avatar_src=discord.avatar_url(user_info),
+                           user_name=user_info['username'], user_discriminator=user_info['discriminator'],
+                           handle=handle, name=db_name)
+
+  except requests.exceptions.HTTPError:
+    return error(401, 'Discord authorization failed!')
 
 
 if __name__ == "__main__":
