@@ -2,3 +2,9 @@
   font-family: Whitney;
   src: url(whitney_book-webfont.ttf) format('truetype');
 }
+
+@font-face {
+  font-family: Whitney;
+  font-weight: bold;
+  src: url(whitney_semibold-webfont.ttf) format('truetype');
+}
