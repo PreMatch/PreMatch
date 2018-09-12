@@ -1,10 +1,11 @@
+import requests
 from flask import *
+
 import database
 import discord
 from auth import *
-from teachers import teachers
 from google_auth import validate_token_for_info
-import requests
+from teachers import teachers
 
 PERIODS = list(map(chr, range(65, 72)))
 
@@ -130,8 +131,10 @@ def show_user(handle):
 
   schedule = database.user_schedule(handle)
   name = database.user_name(handle)
+  lunch = database.lunch_numbers(handle)
   return render_template('user.html', schedule=schedule, name=name,
-                         handle=handle, teachers=teachers)
+                         handle=handle, teachers=teachers,
+                         lunch_numbers=lunch, lunch_blocks=lunch.keys())
 
 
 @app.route('/dashboard')

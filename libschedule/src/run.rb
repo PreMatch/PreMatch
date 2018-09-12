@@ -11,6 +11,11 @@ bot = Discordrb::Commands::CommandBot.new \
 Bot.initialize
 
 bot.command :day do |event, *args|
+  unless Discord.channel_verified(event.channel)
+    event.send_message 'This server is not a verified AHS server.'
+    return
+  end
+
   date = Chronic.parse(args.join(' '))
 
   if date.nil?
@@ -23,6 +28,6 @@ end
 
 bot.command :personalize do |event, *args|
   Bot.response_to(:personalize, Date.today, event)
-    end
+end
 
 bot.run

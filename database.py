@@ -23,7 +23,9 @@ def handle_exists(handle):
 
 
 def schedule_count():
-  return len(list(get_db().query(kind="Schedule").fetch()))
+  query = get_db().query(kind='__Stat_Kind__')
+  query.add_filter('kind_name', '=', 'Schedule')
+  return list(query.fetch())[0]['count']
 
 
 def add_schedule(handle, name, sched_list):
