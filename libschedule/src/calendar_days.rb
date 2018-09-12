@@ -31,6 +31,10 @@ class HalfDay < Day
   def initialize(blocks)
     @blocks = blocks
   end
+
+  def description
+    'Half day'
+  end
 end
 
 class UnknownDay < Day
@@ -55,7 +59,7 @@ class ExamDay < Day
   end
 
   def description
-    "Exam Day with blocks #{@test_blocks[0]} and #{@test_blocks[1]}"
+    'Exam day'
   end
 end
 

@@ -1,28 +1,28 @@
 #$LOAD_PATH << 'src'
 require 'time'
-require './calendar'
+require './bot'
 require 'discordrb'
-require './schedule'
 
-
-today = Calendar.current.day_on(Date.today)
-puts "It is day #{today.number}"
-
-period = Schedule.of_day(today).period_index_at_time(Time.now)
-puts "It is Period #{period + 1}, Block #{Schedule.of_day(today).periods[period].block}" unless period.nil?
+require 'chronic'
 
 bot = Discordrb::Commands::CommandBot.new \
   token: 'NDE4MDg5MzY5OTQyMDk3OTIx.DXcfwA.hGGJJUR66WnhL4qwWXe5sJpMn34', prefix: '$$'
 
-DAY_LANGUAGE = { today: 0, tomorrow: 1, yesterday: -1 }.freeze
-
-def parse_day(arg)
-  Date.parse(arg)
-rescue StandardError
-  Date.today + DAY_LANGUAGE.get(arg.downcase, arg.to_i)
-end
+Bot.initialize
 
 bot.command :day do |event, *args|
+  date = Chronic.parse(args.join(' '))
+
+  if date.nil?
+    event.send_message(':thinking: I don\'t know what you mean.')
+    return
+  end
+
+  event.send_message(Bot.response_to(:day, date.to_date, event))
 end
+
+bot.command :personalize do |event, *args|
+  Bot.response_to(:personalize, Date.today, event)
+    end
 
 bot.run

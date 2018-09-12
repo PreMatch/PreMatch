@@ -187,3 +187,26 @@ def lunch_numbers(handle):
   schedule = user_schedule(handle)
   return dict(map(
       lambda block: (block, lunch_number(block, schedule[block])), PERIODS[2:]))
+
+
+def record_discord_assoc(handle, user_id):
+  client = get_db()
+  key = client.key('Discord', user_id)
+  task = datastore.Entity(key)
+
+  task.update({
+    'handle': handle
+  })
+
+  client.put(task)
+
+
+def get_assoc_discord_id(handle):
+  query = get_db().query(kind='Discord')
+  query.add_filter('handle', '=', handle)
+
+  result = list(query.fetch())
+  if len(result) == 0:
+    return None
+
+  return result[0].key.name

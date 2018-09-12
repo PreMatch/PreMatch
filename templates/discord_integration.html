@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+  <link rel="stylesheet" href="/static/fonts/whitney.css", rel="stylesheet">
+
+  <title>PreMatch Discord Integration</title>
+</head>
+<body>
+  <div class="columns" id="container">
+    <div class="column mobile-is-12 side has-text-centered" id="discord-side">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image">
+            <img src="{{ avatar_src }}" alt="{{ user_name }}">
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-4">{{ user_name }}</p>
+          <p class="subtitle is-6">#{{ user_discriminator }}</p>
+        </div>
+      </div>
+      Discord name
+    </div>
+    <div class="column is-2 mobile-is-12" id="blend">
+      <div id="chain"></div>
+    </div>
+    <div class="column mobile-is-12 side has-text-centered" id="prematch-side">
+      PreMatch name and handle
+    </div>
+  </div>
+<style>
+  #discord-side {
+    background-color: #36393f;
+    color: #dcddde;
+    font-family: 'Whitney', sans-serif;
+  }
+  #prematch-side {
+    background-color: #03A9F4;
+    color: #fff;
+  }
+  .side {
+    width: calc((100vw - 200px) / 2);
+  }
+  .column {
+    height: calc(100vh - 100px);
+    padding: 0 0;
+  }
+  #blend {
+    background: linear-gradient(to right, #36393f, #03A9F4);
+    width: 200px;
+    align-content: center;
+  }
+  .columns {
+    min-height: 420px;
+  }
+  #chain {
+    background: url('/static/img/chains.png') repeat-x center;
+    width: 200px;
+    height: 100%;
+    margin: auto auto;
+    align-self: center;
+    vertical-align: center;
+  }
+  @media screen and (max-width: 768px) {
+    #blend {
+      background: linear-gradient(to bottom, #36393f, #03A9F4);
+      height: 200px;
+      width: 100%;
+    }
+    .side {
+      height: calc((100vh - 300px) / 2);
+    }
+    .column {
+      width: 100%;
+    }
+    #chain {
+      background: url('/static/img/chains-vert.png') repeat-y center;
+    }
+  }
+</style>
+</body>
+</html>

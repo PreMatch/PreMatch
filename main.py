@@ -1,5 +1,6 @@
 from flask import *
 import database
+import discord
 from auth import *
 from teachers import teachers
 from google_auth import validate_token_for_info
@@ -291,6 +292,43 @@ def do_search():
   results = database.search_user(query.strip())
   return render_template('search-result.html', query=query, results=results,
                          handle=logged_handle())
+
+
+@app.route('/discord')
+def discord_entry_point():
+  code = request.args.get('code')
+  state = request.args.get('state')
+
+  if code is not None and state is not None:
+    return redirect(f'/discord/{code}/{state}')
+
+  if code is None:
+    flash('No code was supplied from Discord. Not our fault!', 'error')
+  if state is None:
+    flash('No state was supplied from Discord. Is this request legit?', 'error')
+
+  return redirect('/')
+
+
+@app.route('/discord/<code>/<state>')
+def verify_discord(code, state):
+  handle = logged_handle()
+  if handle is None:
+    return error_not_logged_in()
+
+  access_token = discord.exchange_code(code)
+  user_info = discord.get('/users/@me', access_token)
+  user_id = user_info.get('id')
+
+  if not discord.state_valid(state, user_id):
+    return 'Impersonator!'
+
+  if database.get_assoc_discord_id(handle) is None:
+    database.record_discord_assoc(handle, user_id)
+
+  return render_template('discord_integration.html', avatar_src=discord.avatar_url(user_info),
+                         user_name=user_info['username'], user_discriminator=user_info['discriminator'],
+                         handle=handle)
 
 
 if __name__ == "__main__":

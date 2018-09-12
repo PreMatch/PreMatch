@@ -60,7 +60,7 @@ describe 'Correct calculation of 7+H day from date' do
   it 'should consider exam days' do
     day = day_on_current_calendar(2019, 6, 13)
     expect(day).to be_a ExamDay
-    expect(day.description).to eql 'Exam Day with blocks C and G'
+    expect(day.description).to eql 'Exam day'
   end
 
   it 'should throw an ArgumentError for dates outside school year' do
