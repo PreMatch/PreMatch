@@ -7,11 +7,6 @@
 
 {{ nav(True, "/roster", handle) }}
 {{ bodyPaddingNav() }}
-You are {{ handle }}, and this is block {{ block }}, lunch # {{ number }}
-
-{% for (name, rhandle) in roster %}
-    {{ name, rhandle }}
-{% endfor %}
 
 <section class="hero is-primary section pushed">
     <div class="hero-body">
@@ -38,26 +33,32 @@ You are {{ handle }}, and this is block {{ block }}, lunch # {{ number }}
     </div>
 </section>
 <section class="section pushed">
-    <form>
-        <input class="input is-large" type="text" placeholder="Name or handle here..." name="query"
-               required>
-        <input class="button is-outlined is-primary is-large is-fullwidth"
-               style="transition: 0.5s all ease;" type="submit" value="Search">
-    </form>
-    <table class="table is-fullwidth is-size-4">
-        <tbody>
-        {% for name, rhandle in roster %}
-            <tr class="{{ 'is-selected' if handle == rhandle }}">
-                <td class="name">{{ name }}</td>
-                <td class="handle">{{ rhandle }}</td>
-                <td class="roster-link" style="{{ 'border: none!important;' if loop.index == roster|length else '' }}">
-                    <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-medium"
-                       href="/user/{{ rhandle }}">View Schedule</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="box" id="box" style="margin: 0 auto; max-width: 390px; padding: 1.25rem 0; ">
+        <form style="margin: 0 1.25rem 1.5rem 1.25rem;">
+            <script type="text/javascript">
+                function filterStudents() {
+
+                }
+            </script>
+            <input class="input is-large" type="text" placeholder="Search a name or handle here..."
+                   required style="font-size: 18px;" onkeyup="filterStudents()">
+        </form>
+        <table class="table is-fullwidth is-size-4" id="table" style="min-width: 100%">
+            <tbody>
+            {% for name, rhandle in roster %}
+                <tr class="{{ 'is-selected' if handle == rhandle }}">
+                    <td class="name">{{ name }}</td>
+                    <td class="handle">{{ rhandle }}</td>
+                    <td class="roster-link"
+                        style="{{ 'border: none!important;' if loop.index == roster|length else '' }}">
+                        <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-medium"
+                           href="/user/{{ rhandle }}">View Schedule</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </section>
 
 <style>
@@ -96,7 +97,16 @@ You are {{ handle }}, and this is block {{ block }}, lunch # {{ number }}
 
 </style>
 <script type="text/javascript">
+    function formResize() {
+        $("#box").css('max-width', $('#table').innerWidth());
+    }
+
+    $(document).ready(() => {
+        formResize();
+    });
+
     $(window).resize(() => {
+        formResize();
         if ($(window).width() <= 480) {
             $('.roster-link').each((indx, td) => {
                 let button = td.getElementsByTagName('a')[0];
