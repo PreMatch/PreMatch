@@ -37,16 +37,59 @@
         <form style="margin: 0 1.25rem 1.5rem 1.25rem;">
             <script type="text/javascript">
                 function filterStudents() {
+                    let input, filter;
+                    input = document.getElementById('search');
+                    filter = input.value.toUpperCase();
+
+                    let noResultsText = document.getElementById('no-results');
+                    noResultsText.style.display = "none";
+
+                    let names = document.getElementsByClassName('name');
+                    let handles = document.getElementsByClassName('handle');
+
+                    if (filter.length > 0) {
+
+
+                        let hitCounter = filterFromLists(names, handles, filter); //
+
+                        if (hitCounter === 0 && filter.length > 0) {
+                            if (hitCounter === 0 && filter.length > 0)
+                                noResultsText.style.display = "flex";
+                            else
+                                noResultsText.style.display = "none";
+                        }
+                    } else {
+                        Array.prototype.forEach.call(names, (name) => {
+                            name.parentElement.style.display = "flex";
+                        });
+                        noResultsText.style.display = "none";
+                    }
+
 
                 }
+
+                // handleList must have the same length as nameList
+                function filterFromLists(nameList, handleList, filter) {
+                    let hitCounter = 0;
+                    for (let i = 0; i < nameList.length; i++) {
+                        if ((nameList[i].innerHTML.toUpperCase().indexOf(filter) > -1 || handleList[i].innerHTML.toUpperCase().indexOf(filter) > -1) && filter !== '') {
+                            nameList[i].parentElement.style.display = "flex";
+                            hitCounter++;
+                        } else {
+                            nameList[i].parentElement.style.display = "none";
+                        }
+                    }
+
+                    return hitCounter;
+                }
             </script>
-            <input class="input is-large" type="text" placeholder="Search a name or handle here..."
+            <input class="input is-large" type="text" id="search" placeholder="Search a name or handle here..."
                    required style="font-size: 18px;" onkeyup="filterStudents()">
         </form>
         <table class="table is-fullwidth is-size-4" id="table" style="min-width: 100%">
             <tbody>
             {% for name, rhandle in roster %}
-                <tr class="{{ 'is-selected' if handle == rhandle }}">
+                <tr class="{{ 'is-selected' if handle == rhandle }} lunch-row">
                     <td class="name">{{ name }}</td>
                     <td class="handle">{{ rhandle }}</td>
                     <td class="roster-link"
@@ -56,6 +99,9 @@
                     </td>
                 </tr>
             {% endfor %}
+            <tr class="lunch-row is-size-2" style="display: none;" id="no-results">
+                <td class="name">No students found</td>
+            </tr>
             </tbody>
         </table>
     </div>

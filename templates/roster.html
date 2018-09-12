@@ -19,9 +19,10 @@
             </h2>
             {% if period in lunch_periods %}
                 {% if lunch_number != none %}
-                    <h3 class="subtitle overridden-white is-5">Lunch {{ lunch_number }}</h3>
-                    <a class="button is-medium is-primary is-pulled-right" id="lunch-button"
-                        href="/lunch/{{ period }}/{{ lunch_number }}">View Lunch</a>
+                    <h3 class="subtitle overridden-white is-5" style="display: flex; align-items: center;"><span
+                            style="margin-right: 20px;">Lunch {{ lunch_number }}</span> <a
+                            class="button is-medium is-primary is-outlined" id="lunch-button"
+                            href="/lunch/{{ period }}/{{ lunch_number }}">View Lunch</a></h3>
                 {% else %}
                     {% if user_in_class %}
                         <h3 class="title overridden-white is-5">No lunch set for this class, why not <a
@@ -64,11 +65,6 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-    }
-
-    #lunch-button {
-        position: absolute;
-        right: 0;
     }
 
     table {

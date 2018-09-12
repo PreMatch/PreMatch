@@ -82,7 +82,7 @@
                         {% if period in lunch_periods and lunch_numbers[period] != none %}
                             <a class="button is-outlined is-primary is-medium lunch-button"
                                href="/lunch/{{ period }}/{{ lunch_numbers[period] }}"
-                               id="view-lunch-{{ period }}" style="border-radius: 10px;">View Lunch</a>
+                               id="view-lunch-{{ period }}" style="border-radius: 10px; margin-top: 10px;">View Lunch</a>
                         {% endif %}
                         <script type="text/javascript">
                             $(document).ready(() => {
