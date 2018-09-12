@@ -1,6 +1,5 @@
 import requests
 import hmac
-import json
 
 API_ENDPOINT = 'https://discordapp.com/api'
 CLIENT_ID = '418089369942097921'

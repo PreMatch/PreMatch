@@ -31,7 +31,7 @@
             {% for period in 'ABCDEFG' %}
                 <div class="teacher-dropdown" id="dropdown-container-{{ period }}">
                     <div class="teacher-dropdown-content" id="teacher-dropdown-{{ period }}">
-                        <label class="block-label" for="teacherInput{{ period }}">Block {{ period }}:</label>
+                        <label class="block-label" for="teacherInput{{ period }}">Block {{ period }}</label>
                         <br>
                         <input type="text" placeholder="Search for a teacher..." id="teacherInput{{ period }}"
                                onkeyup="filterTeachers('{{ period }}')" onfocus="selectInput('{{ period }}')">
@@ -78,6 +78,11 @@
                             <a class="button is-outlined is-primary is-medium"
                                data-href-base="/roster/{{ period }}/"
                                id="view-roster-{{ period }}" style="border-radius: 10px;">View Classmates</a>
+                        {% endif %}
+                        {% if period in lunch_periods and lunch_numbers[period] != none %}
+                            <a class="button is-outlined is-primary is-medium lunch-button"
+                               href="/lunch/{{ period }}/{{ lunch_numbers[period] }}"
+                               id="view-lunch-{{ period }}" style="border-radius: 10px;">View Lunch</a>
                         {% endif %}
                         <script type="text/javascript">
                             $(document).ready(() => {
@@ -156,6 +161,10 @@
         margin: 0 auto;
         padding: 20px;
         z-index: 99999999;
+    }
+
+    .notification .button.is-medium {
+        width: 100%;
     }
 
     @media screen and (max-width: 1000px) {

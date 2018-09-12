@@ -11,15 +11,17 @@
 <section class="hero is-primary section pushed">
     <div class="hero-body">
         <div class="container">
-            <h1 class="title overridden-white is-1">
+            <h1 class="title overridden-white is-size-1 is-size-2-mobile">
                 Block {{ period }} with {{ teacher }}
             </h1>
-            <h2 class="subtitle overridden-white is-3">
+            <h2 class="subtitle overridden-white is-size-3 is-size-4-mobile">
                 {{ roster|length }} student(s)
             </h2>
             {% if period in lunch_periods %}
                 {% if lunch_number != none %}
-                    <h3 class="title overridden-white is-5">Lunch {{ lunch_number }}</h3>
+                    <h3 class="subtitle overridden-white is-5">Lunch {{ lunch_number }}</h3>
+                    <a class="button is-medium is-primary is-pulled-right" id="lunch-button"
+                        href="/lunch/{{ period }}/{{ lunch_number }}">View Lunch</a>
                 {% else %}
                     {% if user_in_class %}
                         <h3 class="title overridden-white is-5">No lunch set for this class, why not <a
@@ -58,18 +60,19 @@
 
 <style>
 
-    table {
-        margin: 0 auto;
+    .hero-body .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
-    @media screen and (max-width: 760px) {
-        .title {
-            font-size: 2rem !important;
-        }
+    #lunch-button {
+        position: absolute;
+        right: 0;
+    }
 
-        .subtitle {
-            font-size: 1rem !important;
-        }
+    table {
+        margin: 0 auto;
     }
 
     @media screen and (max-width: 700px) {
@@ -80,15 +83,19 @@
         tr td a {
             font-size: 0.75rem !important;
         }
+
+        #lunch-button {
+            font-size: 0.8em !important;
+        }
     }
 
     @media screen and (max-width: 600px) {
         .title {
-            font-size: 1.5rem !important;
+            font-size: 2rem !important;
         }
 
         .subtitle {
-            font-size: 0.75rem !important;
+            font-size: 1rem !important;
         }
 
         tr {

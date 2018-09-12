@@ -142,11 +142,16 @@ function selectLunch(period, lunch) {
     let text = $(`#lunch-select-${ period }-${ lunch }`).html();
     $(`#lunch-opener-${ period }`).html(text + ' <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
     document.getElementById(`lunch-invis-${period}`).value = lunch;
+
+    const lunchButton = $(`#view-lunch-${period}`);
+    lunchButton.attr('href', `/lunch/${period}/${lunch}`);
+    lunchButton.show();
 }
 
 function clearLunch(period) {
     $(`#lunch-opener-${ period }`).html('Select lunch... <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
     document.getElementById(`lunch-invis-${period}`).value = "";
+    $(`#view-lunch-${period}`).hide();
 }
 
 function setOriginalMargin() {
