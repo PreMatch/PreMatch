@@ -31,7 +31,8 @@ bot.command :personalize do |event, *_args|
 end
 
 bot.command :myday do |event, *_args|
-  event.send(Bot.response_to(:myday, Date.today, event))
+  resp = Bot.response_to(:myday, Date.today, event)
+  event.send(resp) unless resp.nil?
 end
 
 bot.run

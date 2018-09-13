@@ -86,7 +86,7 @@ module Bot
       call_day = @calendar.day_on(call_date)
 
       personal_respond(schedule, call_date, call_day, event)
-      'Here you go'
+      nil
     end
   end
 
@@ -149,12 +149,11 @@ module Bot
     embed.description = "Showing #{target_desc} (#{target_day.description})"
     embed.author = embed_author
     embed.add_field(
-        name: "Blocks",
-        value: target_blocks.join("\n"),
-        inline: true)
-    embed.add_field(
-        name: teacher_expr,
-        value: target_blocks.map {|blk| user_schedule[blk]}.join("\n"),
+        name: "Blocks and #{teacher_expr}",
+        value: target_blocks.map do |blk|
+          teacher = user_schedule[blk]
+          teacher.nil? ? blk : "#{blk} → #{teacher}"
+        end.join("\n"),
         inline: true)
   end
 
