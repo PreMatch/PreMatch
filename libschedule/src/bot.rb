@@ -86,7 +86,7 @@ module Bot
       call_day = @calendar.day_on(call_date)
 
       personal_respond(schedule, call_date, call_day, event)
-      nil
+      'Here you go'
     end
   end
 
@@ -127,12 +127,12 @@ module Bot
       else
         now_block = timetable.period_at_time now
         if now_block.nil?
-          return ['You are (should be) in school, between periods.',
+          return ['You are in school, between periods.',
                   call_date, 'today']
         else
           now_teacher = schedule[now_block.block] || 'an unknown teacher'
 
-          return ["You are (should be) in block #{now_block.block} with #{now_teacher}",
+          return ["You are in block #{now_block.block} with #{now_teacher}",
                   call_date, 'today']
         end
       end
@@ -153,9 +153,13 @@ module Bot
         value: target_blocks.join("\n"),
         inline: true)
     embed.add_field(
-        name: 'Teachers',
+        name: teacher_expr,
         value: target_blocks.map {|blk| user_schedule[blk]}.join("\n"),
         inline: true)
+  end
+
+  def self.teacher_expr
+    Random.rand < 0.05 ? 'Prison Guards Crossed with Babysitters' : 'Teachers'
   end
 
   def self.express_date(date)
