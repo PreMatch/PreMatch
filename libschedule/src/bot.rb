@@ -1,6 +1,7 @@
 require './calendar'
 require './schedule'
 require './database'
+require 'discordrb'
 
 require 'openssl'
 
@@ -29,6 +30,14 @@ module Bot
   def self.initialize
     @calendar = Calendar.current
     @database = Database.new
+  end
+
+  def self.embed_author
+    Discordrb::Webhooks::EmbedAuthor.new(
+        name: 'PreMatch Discord',
+        url: 'https://prematch.org',
+        icon_url: 'https://prematch.org/static/img/PreMatch%20Logo.png'
+    )
   end
 
   def self.response_to(command, call_date, event)
@@ -66,10 +75,88 @@ module Bot
         schedule = Schedule.of_day(call_day)
         return "#{express_date call_date} is a #{call_day.description} with blocks #{schedule.periods.map(&:block).join(', ')}"
       end
+
+    when :myday
+      return 'We are not in the currently defined calendar year. Is this summer?' unless @calendar.includes? call_date
+
+      handle = @database.associated_handle(event.author.id.to_s)
+      return 'You are not associated with PreMatch! Try $$personalize.' if handle.nil?
+
+      schedule = @database.read_schedule(handle)
+      call_day = @calendar.day_on(call_date)
+
+      personal_respond(schedule, call_date, call_day, event)
+      nil
     end
   end
 
+  def self.personal_respond(schedule, call_date, call_day, event)
+    status, target_date, target_desc = current_status(schedule, call_day, call_date)
+
+    event.channel.send_embed do |embed|
+      embed.add_field(
+          name: 'Current status',
+          value: status
+      )
+      render_embed(embed, schedule, target_date, target_desc)
+    end
+
+  end
+
   private
+
+  # Returns [message, target_date, target_desc]
+  def self.current_status(schedule, call_day, call_date)
+    case call_day
+    when Holiday
+      return ['Enjoy your day off! Prepare for the next school day.',
+              @calendar.next_nonholiday(call_date), 'next school day']
+    when UnknownDay
+      return ["Today's schedule is unknown to me.",
+              @calendar.next_nonholiday(call_date), 'next school day']
+    else
+      timetable = Schedule.of_day(call_day)
+      now = Time.new(1970, 1, 1, Time.now.hour, Time.now.min, 0)
+
+      if now < timetable.start_time
+        return ['Good morning. Here is your schedule for today',
+                call_date, 'today']
+      elsif now > timetable.end_time
+        return ['School has ended for today. Prepare for the next school day.',
+                @calendar.next_nonholiday(call_date), 'next school day']
+      else
+        now_block = timetable.period_at_time now
+        if now_block.nil?
+          return ['You are (should be) in school, between periods.',
+                  call_date, 'today']
+        else
+          now_teacher = schedule[now_block.block] || 'an unknown teacher'
+
+          return ["You are (should be) in block #{now_block.block} with #{now_teacher}",
+                  call_date, 'today']
+        end
+      end
+    end
+  end
+
+  def self.render_embed(embed, user_schedule, target_date, target_desc)
+    today = @calendar.day_on(Date.today)
+    target_day = @calendar.day_on target_date
+    target_schedule = Schedule.of_day(target_day)
+    target_blocks = target_schedule.periods.map(&:block)
+
+    embed.title = "Today is #{today.description}"
+    embed.description = "Showing #{target_desc} (#{target_day.description})"
+    embed.author = embed_author
+    embed.add_field(
+        name: "Blocks",
+        value: target_blocks.join("\n"),
+        inline: true)
+    embed.add_field(
+        name: 'Teachers',
+        value: target_blocks.map {|blk| user_schedule[blk]}.join("\n"),
+        inline: true)
+  end
 
   def self.express_date(date)
     date.strftime('%B %-d, %Y')

@@ -26,8 +26,13 @@ bot.command :day do |event, *args|
   event.send_message(Bot.response_to(:day, date.to_date, event))
 end
 
-bot.command :personalize do |event, *args|
+bot.command :personalize do |event, *_args|
   Bot.response_to(:personalize, Date.today, event)
+end
+
+bot.command :myday do |event, *_args|
+  Bot.response_to(:myday, Date.today, event)
+  nil
 end
 
 bot.run

@@ -18,7 +18,7 @@ class TimeRange
   end
 
   def includes?(time)
-    (time >= @start_time) && (time <= @end_time)
+    (without_date(time) >= @start_time) && (without_date(time) <= @end_time)
   end
 end
 
