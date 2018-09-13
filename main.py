@@ -83,6 +83,8 @@ def do_login():
     log_in(handle)
 
     flash('Successfully logged in as ' + name)
+    if database.missing_some_lunch(handle):
+      flash('You are missing some lunch numbers. To enter them, please visit the Update page.')
     default = '/dashboard'
 
     if not database.handle_exists(handle):

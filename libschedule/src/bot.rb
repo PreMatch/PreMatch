@@ -79,7 +79,7 @@ module Bot
     when :myday
       return 'We are not in the currently defined calendar year. Is this summer?' unless @calendar.includes? call_date
 
-      handle = @database.associated_handle(event.author.id.to_s)
+      handle = @database.associated_handle(event.author.id)
       return 'You are not associated with PreMatch! Try $$personalize.' if handle.nil?
 
       schedule = @database.read_schedule(handle)

@@ -123,12 +123,6 @@ def most_common_classmates(handle):
   return list(max_users), max_hit_rate
 
 
-def lunch_exists_for_handle(handle):
-  key = get_db().key('Lunch', handle)
-
-  return get_db().get(key) is not None
-
-
 def upsert_lunch(handle, lunch_numbers):
   if not handle_exists(handle):
     raise Exception(f'Schedule with handle {handle} does not exist')
@@ -212,3 +206,15 @@ def get_assoc_discord_id(handle):
     return None
 
   return result[0].key.name
+
+
+def missing_some_lunch(handle):
+  schedule = user_schedule(handle)
+  if schedule is None:
+    return True
+
+  for block in PERIODS[2:]:
+    if lunch_number(block, schedule[block]) is None:
+      return True
+
+  return False

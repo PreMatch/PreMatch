@@ -18,7 +18,7 @@ class Database
   end
 
   def associated_handle(user_id)
-    key = @datastore.key 'Discord', user_id
+    key = @datastore.key 'Discord', user_id.to_s
     entity = @datastore.find(key)
 
     if entity.nil?
