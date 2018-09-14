@@ -33,7 +33,7 @@
     </div>
 </section>
 <section class="section pushed">
-    <div class="box" id="box" style="margin: 0 auto; max-width: 75%; padding: 1.25rem 0; ">
+    <div class="box" id="box" style="margin: 0 auto; max-width: 75%; padding: 1.25rem; ">
         <form style="margin: 0 1.25rem 1.5rem 1.25rem;">
             <script type="text/javascript">
                 function filterStudents() {
@@ -109,7 +109,8 @@
                 {% endfor %}
                 </div>
         </div>
-        <div class="lunch-row is-size-2" style="display: none; margin: 0; text-align: center; font-size: 1.25rem;" id="no-results">
+        <div class="lunch-row is-size-2" style="display: none; margin: 0; text-align: center; font-size: 1.25rem;"
+             id="no-results">
             <p>No students found</p>
         </div>
     </div>
@@ -125,6 +126,7 @@
 
     .handle {
         margin: -0.3rem 0;
+        font-size: 14px;
     }
 
     .lunch-row {
@@ -161,9 +163,84 @@
     .is-selected h1 {
         color: white !important;
     }
+
+    @media screen and (max-width: 1000px) {
+        .name {
+            font-size: 14px;
+        }
+
+        .handle {
+            font-size: 10px;
+        }
+
+        .button { /* Turn it from is-medium to is-small */
+            border-radius: 2px;
+            font-size: .75rem !important;
+        }
+    }
+
+    @media screen and (max-width: 750px) {
+        .columns {
+            flex-direction: column;
+        }
+
+        .name {
+            font-size: 18px;
+        }
+
+        .handle {
+            font-size: 14px;
+        }
+
+        .button {
+            font-size: 1.25rem !important;
+        }
+
+        .column {
+            border-right: none !important;
+        }
+
+        #box {
+            padding: 1.25rem 0 !important;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        #no-results p {
+            font-size: 18px !important;
+        }
+    }
+
+    @media screen and (max-width: 470px) {
+        #search {
+            font-size: 14px !important;
+        }
+    }
+
+    @media screen and (max-width: 450px) {
+        .name {
+            font-size: 14px;
+        }
+
+        .handle {
+            font-size: 10px;
+        }
+
+        .title.is-1 {
+            font-size: 1.5rem;
+        }
+
+        .subtitle.is-3 {
+            font-size: 1rem;
+        }
+
+        #search {
+            font-size: 11px !important;
+        }
+    }
 </style>
 <script type="text/javascript">
-    $(window).resize(() => {
+    function buttons() {
         if ($(window).width() <= 480) {
             $('.roster-link').each((indx, td) => {
                 let button = td.getElementsByTagName('a')[0];
@@ -175,6 +252,12 @@
                 button.innerHTML = "View Schedule"
             });
         }
+    }
+
+    buttons();
+
+    $(window).resize(() => {
+        buttons();
     });
 </script>
 {{ importJs() }}
