@@ -33,7 +33,7 @@
     </div>
 </section>
 <section class="section pushed">
-    <div class="box" id="box" style="margin: 0 auto; max-width: 390px; padding: 1.25rem 0; ">
+    <div class="box" id="box" style="margin: 0 auto; max-width: 75%; padding: 1.25rem 0; ">
         <form style="margin: 0 1.25rem 1.5rem 1.25rem;">
             <script type="text/javascript">
                 function filterStudents() {
@@ -48,15 +48,19 @@
                     let handles = document.getElementsByClassName('handle');
 
                     if (filter.length > 0) {
-
-
                         let hitCounter = filterFromLists(names, handles, filter); //
 
                         if (hitCounter === 0 && filter.length > 0) {
-                            if (hitCounter === 0 && filter.length > 0)
-                                noResultsText.style.display = "flex";
-                            else
-                                noResultsText.style.display = "none";
+                            noResultsText.style.display = "flex";
+                            Array.prototype.forEach.call(document.getElementsByClassName('column'), (col) => {
+                                $(col).hide();
+                            });
+                        }
+                        else {
+                            noResultsText.style.display = "none";
+                            Array.prototype.forEach.call(document.getElementsByClassName('column'), (col) => {
+                                $(col).show();
+                            });
                         }
                     } else {
                         Array.prototype.forEach.call(names, (name) => {
@@ -86,40 +90,33 @@
             <input class="input is-large" type="text" id="search" placeholder="Search a name or handle here..."
                    required style="font-size: 18px;" onkeyup="filterStudents()">
         </form>
-        <table class="table is-fullwidth is-size-4" id="table" style="min-width: 100%">
-            <tbody>
-            {% for name, rhandle in roster %}
-                <tr class="{{ 'is-selected' if handle == rhandle }} lunch-row">
-                    <td class="name">{{ name }}</td>
-                    <td class="handle">{{ rhandle }}</td>
-                    <td class="roster-link"
-                        style="{{ 'border: none!important;' if loop.index == roster|length else '' }}">
-                        <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-medium"
-                           href="/user/{{ rhandle }}">View Schedule</a>
-                    </td>
-                </tr>
-            {% endfor %}
-            <tr class="lunch-row is-size-2" style="display: none;" id="no-results">
-                <td class="name">No students found</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="columns">
+            <div class="column is-one-third">
+                {% for name, rhandle in roster %}
+                    {% if loop.index == (loop|length / 3)|round|int + 1 or loop.index == (loop|length / 3)|round|int * 2 + 1 %}
+                        </div>
+                        <div class="column is-one-third">
+                    {% endif %}
+                    <div class="{{ 'is-selected' if handle == rhandle }} lunch-row">
+                        <h1 class="name">{{ name }}</h1>
+                        <h1 class="handle">{{ rhandle }}</h1>
+                        <p class="roster-link"
+                           style="{{ 'border: none!important;' if loop.index == roster|length else '' }} text-align: center;">
+                            <a class="button {{ 'is-outlined' if handle == rhandle }} is-primary is-medium"
+                               href="/user/{{ rhandle }}">View Schedule</a>
+                        </p>
+                    </div>
+                {% endfor %}
+                </div>
+        </div>
+        <div class="lunch-row is-size-2" style="display: none; margin: 0; text-align: center; font-size: 1.25rem;" id="no-results">
+            <p>No students found</p>
+        </div>
     </div>
 </section>
 
 <style>
-
-    table {
-        margin: 0 auto;
-        max-width: 25%;
-        border-radius: 10px;
-    }
-
-    .roster-link {
-        border-bottom: 1px solid #bdbdbd !important;
-    }
-
-    tr td {
+    .lunch-row h1 {
         flex: 1;
         text-align: center;
         color: #009688;
@@ -127,32 +124,46 @@
     }
 
     .handle {
-        margin-top: -1rem;
+        margin: -0.3rem 0;
     }
 
-    tr {
+    .lunch-row {
         display: flex;
         flex-direction: column;
+        margin: 0 0.75rem;
     }
 
-    .name {
+    .name, #no-results {
         font-size: 18px;
         color: #03A9F4;
         font-weight: bold;
+        margin-top: 1rem;
     }
 
+    .column {
+        border-right: 1px solid #bdbdbd !important;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .column:last-of-type {
+        border: none !important;
+    }
+
+    .lunch-row.is-selected {
+        margin: 0;
+    }
+
+    .is-selected {
+        background-color: #03A9F4;
+    }
+
+    .is-selected h1 {
+        color: white !important;
+    }
 </style>
 <script type="text/javascript">
-    function formResize() {
-        $("#box").css('max-width', $('#table').innerWidth());
-    }
-
-    $(document).ready(() => {
-        formResize();
-    });
-
     $(window).resize(() => {
-        formResize();
         if ($(window).width() <= 480) {
             $('.roster-link').each((indx, td) => {
                 let button = td.getElementsByTagName('a')[0];
