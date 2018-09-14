@@ -22,7 +22,7 @@ require './current_calendar'
 
 class Calendar
   def self.current
-    Calendar.new([],
+    Calendar.new(CurrentCalendar.overrides,
                  CurrentCalendar.exclusions,
                  CurrentCalendar.start_date,
                  CurrentCalendar.end_date)

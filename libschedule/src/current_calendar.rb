@@ -71,4 +71,11 @@ module CurrentCalendar
       exam_day(Date.new(2019, 6, 14), 'D', 'Makeup')
     ]
   end
+
+  def self.overrides
+    [
+        single_holiday(Date.new(2018, 9, 14), 'Day after Gas Explosion Apocalypse'),
+        Exclusion.new(Date.new(2018, 9, 17), Date.new(2018, 9, 17), StandardDay::new(2))
+    ]
+  end
 end
