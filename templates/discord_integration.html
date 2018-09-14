@@ -10,36 +10,66 @@
 
     <title>PreMatch Discord Integration</title>
 </head>
-<body class="no-padding">
-<div class="columns" id="container">
-    <div class="column mobile-is-12 side has-text-centered" id="discord-side">
-        <div class="column-inner">
-            <img id="logo" src="/static/img/discord.png">
-            <section class="hero">
-                <div class="media">
-                    <div class="media-left">
-                        <figure class="image">
-                            <img src="{{ avatar_src }}" alt="{{ user_name }}" id="avatar" height="100" width="100">
-                        </figure>
+<body class="no-padding is-fullheight">
+<div class="columns is-fullheight" id="container">
+    <div class="column side has-text-centered is-fullheight" id="discord-side">
+        <div class="columns is-narrow"
+             style="flex-direction: column; min-height: 102vh; padding: 2vh 0; overflow: hidden;">
+            <div class="column">
+                <img id="logo" src="/static/img/discord.png">
+            </div>
+            <section class="column"
+                     style="display: flex;flex-direction: column;align-items: center; justify-content: center; max-width: 100%; -webkit-flex: 1 0 auto;">
+                <div style="flex: 1;">
+                    {% for counter in range(3) %}
+                        <div class="user-container other-user">
+                            <div class="user-img">
+                                <figure class="user-pfp">
+                                    <img src="/static/img/discord%20pfp.png" height="75" width="75">
+                                </figure>
+                            </div>
+                            <div class="user-info">
+                                <p class="title has-text-light username">Name here</p>
+                                <p class="subtitle has-text-grey id">#0000</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="user-container is-user">
+                        <div class="user-img">
+                            <figure class="user-pfp">
+                                <img src="{{ avatar_src }}" alt="{{ user_name }}" id="pfp" height="100" width="100">
+                            </figure>
+                        </div>
+                        <div class="user-info">
+                            <p class="title has-text-light username">{{ user_name }}</p>
+                            <p class="subtitle has-text-grey id" id="user-id">#{{ user_discriminator }}</p>
+                        </div>
                     </div>
-                    <div class="media-content">
-                        <p class="title is-size-1 has-text-light is-size-3-mobile">{{ user_name }}</p>
-                        <p class="subtitle is-size-3 has-text-grey is-size-5-mobile">#{{ user_discriminator }}</p>
-                    </div>
+                    {% for counter in range(3) %}
+                        <div class="user-container other-user">
+                            <div class="user-img">
+                                <figure class="user-pfp">
+                                    <img src="/static/img/discord%20pfp.png" height="75" width="75">
+                                </figure>
+                            </div>
+                            <div class="user-info">
+                                <p class="title has-text-light username">Name here</p>
+                                <p class="subtitle has-text-grey id">#0000</p>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </section>
         </div>
     </div>
-    <div class="column is-2 is-12-mobile" id="blend">
+    <div class="column is-2 is-fullheight" id="blend">
         <h1 class="is-size-2 is-size-4-mobile" id="success">Success!</h1>
         <h2 class="is-size-2 is-size-4-mobile" id="now-try">Now try $$myday.</h2>
-        <div id="chain">
-        </div>
     </div>
-    <div class="column mobile-is-12 side has-text-centered" id="prematch-side">
+    <div class="column side has-text-centered is-fullheight" id="prematch-side">
         <div class="column-inner">
             <img id="logo" src="/static/img/PreMatch%20Logo.png">
-            <section class="hero">
+            <div>
                 <div class="container">
                     <h1 class="title is-size-1 has-text-white is-size-3-mobile">
                         {{ name }}
@@ -48,9 +78,10 @@
                         {{ handle }}
                     </h2>
                 </div>
-            </section>
+            </div>
         </div>
     </div>
+    <div id="chain"></div>
 </div>
 <style>
     #discord-side {
@@ -59,7 +90,7 @@
         font-family: 'Whitney', sans-serif;
     }
 
-    #avatar {
+    .user-pfp img {
         border-radius: 50%;
     }
 
@@ -77,8 +108,8 @@
     }
 
     .column {
-        height: 100vh;
         padding: 0 0;
+        flex: 1;
     }
 
     .column-inner {
@@ -121,50 +152,89 @@
         height: 100%;
     }
 
-    @media screen and (max-width: 768px) {
-        #blend {
-            background: linear-gradient(to bottom, #36393f, #03A9F4);
-            height: 200px;
-            width: 100%;
-        }
+    .user-img, .user-info {
+        flex: 1;
+    }
 
-        .side {
-            height: calc((100vh - 200px) / 2);
-        }
+    .user-img {
+        max-width: 75px;
+    }
 
-        .column {
-            width: 100%;
-            padding: 5%;
-        }
+    .user-info {
+        padding-left: 10px;
+    }
 
-        #chain {
-            background: url('/static/img/chains-vert.png') repeat-y center;
-        }
+    .user-container {
+        display: flex;
+        border-radius: 5px;
+        padding: 8px;
+        text-align: left;
+        align-items: center;
+    }
 
-        #success {
-            position: absolute;
-            left: 50px;
-            top: unset;
-            width: 100px;
-        }
+    .username {
+        font-size: 30px;
+    }
 
-        #now-try {
-            position: absolute;
-            right: 50px;
-            bottom: unset;
-            width: 100px;
-            text-align: center;
-        }
+    .id {
+        font-size: 20px;
+    }
 
-        #logo {
-            height: 80px;
-        }
+    .user-container.is-user {
+        background-color: rgba(79, 84, 92, .6);
+    }
 
-        #avatar {
-            height: 60px;
-            width: 60px;
-        }
+    .user-container.is-user .user-img {
+        max-width: 100px;
+    }
+
+    .user-container.is-user .user-info {
+        margin-right: 10px;
+    }
+
+    .user-container.is-user .username {
+        font-size: 48px;
+    }
+
+    .user-container.is-user .id {
+        font-size: 32px;
     }
 </style>
+<script type="text/javascript">
+    let bgColors = ['#f04747', '#faa61a', '#7289da', '#747f8d', '#43b581'];
+    let names = ["Anakin Skywalker", "Luke Skywalker", "Darth Vader", "Obi-Wan Kenobi", "Leia Organa", "R2-D2", "C-3PO", "Chewbacca", "Han Solo", "Darth Maul"];
+    let otherIds = [];
+
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+
+    Array.prototype.forEach.call(document.getElementsByClassName('other-user'), (userCont) => {
+        let pic = userCont.getElementsByTagName('img')[0];
+        pic.style.backgroundColor = bgColors[getRandomInt(bgColors.length)];
+        let name = userCont.getElementsByClassName('username')[0];
+        let namesId = getRandomInt(names.length)
+        name.innerHTML = names[namesId];
+        names.splice(namesId, 1);
+        let userId = document.getElementById('user-id').innerHTML.substr(1);
+        let id = '';
+        while (true) {
+            for (let i = 0; i < 4; i++) {
+                id += getRandomInt(10);
+            }
+
+            if (id === userId || otherIds.includes(id)) {
+                id = '';
+                continue;
+            }
+
+            otherIds.push(id);
+            break;
+        }
+
+        let idText = userCont.getElementsByClassName('id')[0];
+        idText.innerHTML = "#" + id;
+    });
+</script>
 </body>
 </html>
