@@ -1,13 +1,32 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="google-signin-client_id"
+          content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-    <link rel="stylesheet" href="/static/fonts/whitney.css">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/client:platform.js" async defer></script>
     <title>PreMatch Discord Integration</title>
 </head>
 <body class="no-padding is-fullheight">
@@ -34,7 +53,7 @@
                             </div>
                         </div>
                     {% endfor %}
-                    <div class="user-container is-user">
+                    <div class="user-container is-user" id="user-box">
                         <div class="user-img">
                             <figure class="user-pfp">
                                 <img src="{{ avatar_src }}" alt="{{ user_name }}" id="pfp" height="100" width="100">
@@ -67,15 +86,15 @@
         <h2 class="is-size-2 is-size-4-mobile" id="now-try">Now try $$myday.</h2>
     </div>
     <div class="column side has-text-centered is-fullheight" id="prematch-side">
-        <div class="column-inner">
-            <img id="logo" src="/static/img/PreMatch%20Logo.png">
-            <div>
-                <div class="container">
+        <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+            <div style="flex: 1;">
+                <img id="logo" src="/static/img/PreMatch%20Logo.png">
+                <div>
                     <h1 class="title is-size-1 has-text-white is-size-3-mobile">
-                        {{ name }}
+                        <span id="prematch-name">{{ name }}</span>
                     </h1>
                     <h2 class="subtitle is-size-3 is-size-5-mobile" style="color:#ddd">
-                        {{ handle }}
+                        <span id="prematch-handle">{{ handle }}</span>
                     </h2>
                 </div>
             </div>
@@ -112,15 +131,6 @@
         flex: 1;
     }
 
-    .column-inner {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        width: 100%;
-        flex-direction: column;
-    }
-
     #blend {
         background: linear-gradient(to right, #36393f, #03A9F4);
         width: 200px;
@@ -148,8 +158,9 @@
 
     #chain {
         background: url('/static/img/chains.png') repeat-x center;
-        width: 200px;
-        height: 100%;
+        width: 600px;
+        height: 61px;
+        position: absolute;
     }
 
     .user-img, .user-info {
@@ -235,6 +246,30 @@
         let idText = userCont.getElementsByClassName('id')[0];
         idText.innerHTML = "#" + id;
     });
+
+    function manageChain() {
+        let chain = $('#chain');
+        let userBox = $('#user-box');
+        let prematchName = $('#prematch-name');
+        let offset = userBox.offset();
+
+        let top = offset.top + userBox.innerHeight() / 4;
+        let left = offset.left + userBox.innerWidth() + 10;
+
+        let prematchLeft = prematchName.offset().left - 10;
+
+        let width = prematchLeft - left;
+
+        chain.css({
+           'top': top,
+           'left': left,
+           'width': width
+        });
+    }
+
+    manageChain();
+
+    $(window).resize(() => manageChain());
 </script>
 </body>
 </html>
