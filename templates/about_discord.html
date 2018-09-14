@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs %}
+
+{{ head('About Discord - PreMatch', True) }}
+
+<body id="body" class="has-discord-bg">
+
+{{ nav(logged_in, "/about/discord", handle) }}
+
+<section class="is-transparent section is-medium pushed">
+    <div class="container is-fluid has-text-centered">
+        <img src="https://discordapp.com/assets/e7a3b51fdac2aa5ec71975d257d5c405.png">
+        <h1 class="title overridden-white is-size-1 is-size-2-mobile">PreMatch Discord Bot</h1>
+        <p class="overridden-white is-size-3 is-size-5-mobile">Combining the 7+H timetable and calendar with your schedule, the PreMatch Bot
+        provides convenience at the right time, with the right information.</p>
+    </div>
+</section>
+<section class="has-discord-bg is-medium section pushed" id="hero-1">
+    <div class="container is-fluid has-text-centered">
+        <h1 class="title overridden-white is-size-1 is-size-3-mobile">The Entire 7+H Calendar, Back to Back.</h1>
+        <p class="overridden-white is-size-3 is-size-5-mobile">From the first day of school to the last day of finals, the PreMatch bot knows the number
+            of every school day. Try <code>$$day</code> to find out.</p>
+    </div>
+</section>
+<section class="is-medium section pushed">
+    <div class="container is-fluid has-text-centered">
+        <h1 class="title overridden-white is-size-1 is-size-3-mobile">Secure to the Promise of Trust.</h1>
+        <p class="overridden-white is-size-3 is-size-5-mobile">While the 7+H calendar and timetable are public, your schedules stay limited within the
+            high school. Before using personalization features in a server channel, the server must be verified to
+        consist of current Andover High School students only.</p>
+    </div>
+</section>
+<section class="is-medium section pushed" id="hero-2">
+    <div class="container is-fluid has-text-centered">
+        <h1 class="overridden-white title is-size-1 is-size-2-mobile">Seamless Integration with Your PreMatch Schedule.</h1>
+        <p class="overridden-white is-size-3 is-size-5-mobile">By sending <code>$$personalize</code>, you can associate your Discord
+        account with your PreMatch schedule. This allows the bot to gain a profile of who you are with in each block.</p>
+    </div>
+</section>
+<section class="is-medium section pushed">
+    <div class="container is-fluid has-text-centered">
+        <h1 class="overridden-white title is-size-1 is-size-2-mobile">Useful Information When You Need it.</h1>
+        <p class="overridden-white is-size-3 is-size-5-mobile">After you have associated your Discord account with your
+            PreMatch schedule, try <code>$$myday</code>. The bot will curate schedule information that is most pertinent
+            to you at the current moment.</p>
+    </div>
+</section>
+<section class="hero has-text-centered" style="background:#23272A!important">
+    <div class="hero-body has-text-centered">
+        <h1 class="overridden-white title is-size-2 is-size-3-mobile">Try it for Your Server!</h1>
+        <p class="overridden-white is-size-4 is-size-5-mobile">If you would like personalized reports in your server,
+            talk to us about verifying it. </p>
+        <a class="button discord-button is-dark is-large" href="https://discordapp.com/api/oauth2/authorize?client_id=418089369942097921&scope=bot">
+            INVITE THE BOT</a>
+        <a class="button discord-button is-dark is-large" href="mailto:michael@mcmoo.org">
+            SAY HELLO</a>
+    </div>
+
+</section>
+<!--<section class="is-transparent is-medium section pushed is-fluid has-text-centered">
+    <h1 class="title is-size-1 overridden-white">Contact Us</h1>
+    <h2 class="overridden-white is-size-4">We appreciate your feedback.</h2>
+    <br>
+
+</section>-->
+
+<link rel="stylesheet" href="/static/fonts/whitney.css">
+<style>
+    section {
+        padding-left: 8% !important;
+        padding-right: 8% !important;
+        font-family: Whitney, sans-serif;
+        overflow: hidden;
+    }
+
+    .has-discord-bg {
+        background-color: #36393f !important;
+    }
+
+    #hero-1 {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85)),
+            url('http://aps1.net/DocumentCenter/View/8341/2018-2019-AHS-colored-Calendar-') !important;
+        background-size: contain;
+    }
+
+    #hero-2 {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85)),
+        url('/static/img/schedule.png') !important;
+        background-size: contain;
+    }
+
+    .discord-button {
+        margin: 10px;
+        background: #7289DA !important;
+        color: #FFFFFF !important;
+        font-weight: bold;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        transition: all 0.3s ease-in-out !important;
+    }
+
+    .discord-button:hover {
+        color: #FFFFFF !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    }
+
+    .discord-button:active {
+        box-shadow: none;
+    }
+
+    code {
+        background: rgba(0, 0, 0, 0.4);
+        color: inherit;
+        padding: 3px;
+    }
+
+    /* Video controls*/
+    iframe {
+        width: 75vw;
+        height: 42.1875vw;
+    }
+
+    /* Note that the width:height ratio is constant */
+
+    @media screen and (max-width: 650px) {
+        iframe {
+            width: 98vw;
+            height: 55.125vw;
+        }
+
+        section {
+            padding-left: 1% !important;
+            padding-right: 1% !important;
+        }
+    }
+
+    #nav {
+        z-index: 1!important;
+    }
+</style>
+
+{{ importJs() }}
+
+</body>
+</html>

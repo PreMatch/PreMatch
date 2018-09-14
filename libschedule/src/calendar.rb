@@ -64,7 +64,7 @@ class Calendar
   def next_nonholiday(date)
     loop do
       date += 1
-      break unless date.is_a? Holiday
+      break unless day_on(date).is_a? Holiday
     end
     date
   end

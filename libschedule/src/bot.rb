@@ -107,13 +107,14 @@ module Bot
 
   # Returns [message, target_date, target_desc]
   def self.current_status(schedule, call_day, call_date)
+    nday = @calendar.next_nonholiday(call_date)
     case call_day
     when Holiday
-      return ['Enjoy your day off! Prepare for the next school day.',
-              @calendar.next_nonholiday(call_date), 'next school day']
+      return ["Enjoy your day off! Prepare for the next school day (#{express_date nday})",
+              nday, 'next school day']
     when UnknownDay
-      return ["Today's schedule is unknown to me.",
-              @calendar.next_nonholiday(call_date), 'next school day']
+      return ["Today's schedule is unknown to me. The next school day is #{express_date nday}.",
+              nday, 'next school day']
     else
       timetable = Schedule.of_day(call_day)
       now = Time.new(1970, 1, 1, Time.now.hour, Time.now.min, 0)
@@ -122,8 +123,8 @@ module Bot
         return ['Good morning. Here is your schedule for today',
                 call_date, 'today']
       elsif now > timetable.end_time
-        return ['School has ended for today. Prepare for the next school day.',
-                @calendar.next_nonholiday(call_date), 'next school day']
+        return ["School has ended for today. Prepare for the next school day (#{express_date nday})",
+                nday, 'next school day']
       else
         now_block = timetable.period_at_time now
         if now_block.nil?

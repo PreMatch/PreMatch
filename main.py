@@ -60,6 +60,11 @@ def show_about():
   return render_login_optional('about.html')
 
 
+@app.route('/about/discord')
+def show_about_discord():
+  return render_login_optional('about_discord.html')
+
+
 # Relaying final redirect (after log-in) from originator of /login GET to /login POST
 # 1. Originator sends user to /login?redirect=<desired_url>
 # 2. login.html is rendered with redirect (template variable) set to the value above, or '' if there wasn't one
@@ -342,7 +347,8 @@ def verify_discord(code, state):
                            user_name=user_info['username'], user_discriminator=user_info['discriminator'],
                            handle=handle, name=db_name)
 
-  except requests.exceptions.HTTPError:
+  except requests.exceptions.HTTPError as e:
+    print(e)
     return error(401, 'Discord authorization failed!')
 
 
