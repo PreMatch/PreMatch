@@ -27,6 +27,11 @@ bot.command :day do |event, *args|
 end
 
 bot.command :personalize do |event, *_args|
+  unless Discord.channel_verified(event.channel)
+    event.send('This server is not a verified AHS only server.')
+    return
+  end
+
   Bot.response_to(:personalize, Date.today, event)
 end
 

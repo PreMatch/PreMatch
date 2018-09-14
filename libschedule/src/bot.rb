@@ -35,7 +35,7 @@ module Bot
   def self.embed_author
     Discordrb::Webhooks::EmbedAuthor.new(
         name: 'PreMatch Discord',
-        url: 'https://prematch.org',
+        url: 'https://prematch.org/about/discord',
         icon_url: 'https://prematch.org/static/img/PreMatch%20Logo.png'
     )
   end
