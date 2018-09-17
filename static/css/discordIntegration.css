@@ -1,0 +1,158 @@
+#discord-side {
+    background-color: #36393f;
+    color: #dcddde;
+    font-family: 'Whitney', sans-serif;
+}
+
+.user-pfp img {
+    border-radius: 50%;
+}
+
+#prematch-side {
+    background-color: #03A9F4;
+    color: #fff;
+}
+
+.logo {
+    height: 150px;
+}
+
+.side {
+    width: calc((100vw - 200px) / 2);
+}
+
+.column {
+    padding: 0 0;
+    flex: 1;
+}
+
+#blend {
+    background: linear-gradient(to right, #36393f, #03A9F4);
+    width: 200px;
+    align-content: center;
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-family: Whitney, sans-serif;
+}
+
+#success {
+    position: absolute;
+    top: 80px;
+}
+
+#now-try {
+    position: absolute;
+    bottom: 80px;
+}
+
+.columns {
+    min-height: 420px;
+    margin-bottom: 0 !important;
+}
+
+#chain {
+    background: url('/static/img/chains.png') repeat-x center;
+    width: 600px;
+    height: 61px;
+    position: absolute;
+}
+
+.user-img, .user-info {
+    flex: 1;
+}
+
+.user-img {
+    max-width: 75px;
+}
+
+.user-info {
+    padding-left: 10px;
+}
+
+.user-container {
+    display: flex;
+    border-radius: 5px;
+    padding: 8px;
+    text-align: left;
+    align-items: center;
+}
+
+.username {
+    font-size: 30px;
+}
+
+.id {
+    font-size: 20px;
+}
+
+.user-content {
+    padding: 8px;
+    display: flex;
+}
+
+.user-container.is-user .user-content {
+    background-color: rgba(79, 84, 92, .6);
+}
+
+.user-container.is-user .user-content .user-img {
+    max-width: 100px;
+}
+
+.user-container.is-user .user-content .user-info {
+    margin-right: 10px;
+}
+
+.user-container.is-user .user-content .username, #prematch-name {
+    font-size: 48px;
+}
+
+.user-container.is-user .user-content .id, #prematch-handle {
+    font-size: 32px;
+}
+
+@media screen and (max-width: 1600px) {
+    .username {
+        font-size: 25px;
+    }
+
+    .id {
+        font-size: 15px;
+    }
+
+    .user-container.is-user .user-content .username, #prematch-name {
+        font-size: 35px;
+    }
+
+    .user-container.is-user .user-content .id, #prematch-handle {
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    .username {
+        font-size: 20px;
+    }
+
+    .id {
+        font-size: 14px;
+    }
+
+    .user-container.is-user .user-content .username, #prematch-name {
+        font-size: 30px;
+    }
+
+    .user-container.is-user .user-content .id, #prematch-handle {
+        font-size: 20px;
+    }
+
+    .user-pfp img {
+        height: 50px;
+        width: 50px;
+    }
+
+    #pfp {
+        height: 75px;
+        width: 75px;
+    }
+}
