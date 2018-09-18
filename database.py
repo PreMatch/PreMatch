@@ -178,7 +178,7 @@ def lunch_number(block, teacher):
 
 def lunch_numbers(handle):
   if not handle_exists(handle):
-    raise Exception(f'Schedule with handle {handle} does not exist')
+    return {}
 
   schedule = user_schedule(handle)
   return dict(map(

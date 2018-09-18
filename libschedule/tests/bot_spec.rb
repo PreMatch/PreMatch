@@ -8,7 +8,7 @@ Bot.initialize
 describe 'Responding to day commands' do
 
   def report_for_day(time)
-    Bot.response_to :day, time
+    Bot.response_to :day, time, nil
   end
 
   it 'should respond with correct message outside school year' do
@@ -33,11 +33,5 @@ describe 'Responding to day commands' do
       .to eql 'December 7, 2018 is a Half day with blocks B, A, G, E'
     expect(report_for_day(Date.new(2019, 1, 18)))
       .to eql 'January 18, 2019 is a Exam day with blocks A, E, Academic Support'
-  end
-end
-
-describe 'Responding to report commands' do
-  it 'should respond to calls outside school year correctly' do
-
   end
 end

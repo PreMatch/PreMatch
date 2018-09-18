@@ -87,9 +87,11 @@ def do_login():
     handle, name = validate_token_for_info(request.form['id_token'])
     log_in(handle)
 
-    flash('Successfully logged in as ' + name)
     if database.missing_some_lunch(handle):
       flash('You are missing some lunch numbers. To enter them, please visit the Update page.')
+    else:
+      flash('Successfully logged in as ' + name)
+
     default = '/dashboard'
 
     if not database.handle_exists(handle):
@@ -115,14 +117,7 @@ def do_logout():
 
 @app.route('/user')
 def show_own_user():
-  handle = logged_handle()
-
-  if logged_handle() is None:
-    return error_not_logged_in()
-  if not database.handle_exists(handle):
-    return error_no_own_schedule()
-
-  return show_user(handle)
+  return show_user(logged_handle())
 
 
 @app.route('/user/<handle>', methods=['GET'])
