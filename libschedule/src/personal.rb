@@ -85,8 +85,8 @@ class PersonalResponder
 
     when Situation::BETWEEN_PERIODS
       before, after = @call_schedule.periods_before_after_time(@call_time)
-      prev_teacher = @user_schedule[before.block]
-      next_teacher = @user_schedule[after.block]
+      prev_teacher = @user_schedule[before.block] || 'an unknown teacher'
+      next_teacher = @user_schedule[after.block] || 'an unknown teacher'
       return "You are traveling from Block #{before.block} with #{prev_teacher} to Block #{after.block} with #{next_teacher}"
 
     else

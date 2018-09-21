@@ -71,8 +71,8 @@ class Schedule < TimeRange
     time = without_date(datetime)
 
     (@periods.length - 1).times do |i|
-      if @periods[i].end_time <= without_date(time) &&
-          @periods[i+1].start_time >= without_date(time)
+      if @periods[i].end_time <= time &&
+          @periods[i+1].start_time >= time
         return [i, i+1]
       end
       if @periods[i].includes? time
@@ -80,7 +80,7 @@ class Schedule < TimeRange
       end
     end
 
-    @periods.last.includes? time ? [@periods.length-1, @periods.length-1] : nil
+    @periods.last.includes?(time) ? [@periods.length-1, @periods.length-1] : nil
   end
 
   def periods_before_after_time(time)

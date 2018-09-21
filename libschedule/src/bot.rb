@@ -90,7 +90,7 @@ module Bot
     end
   end
 
-  def express_date(date)
+  def self.express_date(date)
     date.strftime('%B %-d, %Y')
   end
 end
