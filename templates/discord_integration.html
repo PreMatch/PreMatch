@@ -57,7 +57,7 @@
                     <div class="user-container is-user" id="user-container">
                         <div class="user-content" id="user-box">
                             <div class="user-img">
-                                <figure class="user-pfp">
+                                <figure class="user-pfp" id="user-pfp">
                                     <img src="{{ avatar_src }}" alt="{{ user_name }}" id="pfp" height="100" width="100">
                                 </figure>
                             </div>
@@ -104,6 +104,9 @@
         </div>
     </div>
     <div id="chain"></div>
+    <script type="text/javascript">
+      $(document).ready(() => manageChain());
+    </script>
 </div>
 <style>
     #discord-logo {
@@ -164,7 +167,7 @@
         margin-bottom: 0 !important;
     }
 
-    .user-pfp {
+    #user-pfp {
       padding: 5px;
     }
 
