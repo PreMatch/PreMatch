@@ -58,12 +58,30 @@ describe 'Obtaining time-based schedules for days' do
       expect(Schedule.of_day(day_type.new(''))).to be_nil
     end
   end
-
+end
+describe 'Relating schedules to given times' do
   it 'should tell period at time during standard day' do
     expect(standard_schedule(2).period_index_at_time(time(12, 12))).to be 3
     expect(standard_schedule(6).period_index_at_time(time(7, 44))).to be 0
     expect(standard_schedule(8).period_at_time(time(16, 22))).to be_nil
   end
 
+  it 'should tell previous and next periods when given time between periods' do
+    before, after = standard_schedule(4).periods_before_after_time(time(11, 10))
+    expect(before.block).to eql 'H'
+    expect(after.block).to eql 'G'
 
+    before, after = standard_schedule(6).periods_before_after_time(time(10, 5))
+    expect(before.block).to eql 'H'
+    expect(after.block).to eql 'E'
+  end
+
+  it 'should return two equivalent periods when given time within period' do
+    before, after = standard_schedule(2).periods_before_after_time(time(8, 0))
+    expect(before.block).to eql after.block
+  end
+
+  it 'should return nil when given time outside school hours' do
+
+  end
 end

@@ -347,5 +347,48 @@ def verify_discord(code, state):
     return error(401, 'Discord authorization failed!')
 
 
+@app.route('/lunch/record', methods=['GET', 'POST'])
+def admin_record_lunch():
+  if logged_handle() is None:
+    return error_not_logged_in()
+
+  if not database.is_admin(logged_handle()):
+    abort(404)
+    return 'Page not found', 404
+
+  if request.method == 'GET':
+    return render_template('record_lunch.html',
+                           students=database.roster_of_all(),
+                           blocks=PERIODS[2:],
+                           lunch_numbers=list('1234'),
+                           message=request.args.get('m'))
+  else:
+    handle = request.form.get('handle')
+    block = request.form.get('block')
+    number = request.form.get('number')
+
+    if None in [handle, block, number]:
+      flash('Missing fields')
+      return redirect('/')
+
+    if not database.handle_exists(handle):
+      flash(f'Invalid student: {handle}')
+      return redirect('/')
+    if block not in PERIODS[2:]:
+      flash(f'Invalid block: {block}')
+      return redirect('/')
+    if number not in '1234':
+      flash(f'Invalid lunch number: {number}')
+      return redirect('/')
+
+    schedule = database.user_schedule(handle)
+
+    if database.lunch_number(block, schedule[block]) is not None:
+      return redirect('/lunch/record?m=AlreadyIn')
+
+    database.add_lunch_number(schedule[block], block, number)
+    return redirect('/lunch/record?m=Success')
+
+
 if __name__ == "__main__":
   app.run()

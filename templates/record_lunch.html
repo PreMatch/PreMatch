@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>PreMatch - Record Lunch</title>
+</head>
+<body>
+{{ message }}
+  <form method="post" id="form" name="form">
+    <label>
+      Student:
+      <select form="form" name="handle">
+        {% for name, handle in students %}
+        <option value="{{ handle }}">{{ name }} ({{ handle }})</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Block:
+      <select form="form" name="block">
+        {% for block in blocks %}
+        <option value="{{ block }}">{{ block }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Number:
+      <select form="form" name="number">
+        {% for number in lunch_numbers %}
+        <option value="{{ number }}">Lunch {{ number }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <input type="submit">
+  </form>
+</body>
+</html>

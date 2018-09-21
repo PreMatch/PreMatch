@@ -76,9 +76,12 @@ def users_in_class(period, teacher):
   return list(query.fetch())
 
 
+def in_roster_form(entity_iterator):
+  return list(map(lambda row: (row['name'], row['handle']), entity_iterator))
+
+
 def class_roster(period, teacher, sort=True):
-  matrix = list(map(lambda row: (row['name'], row['handle']),
-                    users_in_class(period, teacher)))
+  matrix = in_roster_form(users_in_class(period, teacher))
 
   return sorted(matrix, key=lambda row: row[0]) if sort else matrix
 
@@ -133,7 +136,7 @@ def upsert_lunch(handle, lunch_numbers):
     number = lunch_numbers.get(block)
     if number is not None:
       teacher = schedule[block]
-      add_lunch_number(teacher, block, number)
+      add_lunch_number(teacher, block, int(number))
 
 
 def add_lunch_number(teacher, block, number):
@@ -142,12 +145,12 @@ def add_lunch_number(teacher, block, number):
   task = client.get(key)
 
   if task:
-    task[block] = number
+    task[block] = int(number)
   else:
     task = datastore.Entity(key)
     task.update({
       'teacher': teacher,
-      block: number
+      block: int(number)
     })
 
   client.put(task)
@@ -218,3 +221,14 @@ def missing_some_lunch(handle):
       return True
 
   return False
+
+
+def is_admin(handle):
+  return handle in [
+    'hpeng2021',
+    'divanovich2021'
+  ]
+
+
+def roster_of_all():
+  return in_roster_form(get_db().query(kind='Schedule').fetch())

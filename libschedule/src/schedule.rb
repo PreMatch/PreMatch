@@ -51,6 +51,7 @@ class Schedule < TimeRange
 
   attr_reader :periods
 
+  # @param [Array[Period]] periods
   def initialize(periods)
     super(periods.first.start_time, periods.last.end_time)
     @periods = periods
@@ -63,10 +64,28 @@ class Schedule < TimeRange
   def period_at_time(time)
     index = period_index_at_time(time)
 
-    if index.nil?
-      nil
-    else
-      @periods[index]
+    index.nil? ? nil : @periods[index]
+  end
+
+  def periods_indices_before_after_time(datetime)
+    time = without_date(datetime)
+
+    (@periods.length - 1).times do |i|
+      if @periods[i].end_time <= without_date(time) &&
+          @periods[i+1].start_time >= without_date(time)
+        return [i, i+1]
+      end
+      if @periods[i].includes? time
+        return [i, i]
+      end
     end
+
+    @periods.last.includes? time ? [@periods.length-1, @periods.length-1] : nil
+  end
+
+  def periods_before_after_time(time)
+    res = periods_indices_before_after_time(time)
+
+    res.nil? ? nil : res.map { |i| @periods[i] }
   end
 end

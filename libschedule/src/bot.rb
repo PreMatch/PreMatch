@@ -1,6 +1,7 @@
 require './calendar'
 require './schedule'
 require './database'
+require './personal'
 require 'discordrb'
 
 require 'openssl'
@@ -24,13 +25,6 @@ module Discord
   def self.channel_verified(channel)
     (channel.type == 0 && $verified_guilds.include?(channel.server.id)) or channel.type == 1
   end
-end
-
-module Bot
-  def self.initialize
-    @calendar = Calendar.current
-    @database = Database.new
-  end
 
   def self.embed_author
     Discordrb::Webhooks::EmbedAuthor.new(
@@ -38,6 +32,13 @@ module Bot
         url: 'https://prematch.org/about/discord',
         icon_url: 'https://prematch.org/static/img/PreMatch%20Logo.png'
     )
+  end
+end
+
+module Bot
+  def self.initialize
+    @calendar = Calendar.current
+    @database = Database.new
   end
 
   def self.response_to(command, call_date, event)
@@ -77,15 +78,14 @@ module Bot
       end
 
     when :myday
-      return 'We are not in the currently defined calendar year. Is this summer?' unless @calendar.includes? call_date
-
       handle = @database.associated_handle(event.author.id)
       return 'You are not associated with PreMatch! Try $$personalize.' if handle.nil?
 
-      schedule = @database.read_schedule(handle)
-      call_day = @calendar.day_on(call_date)
+      PersonalResponder.new(handle, Time.now, event, @database).respond
 
-      personal_respond(schedule, call_date, call_day, event)
+      #schedule = @database.read_schedule(handle)
+      #call_day = @calendar.day_on(call_date)
+      #personal_respond(schedule, call_date, call_day, event)
       nil
     end
   end
@@ -110,20 +110,20 @@ module Bot
     nday = @calendar.next_nonholiday(call_date)
     case call_day
     when Holiday
-      return ["Enjoy your day off! Prepare for the next school day (#{express_date nday})",
+      return ["Enjoy your day off! Prepare for the next school day.",
               nday, 'next school day']
     when UnknownDay
       return ["Today's schedule is unknown to me. The next school day is #{express_date nday}.",
               nday, 'next school day']
     else
       timetable = Schedule.of_day(call_day)
-      now = Time.new(1970, 1, 1, Time.now.hour, Time.now.min, 0)
+      now = without_date(Time.now)
 
       if now < timetable.start_time
         return ['Good morning. Here is your schedule for today',
                 call_date, 'today']
       elsif now > timetable.end_time
-        return ["School has ended for today. Prepare for the next school day (#{express_date nday})",
+        return ["School has ended for today. Prepare for the next school day",
                 nday, 'next school day']
       else
         now_block = timetable.period_at_time now
@@ -144,13 +144,19 @@ module Bot
     today = @calendar.day_on(Date.today)
     target_day = @calendar.day_on target_date
     target_schedule = Schedule.of_day(target_day)
+
+    if target_schedule.nil?
+      embed.description = 'I do not know the schedule of the target day.'
+      return
+    end
+
     target_blocks = target_schedule.periods.map(&:block)
 
     embed.title = "Today is #{today.description}"
     embed.description = "Showing #{target_desc} (#{target_day.description})"
-    embed.author = embed_author
+    embed.author = Discord.embed_author
     embed.add_field(
-        name: "Blocks and #{teacher_expr}",
+        name: "#{express_date target_date}: Blocks and #{teacher_expr}",
         value: target_blocks.map do |blk|
           teacher = user_schedule[blk]
           teacher.nil? ? blk : "#{blk} → #{teacher}"
