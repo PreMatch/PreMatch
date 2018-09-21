@@ -89,4 +89,8 @@ module Bot
       nil
     end
   end
+
+  def express_date(date)
+    date.strftime('%B %-d, %Y')
+  end
 end
