@@ -4,7 +4,7 @@ import hmac
 API_ENDPOINT = 'https://discordapp.com/api'
 CLIENT_ID = '418089369942097921'
 CLIENT_SECRET = 'IIx8xkGg52On9-EkZrxm0OiIGoyOHBkv'
-REDIRECT_URI = 'http://localhost:5000/discord'
+REDIRECT_URI = 'https://prematch.org/discord'
 
 
 def state_valid(state, id_from_api):
