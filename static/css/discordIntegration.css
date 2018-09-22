@@ -1,7 +1,16 @@
+.columns {
+    margin: 0 !important;
+}
+
+#discord-logo {
+    display: block;
+    margin: 0 auto;
+}
+
 #discord-side {
     background-color: #36393f;
     color: #dcddde;
-    font-family: 'Whitney', sans-serif;
+    font-family: 'Whitney', sans-serif !important;
 }
 
 .user-pfp img {
@@ -51,6 +60,10 @@
     margin-bottom: 0 !important;
 }
 
+#user-pfp {
+    padding: 5px;
+}
+
 #chain {
     background: url('/static/img/chains.png') repeat-x center;
     width: 600px;
@@ -59,7 +72,7 @@
 }
 
 .user-img, .user-info {
-    flex: 1;
+    flex: 0 0 auto;
 }
 
 .user-img {
@@ -73,22 +86,25 @@
 .user-container {
     display: flex;
     border-radius: 5px;
-    padding: 8px;
     text-align: left;
     align-items: center;
+    align-self: flex-start;
+    margin: 8px 0;
 }
 
 .username {
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .id {
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .user-content {
-    padding: 8px;
+    padding: 8px 8px 8px 0;
     display: flex;
+    flex: 1 0 auto;
+    align-items: center;
 }
 
 .user-container.is-user .user-content {
@@ -104,16 +120,27 @@
 }
 
 .user-container.is-user .user-content .username, #prematch-name {
-    font-size: 48px;
+    font-size: 30px;
 }
 
 .user-container.is-user .user-content .id, #prematch-handle {
-    font-size: 32px;
+    font-size: 20px;
 }
 
-@media screen and (max-width: 1600px) {
+#roster-container {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#container {
+    max-width: 100%;
+}
+
+@media screen and (max-width: 1400px) {
     .username {
-        font-size: 25px;
+        font-size: 20px;
     }
 
     .id {
@@ -121,38 +148,188 @@
     }
 
     .user-container.is-user .user-content .username, #prematch-name {
-        font-size: 35px;
+        font-size: 25px;
     }
 
     .user-container.is-user .user-content .id, #prematch-handle {
-        font-size: 25px;
+        font-size: 18px;
+    }
+
+    #discord-logo {
+        max-width: 75%;
+        height: auto;
     }
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1000px) {
     .username {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .id {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .user-container.is-user .user-content .username, #prematch-name {
-        font-size: 30px;
+        font-size: 22px;
     }
 
     .user-container.is-user .user-content .id, #prematch-handle {
-        font-size: 20px;
+        font-size: 16px;
     }
 
     .user-pfp img {
-        height: 50px;
-        width: 50px;
+        height: 60px;
+        width: 60px;
+    }
+
+    .user-img {
+        max-width: 60px;
     }
 
     #pfp {
         height: 75px;
         width: 75px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #blend {
+        width: 100%;
+        background: linear-gradient(to bottom, #36393f, #03A9F4);
+        height: 34vh;
+        position: relative;
+    }
+
+    #success, #now-try {
+        position: absolute;
+        top: unset;
+    }
+
+    #success {
+        top: 0;
+        left: 20px;
+    }
+
+    #now-try {
+        bottom: 10px;
+        right: 20px;
+    }
+
+    #roster-container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 130px;
+    }
+
+    #discord-side, #prematch-side {
+        max-height: 46vh;
+        min-height: 45vh;
+    }
+
+    #prematch-container {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+    }
+
+    #prematch-logo {
+        max-width: 150px;
+    }
+
+    #discord-logo {
+        height: 150px !important;
+        max-width: calc(800 / 212 * 150px) !important;
+    }
+
+    .dropped-user {
+        visibility: hidden;
+        opacity: 0;
+        display: none;
+    }
+
+    .user-container {
+        margin: 0 8px;
+        align-self: center;
+    }
+
+    .user-pfp img {
+        height: 45px;
+        width: 45px;
+    }
+
+    .user-img {
+        max-width: 45px;
+    }
+
+    #pfp {
+        height: 60px;
+        width: 60px;
+    }
+
+    .left-user {
+        justify-content: flex-end;
+    }
+
+    #chain {
+        background: url(/static/img/chains-vert.png) repeat-y center;
+        width: 61px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    #discord-logo, #prematch-logo {
+        max-width: 125px !important;
+        height: 125px !important;
+    }
+
+    #discord-logo {
+        max-width: calc(800 / 212 * 125px) !important;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    .user-container {
+        display: none;
+    }
+
+    .user-container.is-user {
+        display: flex;
+    }
+
+    #roster-container {
+        min-width: unset;
+    }
+
+    #discord-logo {
+        max-width: calc(800 / 212 * 75px) !important;
+        height: 75px !important;
+    }
+}
+
+@media screen and (max-width: 490px) {
+    #success, #now-try {
+        font-size: 1.0rem !important;
+    }
+
+    #now-try span {
+        font-size: 1.25rem !important;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #now-try span {
+        display: block;
+        padding-left: 50px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    #now-try span {
+        padding-left: 30px;
     }
 }

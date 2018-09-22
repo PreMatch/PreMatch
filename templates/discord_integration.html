@@ -1,5 +1,6 @@
 <!doctype html>
-<html>
+<html lang="en">
+{% from 'macros.html' import hideScrollbar %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,18 +24,19 @@
     <meta name="google-signin-client_id"
           content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-    <!--<link rel="stylesheet" href="/static/css/discordIntegration.css">-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://apis.google.com/js/client:platform.js" async defer></script>
+    <link rel="stylesheet" href="/static/css/discordIntegration.css">
     <title>PreMatch Discord Integration</title>
+    {{ hideScrollbar() }}
 </head>
-<body class="no-padding is-fullheight">
+<body class="no-padding is-fullheight" style="max-width: 100%; max-height: 100vh; overflow: hidden;">
 <div class="columns is-fullheight" id="container">
     <div class="column is-12-mobile side has-text-centered is-fullheight" id="discord-side">
         <div class="columns is-narrow"
-             style="flex-direction: column; min-height: 102vh; padding: 2vh 0; overflow: hidden; max-width: 100%;">
+             style="flex-direction: column; min-height: 100vh; overflow: hidden; max-width: 100%;">
             <div class="column">
                 <img class="logo" id="discord-logo" src="/static/img/discord.png" alt="Discord">
             </div>
@@ -43,25 +45,27 @@
                 <div id="roster-container">
                     {% for counter in range(3) %}
                         <div class="user-container other-user {{ 'dropped-user' if counter <= 1 }} {{ 'left-user' if counter == 2 }}">
-                            <div class="user-img">
-                                <figure class="user-pfp">
-                                    <img src="/static/img/discord%20pfp.png" height="75" width="75">
-                                </figure>
-                            </div>
-                            <div class="user-info">
-                                <p class="title has-text-light username">Name here</p>
-                                <p class="subtitle has-text-grey id">#0000</p>
+                            <div class="user-content">
+                                <div class="user-img">
+                                    <figure class="user-pfp">
+                                        <img src="/static/img/discord%20pfp.png" height="75" width="75">
+                                    </figure>
+                                </div>
+                                <div class="user-info">
+                                    <p class="title has-text-light username">Name here</p>
+                                    <p class="subtitle has-text-grey id">#0000</p>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
                     <div class="user-container is-user" id="user-container">
                         <div class="user-content" id="user-box">
-                            <div class="user-img">
+                            <div class="user-img" id="user-img">
                                 <figure class="user-pfp" id="user-pfp">
                                     <img src="{{ avatar_src }}" alt="{{ user_name }}" id="pfp" height="100" width="100">
                                 </figure>
                             </div>
-                            <div class="user-info">
+                            <div class="user-info" id="user-info">
                                 <p class="title has-text-light username">{{ user_name }}</p>
                                 <p class="subtitle has-text-grey id" id="user-id">#{{ user_discriminator }}</p>
                             </div>
@@ -69,14 +73,16 @@
                     </div>
                     {% for counter in range(3) %}
                         <div class="user-container other-user {{ 'dropped-user' if counter >= 1 else '' }}">
-                            <div class="user-img">
-                                <figure class="user-pfp">
-                                    <img src="/static/img/discord%20pfp.png" height="75" width="75">
-                                </figure>
-                            </div>
-                            <div class="user-info">
-                                <p class="title has-text-light username">Name here</p>
-                                <p class="subtitle has-text-grey id">#0000</p>
+                            <div class="user-content">
+                                <div class="user-img">
+                                    <figure class="user-pfp">
+                                        <img src="/static/img/discord%20pfp.png" height="75" width="75">
+                                    </figure>
+                                </div>
+                                <div class="user-info">
+                                    <p class="title has-text-light username">Name here</p>
+                                    <p class="subtitle has-text-grey id">#0000</p>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
@@ -86,7 +92,7 @@
     </div>
     <div class="column is-2-tablet is-12-mobile is-fullheight" id="blend">
         <h1 class="is-size-2 is-size-4-mobile" id="success">Success!</h1>
-        <h2 class="is-size-2 is-size-4-mobile" id="now-try">Now try $$myday.</h2>
+        <h2 class="is-size-2 is-size-4-mobile" id="now-try">Now try <span>$$myday</span></h2>
     </div>
     <div class="column side is-12-mobile has-text-centered is-fullheight" id="prematch-side">
         <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
@@ -96,7 +102,7 @@
                     <h1 class="title has-text-white is-size-3-mobile">
                         <span id="prematch-name">{{ name }}</span>
                     </h1>
-                    <h2 class="subtitle is-size-5-mobile" style="color:#ddd">
+                    <h2 class="subtitle is-size-5-mobile" style="color:#ddd; margin: -30px 0 -20px;">
                         <span id="prematch-handle">{{ handle }}</span>
                     </h2>
                 </div>
@@ -105,411 +111,134 @@
     </div>
     <div id="chain"></div>
     <script type="text/javascript">
-      $(document).ready(() => manageChain());
-    </script>
-</div>
-<style>
-    #discord-logo {
-        display: block;
-        margin: 0 auto;
-    }
+        function centerRoster() {
+            let container = $('#roster-container');
+            let padding = 0;
 
-    #discord-side {
-        background-color: #36393f;
-        color: #dcddde;
-        font-family: 'Whitney', sans-serif!important;
-    }
+            if ($(window).outerWidth() > 768) {
+                let containerWidth = container.innerWidth();
+                let userWidth = $('#user-box').innerWidth();
 
-    .user-pfp img {
-        border-radius: 50%;
-    }
-
-    #prematch-side {
-        background-color: #03A9F4;
-        color: #fff;
-    }
-
-    .logo {
-        height: 150px;
-    }
-
-    .side {
-        width: calc((100vw - 200px) / 2);
-    }
-
-    .column {
-        padding: 0 0;
-        flex: 1;
-    }
-
-    #blend {
-        background: linear-gradient(to right, #36393f, #03A9F4);
-        width: 200px;
-        align-content: center;
-        color: white;
-        display: flex;
-        justify-content: center;
-        font-family: Whitney, sans-serif;
-    }
-
-    #success {
-        position: absolute;
-        top: 80px;
-    }
-
-    #now-try {
-        position: absolute;
-        bottom: 80px;
-    }
-
-    .columns {
-        min-height: 420px;
-        margin-bottom: 0 !important;
-    }
-
-    #user-pfp {
-      padding: 5px;
-    }
-
-    #chain {
-        background: url('/static/img/chains.png') repeat-x center;
-        width: 600px;
-        height: 61px;
-        position: absolute;
-    }
-
-    .user-img, .user-info {
-        flex: 0 0 auto;
-    }
-
-    .user-img {
-        max-width: 75px;
-    }
-
-    .user-info {
-        padding-left: 10px;
-    }
-
-    .user-container {
-        display: flex;
-        border-radius: 5px;
-        text-align: left;
-        align-items: center;
-        align-self: flex-start;
-        margin: 8px 0;
-    }
-
-    .username {
-        font-size: 25px;
-    }
-
-    .id {
-        font-size: 18px;
-    }
-
-    .user-content {
-        padding: 8px 8px 8px 0;
-        display: flex;
-        flex: 1 0 auto;
-        align-items: center;
-    }
-
-    .user-container.is-user .user-content {
-        background-color: rgba(79, 84, 92, .6);
-    }
-
-    .user-container.is-user .user-content .user-img {
-        max-width: 100px;
-    }
-
-    .user-container.is-user .user-content .user-info {
-        margin-right: 10px;
-    }
-
-    .user-container.is-user .user-content .username, #prematch-name {
-        font-size: 30px;
-    }
-
-    .user-container.is-user .user-content .id, #prematch-handle {
-        font-size: 20px;
-    }
-
-    #roster-container {
-        flex: 1;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    #container {
-        max-width: 100%;
-    }
-
-    @media screen and (max-width: 1400px) {
-        .username {
-            font-size: 20px;
-        }
-
-        .id {
-            font-size: 15px;
-        }
-
-        .user-container.is-user .user-content .username, #prematch-name {
-            font-size: 25px;
-        }
-
-        .user-container.is-user .user-content .id, #prematch-handle {
-            font-size: 18px;
-        }
-
-        #discord-logo {
-            max-width: 75%;
-            height: auto;
-        }
-    }
-
-    @media screen and (max-width: 1000px) {
-        .username {
-            font-size: 18px;
-        }
-
-        .id {
-            font-size: 12px;
-        }
-
-        .user-container.is-user .user-content .username, #prematch-name {
-            font-size: 22px;
-        }
-
-        .user-container.is-user .user-content .id, #prematch-handle {
-            font-size: 16px;
-        }
-
-        .user-pfp img {
-            height: 60px;
-            width: 60px;
-        }
-
-        .user-img {
-            max-width: 60px;
-        }
-
-        #pfp {
-            height: 75px;
-            width: 75px;
-        }
-    }
-
-    @media screen and (max-width: 768px) {
-        #blend {
-            width: 100%;
-            background: linear-gradient(to bottom, #36393f, #03A9F4);
-            height: 33vh;
-        }
-
-        #success, #now-try {
-            position: static;
-            top: unset;
-        }
-
-        #roster-container {
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #discord-side, #prematch-side {
-            max-height: 45vh;
-        }
-
-        #prematch-container {
-            display: flex;
-            flex-direction: column-reverse;
-            align-items: center;
-        }
-
-        #prematch-logo {
-            max-width: 150px;
-        }
-
-        #discord-logo {
-            height: 150px;
-            max-width: calc(800 / 212 * 150px);
-        }
-
-        .dropped-user {
-            visibility: hidden;
-            opacity: 0;
-        }
-
-        .user-container {
-            margin: 0 8px;
-            align-self: center;
-            min-width: 155px;
-        }
-
-        .user-pfp img {
-            height: 45px;
-            width: 45px;
-        }
-
-        .user-img {
-            max-width: 45px;
-        }
-
-        #pfp {
-            height: 60px;
-            width: 60px;
-        }
-
-        .left-user {
-            justify-content: flex-end;
-        }
-    }
-
-    @media screen and (max-width: 700px) {
-
-    }
-
-    @media screen and (max-width: 650px) {
-        #discord-logo, #prematch-logo {
-            max-width: 125px;
-            height: 125px;
-        }
-
-        #discord-logo {
-            max-width: calc(800 / 212 * 125px);
-        }
-    }
-
-    @media screen and (max-width: 400px) {
-        .user-container {
-            display: none;
-        }
-
-        .user-container.is-user {
-            display: flex;
-        }
-
-        #roster-container {
-            min-width: unset;
-        }
-    }
-</style>
-<script type="text/javascript">
-    function centerRoster() {
-        let container = $('#roster-container');
-        if ($(window).outerWidth() > 768) {
-            let containerWidth = container.innerWidth();
-            let userWidth = $('#user-box').innerWidth();
-
-            let padding = (containerWidth - userWidth) / 2;
+                padding = (containerWidth - userWidth) / 2;
+            } else
+                padding = 0;
 
             container.css({
                 'padding-left': padding,
-                'padding-right': padding
-            });
-        } else {
-            container.css({
-                'padding-left': 0,
-                'padding-right': 0
+                'padding-right': padding,
+                'top': $("#discord-logo").innerHeight()
             });
         }
-    }
 
-    centerRoster();
-
-    let bgColors = ['#f04747', '#faa61a', '#7289da', '#747f8d', '#43b581'];
-    let names = [["Anakin", "Skywalker"], ["Luke", "Skywalker"], ["Darth", "Vader"], ["Obi-Wan", "Kenobi"], ["Leia", "Organa"], ["R2-D2", ""], ["C-3PO", ""], ["Chewbacca"], ["Han", "Solo"], ["Darth", "Maul"]];
-    let otherIds = [];
-
-    function getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-    }
-
-    function generateUsers() {
-        Array.prototype.forEach.call(document.getElementsByClassName('other-user'), (userCont) => {
-                let pic = userCont.getElementsByTagName('img')[0];
-                pic.style.backgroundColor = bgColors[getRandomInt(bgColors.length)];
-                let name = userCont.getElementsByClassName('username')[0];
-                let namesId = getRandomInt(names.length);
-                let nameArr = names[namesId];
-
-                if ($(window).outerWidth() > 768)
-                    name.innerHTML = nameArr.join(' ');
-                else {
-                    if (nameArr[0] !== "Darth")
-                        name.innerHTML = nameArr[0];
-                    else
-                        name.innerHTML = nameArr[1];
-                }
-
-                names.splice(namesId, 1);
-                let userId = document.getElementById('user-id').innerHTML.substr(1);
-                let id = '';
-                while (true) {
-                    for (let i = 0; i < 4; i++) {
-                        id += getRandomInt(10);
-                    }
-
-                    if (id === userId || otherIds.includes(id)) {
-                        id = '';
-                        continue;
-                    }
-
-                    otherIds.push(id);
-                    break;
-                }
-
-                let idText = userCont.getElementsByClassName('id')[0];
-                idText.innerHTML = "#" + id;
-            }
-        );
-
-        names = [["Anakin", "Skywalker"], ["Luke", "Skywalker"], ["Darth", "Vader"], ["Obi-Wan", "Kenobi"], ["Leia", "Organa"], ["R2-D2", ""], ["C-3PO", ""], ["Chewbacca"], ["Han", "Solo"], ["Darth", "Maul"]];
-        otherIds = [];
-    }
-
-    function manageChain() {
-        let chain = $('#chain');
-        let userBox = $('#user-box');
-        let prematchName = $('#prematch-name');
-        let offset = userBox.offset();
-
-        let top = offset.top + userBox.innerHeight() / 4;
-        let left = offset.left + userBox.innerWidth() + 10;
-
-        let prematchLeft = prematchName.offset().left - 10;
-
-        let width = prematchLeft - left;
-
-        chain.css({
-            'top': top,
-            'left': left,
-            'width': width
-        });
-    }
-
-    generateUsers();
-    manageChain();
-
-    let oldWidth;
-
-    $(window).resize(() => {
-        manageChain();
         centerRoster();
 
-        if (oldWidth) {
-            if ($(window).outerWidth() > 768 && oldWidth <= 768)
-                generateUsers();
-            else if ($(window).outerWidth() <= 768 && oldWidth > 768)
-                generateUsers();
+        let bgColors = ['#f04747', '#faa61a', '#7289da', '#747f8d', '#43b581'];
+        let names = [["Anakin", "Skywalker"], ["Luke", "Skywalker"], ["Darth", "Vader"], ["Obi-Wan", "Kenobi"], ["Leia", "Organa"], ["R2-D2", ""], ["C-3PO", ""], ["Chewbacca"], ["Han", "Solo"], ["Darth", "Maul"]];
+        let otherIds = [];
 
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * Math.floor(max));
         }
 
-        oldWidth = $(window).outerWidth();
-    });
-</script>
-<!--<script type="text/javascript" src="/static/js/discordIntegration.js"></script>-->
+        function generateUsers() {
+            Array.prototype.forEach.call(document.getElementsByClassName('other-user'), (userCont) => {
+                    let pic = userCont.getElementsByTagName('img')[0];
+                    pic.style.backgroundColor = bgColors[getRandomInt(bgColors.length)];
+                    let name = userCont.getElementsByClassName('username')[0];
+                    let namesId = getRandomInt(names.length);
+                    let nameArr = names[namesId];
+
+                    if ($(window).outerWidth() > 768)
+                        name.innerHTML = nameArr.join(' ');
+                    else {
+                        if (nameArr[0] !== "Darth")
+                            name.innerHTML = nameArr[0];
+                        else
+                            name.innerHTML = nameArr[1];
+                    }
+
+                    names.splice(namesId, 1);
+                    let userId = document.getElementById('user-id').innerHTML.substr(1);
+                    let id = '';
+                    while (true) {
+                        for (let i = 0; i < 4; i++) {
+                            id += getRandomInt(10);
+                        }
+
+                        if (id === userId || otherIds.includes(id)) {
+                            id = '';
+                            continue;
+                        }
+
+                        otherIds.push(id);
+                        break;
+                    }
+
+                    let idText = userCont.getElementsByClassName('id')[0];
+                    idText.innerHTML = "#" + id;
+                }
+            );
+
+            names = [["Anakin", "Skywalker"], ["Luke", "Skywalker"], ["Darth", "Vader"], ["Obi-Wan", "Kenobi"], ["Leia", "Organa"], ["R2-D2", ""], ["C-3PO", ""], ["Chewbacca"], ["Han", "Solo"], ["Darth", "Maul"]];
+            otherIds = [];
+        }
+
+        function manageChain() {
+            let chain = $('#chain');
+            let userBox = $('#user-box');
+            let prematchName = $('#prematch-name');
+            let offset = userBox.offset();
+            let top = 0, left = 0, width = 0, height = 0;
+
+            if ($(window).outerWidth() > 768) {
+                top = offset.top + userBox.innerHeight() / 4;
+                left = offset.left + userBox.innerWidth() + 10;
+
+                let prematchLeft = prematchName.offset().left - 10;
+
+                width = prematchLeft - left;
+                height = 61;
+            } else {
+                top = offset.top + userBox.innerHeight() + 10;
+                left = offset.left + userBox.innerWidth() / 2 - 61 / 2;
+
+                let prematchHeight = prematchName.offset().top - 10;
+                height = prematchHeight - top;
+                width = 61;
+            }
+
+            chain.css({
+                'top': top,
+                'left': left,
+                'width': width,
+                'height': height
+            });
+
+            console.log('managed chainio, width: ', width);
+        }
+
+        generateUsers();
+        manageChain();
+
+        let oldWidth;
+
+        $(window).bind('resize', () => {
+            $('#user-box').css('max-width', $('#user-img').innerWidth() + $('#user-info').outerWidth(true));
+            if ($(window).outerWidth() <= 1000)
+                $('#user-container').css('width', $('#user-box').innerWidth());
+
+            centerRoster();
+            if (oldWidth) {
+                if ($(window).outerWidth() > 768 && oldWidth <= 768)
+                    generateUsers();
+                else if ($(window).outerWidth() <= 768 && oldWidth > 768)
+                    generateUsers();
+            }
+            setTimeout(manageChain(), 2000);
+            oldWidth = $(window).outerWidth();
+        });
+        $(document).ready(() => manageChain());
+    </script>
+</div>
 </body>
 </html>

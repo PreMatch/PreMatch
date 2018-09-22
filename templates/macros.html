@@ -143,5 +143,13 @@
     <script src="/static/js/googleSignIn.js"></script>
     <script src="/static/js/flash.js"></script>
 {% endmacro %}
+
+{% macro hideScrollbar() %}
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+{% endmacro %}
 </body>
 </html>
