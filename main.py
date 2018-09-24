@@ -81,7 +81,7 @@ def do_login():
 
   # expected form argument: id_token, redirect (optional)
   if missing_form_field('id_token'):
-    return error(400, 'Missing token from Google sign-in')
+    return error(422, 'Missing token from Google sign-in')
 
   try:
     handle, name = validate_token_for_info(request.form['id_token'])
@@ -103,7 +103,7 @@ def do_login():
     return redirect(request.form.get('redirect', default))
 
   except ValueError as e:
-    return error(400, 'Authentication failed: ' + str(e))
+    return error(500, 'Authentication failed: ' + str(e))
 
 
 @app.route('/logout')
@@ -207,13 +207,13 @@ def do_update():
       redirect_path = '/dashboard'
 
     if any(map(missing_form_field, PERIODS)):
-      return error(400, 'One or more periods missing')
+      return error(422, 'One or more periods missing')
 
     # Teacher validity check
     new_schedule = list(map(request.form.get, PERIODS))
     for teacher in new_schedule:
       if teacher not in teachers:
-        return error(400, 'Unknown teacher: ' + teacher)
+        return error(422, 'Unknown teacher: ' + teacher)
 
     # Read lunches (optional)
     lunches = {}
@@ -221,7 +221,7 @@ def do_update():
       nbr = lunches[block] = request.form.get(f'lunch{block}')
       if nbr is not None:
         if nbr not in list('1234'):
-          return error(400, f'Invalid lunch number: {nbr}')
+          return error(422, f'Invalid lunch number: {nbr}')
         lunches[block] = int(nbr)
 
     try:
@@ -247,9 +247,9 @@ def show_roster(period, teacher):
     return error_not_logged_in()
 
   if period not in PERIODS:
-    return error(400, 'Invalid block: ' + period)
+    return error(422, 'Invalid block: ' + period)
   if teacher not in teachers:
-    return error(400, 'Invalid teacher: ' + teacher)
+    return error(422, 'Invalid teacher: ' + teacher)
 
   roster = database.class_roster(period, teacher)
   if len(roster) == 0:
@@ -271,9 +271,9 @@ def show_lunch(block, number):
     return error_not_logged_in()
 
   if block not in PERIODS[2:]:
-    return error(400, f'Invalid lunch block: {block}')
+    return error(422, f'Invalid lunch block: {block}')
   if number not in list('1234'):
-    return error(400, f'Invalid lunch number: {number}')
+    return error(422, f'Invalid lunch number: {number}')
 
   number = int(number)
   roster = database.lunch_roster(block, number)
@@ -363,32 +363,41 @@ def admin_record_lunch():
                            lunch_numbers=list('1234'),
                            message=request.args.get('m'))
   else:
-    handle = request.form.get('handle')
+    handles = request.form.get('handles').split(',')
     block = request.form.get('block')
     number = request.form.get('number')
 
-    if None in [handle, block, number]:
+    if None in [handles, block, number] or len(handles) == 0:
       flash('Missing fields')
-      return redirect('/')
+      return redirect('/lunch/record')
 
-    if not database.handle_exists(handle):
-      flash(f'Invalid student: {handle}')
-      return redirect('/')
+    if not all(map(database.handle_exists, handles)):
+      flash(f'Invalid student')
+      return redirect('/lunch/record')
     if block not in PERIODS[2:]:
       flash(f'Invalid block: {block}')
-      return redirect('/')
+      return redirect('/lunch/record')
     if number not in '1234':
       flash(f'Invalid lunch number: {number}')
-      return redirect('/')
+      return redirect('/lunch/record')
 
-    schedule = database.user_schedule(handle)
+    already_in = []
 
-    if database.lunch_number(block, schedule[block]) is not None:
-      return redirect('/lunch/record?m=AlreadyIn')
+    for handle in handles:
+      schedule = database.user_schedule(handle)
 
-    database.add_lunch_number(schedule[block], block, number)
-    return redirect('/lunch/record?m=Success')
+      if database.lunch_number(block, schedule[block]) is not None:
+        already_in.append(handle)
 
+      database.add_lunch_number(schedule[block], block, number)
+
+    flash('Successfully recorded' +
+          f" with #{', '.join(already_in)} overwritten" if already_in else ' with none existing')
+    return redirect('/lunch/record')
+
+
+from apis import rest_api
+app.register_blueprint(rest_api)
 
 if __name__ == "__main__":
   app.run()
