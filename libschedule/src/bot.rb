@@ -79,7 +79,7 @@ module Bot
 
     when :myday
       handle = @database.associated_handle(event.author.id)
-      return 'You are not associated with PreMatch! Try `$$personalize.`' if handle.nil?
+      return 'You are not associated with PreMatch! Try `$$personalize`.' if handle.nil?
 
       PersonalResponder.new(handle, Time.now, event, @database).respond
 
