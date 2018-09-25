@@ -361,7 +361,8 @@ def admin_record_lunch():
                            students=database.roster_of_all(),
                            blocks=PERIODS[2:],
                            lunch_numbers=list('1234'),
-                           message=request.args.get('m'))
+                           message=request.args.get('m'),
+                           handle=logged_handle())
   else:
     handles = request.form.get('handles').split(',')
     block = request.form.get('block')
@@ -381,18 +382,18 @@ def admin_record_lunch():
       flash(f'Invalid lunch number: {number}')
       return redirect('/lunch/record')
 
-    already_in = []
+    unchanged = []
 
     for handle in handles:
       schedule = database.user_schedule(handle)
-
-      if database.lunch_number(block, schedule[block]) is not None:
-        already_in.append(handle)
+      exist_number = database.lunch_number(block, schedule[block])
+      if exist_number is not None:
+        unchanged.append(handle)
+        continue
 
       database.add_lunch_number(schedule[block], block, number)
 
-    flash('Successfully recorded' +
-          f" with #{', '.join(already_in)} overwritten" if already_in else ' with none existing')
+    flash(f'{unchanged} unchanged, others new')
     return redirect('/lunch/record')
 
 

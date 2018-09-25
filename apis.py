@@ -1,4 +1,6 @@
-from main import *
+from auth import logged_handle
+from teachers import teachers
+import database
 from flask import *
 
 rest_api = Blueprint('rest_api', __name__)
@@ -38,7 +40,7 @@ def api_lunch_get():
 
   if teacher not in teachers:
     return api_error(422, f'No such teacher: {teacher}')
-  if block not in PERIODS[2:]:
+  if block not in 'CDEFG':
     return api_error(422, f'No such lunch block: {block}')
 
   number = database.lunch_number(block, teacher)

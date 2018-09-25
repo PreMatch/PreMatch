@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head %}
+{% from 'macros.html' import head, nav, importJs %}
 
 {{ head('Assign Lunches', True) }}
+{{ nav(True, "/lunch/record", handle) }}
+
 <body id="body" class="bg-primary">
 
 <section class="hero is-primary section pushed">
@@ -284,6 +286,8 @@
         buttons();
     });
 </script>
+
+{{ importJs() }}
 
 </body>
 </html>
