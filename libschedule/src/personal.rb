@@ -75,6 +75,9 @@ class PersonalResponder
     when Situation::UNKNOWN
       return "I don't know what you're up to."
 
+    when Situation::BEFORE_SCHOOL
+      return "#{@call_day.description} is coming up."
+
     when Situation::AFTER_SCHOOL
       return "You finished #{@call_day.description}."
 
