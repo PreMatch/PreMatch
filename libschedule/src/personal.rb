@@ -112,7 +112,7 @@ class PersonalResponder
       teacher = @user_schedule[p.block]
       content = teacher.nil? ? p.block : p.block + " → " + teacher
 
-      if @target_date == @call_date
+      if [Situation::DURING_PERIOD, Situation::BETWEEN_PERIODS].include? @situation
         if i < prev_index
           next "~~#{content}~~"
         end
