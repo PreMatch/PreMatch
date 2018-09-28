@@ -1,6 +1,6 @@
 from google.cloud import datastore
+from config import periods
 
-PERIODS = 'ABCDEFG'
 DATABASE = datastore.Client()
 
 
@@ -39,7 +39,7 @@ def add_schedule(handle, name, sched_list):
   }
 
   for i in range(len(sched_list)):
-    data[PERIODS[i]] = sched_list[i]
+    data[periods[i]] = sched_list[i]
 
   task = datastore.Entity(key)
   task.update(data)
@@ -55,7 +55,7 @@ def update_schedule(handle, sched_list):
 
     if task:
       for i in range(len(sched_list)):
-        task[PERIODS[i]] = sched_list[i]
+        task[periods[i]] = sched_list[i]
       client.put(task)
 
 
@@ -96,43 +96,13 @@ def search_user(search_query):
                        'handle'], users))
 
 
-def most_common_classmates(handle):
-  frequency = {}
-  max_hit_rate = 0
-  max_users = []
-
-  schedule = user_schedule(handle)
-
-  for period in PERIODS:
-    for classmate in users_in_class(period, schedule[period]):
-      u_handle = classmate['handle']
-      if u_handle != handle:
-
-        if u_handle not in frequency:
-          frequency[u_handle] = 1
-        else:
-          frequency[u_handle] += 1
-
-        new_freq = frequency[u_handle]
-        if new_freq > max_hit_rate:
-          max_hit_rate = new_freq
-          max_users = [classmate]
-        elif new_freq == max_hit_rate:
-          max_users.append(classmate)
-
-  if max_hit_rate < 2:
-    return None
-
-  return list(max_users), max_hit_rate
-
-
 def upsert_lunch(handle, lunch_numbers):
   if not handle_exists(handle):
     raise Exception(f'Schedule with handle {handle} does not exist')
 
   schedule = user_schedule(handle)
 
-  for block in PERIODS[2:]:
+  for block in periods[2:]:
     number = lunch_numbers.get(block)
     if number is not None:
       teacher = schedule[block]
@@ -185,7 +155,7 @@ def lunch_numbers(handle):
 
   schedule = user_schedule(handle)
   return dict(map(
-      lambda block: (block, lunch_number(block, schedule[block])), PERIODS[2:]))
+      lambda block: (block, lunch_number(block, schedule[block])), periods[2:]))
 
 
 def record_discord_assoc(handle, user_id):
@@ -216,7 +186,7 @@ def missing_some_lunch(handle):
   if schedule is None:
     return True
 
-  for block in PERIODS[2:]:
+  for block in periods[2:]:
     if lunch_number(block, schedule[block]) is None:
       return True
 

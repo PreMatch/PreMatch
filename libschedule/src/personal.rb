@@ -179,6 +179,6 @@ class PersonalResponder
   end
 
   def teacher_expr
-    Random.rand < 0.04 ? 'Prison Guards Crossed with Babysitters' : 'Teachers'
+    Random.rand < 0.02 ? 'Prison Guards Crossed with Babysitters' : 'Teachers'
   end
 end

@@ -253,3 +253,5 @@ teachers = sorted(["Conrad",
                    "Scarfo",
                    "Smith"
                    ])
+periods = list('ABCDEFG')
+lunch_blocks = list('CDEFG')

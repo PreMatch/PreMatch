@@ -23,6 +23,7 @@ def get(endpoint, access_token):
 def avatar_url(user_info):
   return f'https://cdn.discordapp.com/avatars/{user_info["id"]}/{user_info["avatar"]}.png'
 
+
 def exchange_code(code):
   data = {
     'client_id': CLIENT_ID,

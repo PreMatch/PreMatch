@@ -1,5 +1,5 @@
 from auth import logged_handle
-from teachers import teachers
+from config import *
 import database
 from flask import *
 
@@ -40,7 +40,7 @@ def api_lunch_get():
 
   if teacher not in teachers:
     return api_error(422, f'No such teacher: {teacher}')
-  if block not in 'CDEFG':
+  if block not in lunch_blocks:
     return api_error(422, f'No such lunch block: {block}')
 
   number = database.lunch_number(block, teacher)

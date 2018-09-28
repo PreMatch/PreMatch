@@ -5,7 +5,7 @@ import database
 import discord
 from auth import *
 from google_auth import validate_token_for_info
-from teachers import teachers
+from config import *
 
 PERIODS = list(map(chr, range(65, 72)))
 
@@ -167,7 +167,7 @@ def show_dashboard(handle):
     rosters[period] = database.class_roster(period, schedule[period])
 
   lunch_rosters = {}
-  for block in PERIODS[2:]:
+  for block in lunch_blocks:
     num = database.lunch_number(block, schedule[block])
     lunch_rosters[block] = database.lunch_roster(block, num) \
       if num is not None else None
@@ -175,7 +175,7 @@ def show_dashboard(handle):
   return render_template('dashboard.html',
                          handle=handle, name=name, schedule=schedule,
                          rosters=rosters,
-                         lunch_periods=PERIODS[2:], lunches=[1, 2, 3, 4],
+                         lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
                          lunch_rosters=lunch_rosters)
 
 
@@ -198,7 +198,7 @@ def do_update():
                            name=session.get('name', database.user_name(handle)),
                            schedule=schedule,
                            teachers=teachers,
-                           lunch_periods=PERIODS[2:], lunches=[1, 2, 3, 4],
+                           lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
                            lunch_numbers=database.lunch_numbers(handle))
   else:
     # Redirect path reading from args
@@ -217,7 +217,7 @@ def do_update():
 
     # Read lunches (optional)
     lunches = {}
-    for block in PERIODS[2:]:
+    for block in lunch_blocks:
       nbr = lunches[block] = request.form.get(f'lunch{block}')
       if nbr is not None:
         if nbr not in list('1234'):
@@ -261,7 +261,7 @@ def show_roster(period, teacher):
   return render_template('roster.html', period=period, teacher=teacher,
                          roster=roster, handle=logged_handle(),
                          lunch_number=database.lunch_number(period, teacher),
-                         lunch_periods=PERIODS[2:],
+                         lunch_periods=lunch_blocks,
                          user_in_class=user_in_class)
 
 
@@ -270,7 +270,7 @@ def show_lunch(block, number):
   if logged_handle() is None:
     return error_not_logged_in()
 
-  if block not in PERIODS[2:]:
+  if block not in lunch_blocks:
     return error(422, f'Invalid lunch block: {block}')
   if number not in list('1234'):
     return error(422, f'Invalid lunch number: {number}')
@@ -359,7 +359,7 @@ def admin_record_lunch():
   if request.method == 'GET':
     return render_template('record_lunch.html',
                            students=database.roster_of_all(),
-                           blocks=PERIODS[2:],
+                           blocks=lunch_blocks,
                            lunch_numbers=list('1234'),
                            message=request.args.get('m'),
                            handle=logged_handle())
@@ -375,7 +375,7 @@ def admin_record_lunch():
     if not all(map(database.handle_exists, handles)):
       flash(f'Invalid student')
       return redirect('/lunch/record')
-    if block not in PERIODS[2:]:
+    if block not in lunch_blocks:
       flash(f'Invalid block: {block}')
       return redirect('/lunch/record')
     if number not in '1234':
