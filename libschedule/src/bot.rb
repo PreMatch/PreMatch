@@ -61,12 +61,14 @@ module Bot
   def self.day_cmd(time_or_day_num)
 
     unless time_or_day_num.is_a? Time
+      return ":exclamation: Day #{time_or_day_num} does not exist" unless
+          CurrentSchedule.is_valid_day(time_or_day_num)
+
       schedule = Schedule.of_day(StandardDay.new(time_or_day_num))
       return "Day #{time_or_day_num} has blocks #{schedule.periods.map(&:block).join(', ')}"
     end
 
     call_date = time_or_day_num.to_date
-
     return "#{express_date call_date} is not in the currently defined calendar year." unless @calendar.includes? call_date
 
     call_day = @calendar.day_on call_date
@@ -75,7 +77,7 @@ module Bot
     when Holiday
       return "#{express_date call_date} is #{call_day.description}"
     when UnknownDay
-      return "#{express_date call_date} is #{call_day.name}, and I don't know the schedule."
+      return "#{express_date call_date} is #{call_day.name}, and I don't know the schedule"
     else
       schedule = Schedule.of_day(call_day)
       return "#{express_date call_date} is a #{call_day.description} with blocks #{schedule.periods.map(&:block).join(', ')}"

@@ -26,6 +26,10 @@ module CurrentSchedule
       %w[C B H F D]
   ].freeze
 
+  def self.is_valid_day(day)
+    day > 0 && day <= BLOCKS.length
+  end
+
   EXAM_DAY_RANGES = [
       TimeRange.new(time(8, 0), time(9, 30)),
       TimeRange.new(time(10, 0), time(11, 30)),
