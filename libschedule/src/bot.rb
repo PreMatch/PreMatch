@@ -58,12 +58,14 @@ module Bot
     end
   end
 
-  def self.day_cmd(date_or_day_num)
+  def self.day_cmd(time_or_day_num)
 
-    unless date_or_day_num.is_a? Time
-      schedule = Schedule.of_day(StandardDay.new(date_or_day_num))
-      return "Day #{date_or_day_num} has blocks #{schedule.periods.map(&:block).join(', ')}"
+    unless time_or_day_num.is_a? Time
+      schedule = Schedule.of_day(StandardDay.new(time_or_day_num))
+      return "Day #{time_or_day_num} has blocks #{schedule.periods.map(&:block).join(', ')}"
     end
+
+    call_date = time_or_day_num.to_date
 
     return "#{express_date call_date} is not in the currently defined calendar year." unless @calendar.includes? call_date
 
