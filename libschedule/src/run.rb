@@ -23,6 +23,11 @@ bot.command :day do |event, *args|
     return
   end
 
+  if args[0].to_f.to_s == args[0]
+    event.send_message(':-1: In 7+H, there is no in between.')
+    return
+  end
+
   date = Chronic.parse(args.join(' '))
   if date.nil? || date.is_a?(Chronic::Span)
     event.send_message(':thinking: I don\'t know what you mean.')
