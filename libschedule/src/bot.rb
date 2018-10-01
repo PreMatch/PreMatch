@@ -60,7 +60,7 @@ module Bot
 
   def self.day_cmd(date_or_day_num)
 
-    unless date_or_day_num.is_a? Date
+    unless date_or_day_num.is_a? Time
       schedule = Schedule.of_day(StandardDay.new(date_or_day_num))
       return "Day #{date_or_day_num} has blocks #{schedule.periods.map(&:block).join(', ')}"
     end
