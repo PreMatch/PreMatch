@@ -65,6 +65,8 @@ module Bot
       return "Day #{date_or_day_num} has blocks #{schedule.periods.map(&:block).join(', ')}"
     end
 
+    call_date = date_or_day_num
+
     return "#{express_date call_date} is not in the currently defined calendar year." unless @calendar.includes? call_date
 
     call_day = @calendar.day_on call_date
