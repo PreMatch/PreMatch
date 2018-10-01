@@ -58,17 +58,15 @@ module Bot
     end
   end
 
-  def self.day_cmd(time_or_day_num)
+  def self.day_number(num)
+    return ":exclamation: Day #{num} does not exist" unless CurrentSchedule.is_valid_day(num)
 
-    unless time_or_day_num.is_a? Time
-      return ":exclamation: Day #{time_or_day_num} does not exist" unless
-          CurrentSchedule.is_valid_day(time_or_day_num)
+    schedule = Schedule.of_day(StandardDay.new(num))
+    return "Day #{num} has blocks #{schedule.periods.map(&:block).join(', ')}"
+  end
 
-      schedule = Schedule.of_day(StandardDay.new(time_or_day_num))
-      return "Day #{time_or_day_num} has blocks #{schedule.periods.map(&:block).join(', ')}"
-    end
-
-    call_date = time_or_day_num.to_date
+  def self.day_cmd(given_time)
+    call_date = given_time.to_date
     return "#{express_date call_date} is not in the currently defined calendar year." unless @calendar.includes? call_date
 
     call_day = @calendar.day_on call_date

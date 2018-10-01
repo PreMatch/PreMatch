@@ -15,6 +15,7 @@ module CurrentSchedule
     end
   end
 
+
   BLOCKS = [
       %w[A C H E G],
       %w[B D F G E],
