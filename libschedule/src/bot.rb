@@ -41,53 +41,50 @@ module Bot
     @database = Database.new
   end
 
-  def self.response_to(command, call_date, event)
+  def self.personalize(init_event)
+    caller_id = init_event.author.id
+    handle = @database.associated_handle(caller_id)
 
-    case command
-    when :personalize
+    unless handle.nil?
+      return "#{init_event.author.mention}, you are already associated to #{handle}!"
+    end
 
-      caller_id = event.author.id
-      handle = @database.associated_handle(caller_id)
+    auth_url = Discord.auth_url(caller_id)
+    init_event.author.pm("To associate your Discord account with PreMatch, visit #{auth_url}")
+    init_event.author.pm('This link applies to you only. **Please do not send it to other users!**')
 
-      unless handle.nil?
-        return "#{event.author.mention}, you are already associated to #{handle}!"
-      end
+    unless init_event.channel.type == 1
+      "I have slid into DMs, #{init_event.author.mention}. Take a look."
+    end
+  end
 
-      auth_url = Discord.auth_url(caller_id)
-      event.author.pm("To associate your Discord account with PreMatch, visit #{auth_url}")
-      event.author.pm('This link applies to you only. Please do not send it to other users!')
+  def self.day_cmd(date_or_day_num)
 
-      unless event.channel.type == 1
-        return "I have slid into DMs, #{event.author.mention}. Take a look."
-      end
+    unless date_or_day_num.is_a? Date
+      schedule = Schedule.of_day(StandardDay.new(date_or_day_num))
+      return "Day #{date_or_day_num} has blocks #{schedule.periods.map(&:block).join(', ')}"
+    end
 
-    when :day
+    return "#{express_date call_date} is not in the currently defined calendar year." unless @calendar.includes? call_date
 
-      return "#{express_date call_date} is not in the currently defined calendar year." unless @calendar.includes? call_date
+    call_day = @calendar.day_on call_date
 
-      call_day = @calendar.day_on call_date
+    case call_day
+    when Holiday
+      return "#{express_date call_date} is #{call_day.description}"
+    when UnknownDay
+      return "#{express_date call_date} is #{call_day.name}, and I don't know the schedule."
+    else
+      schedule = Schedule.of_day(call_day)
+      return "#{express_date call_date} is a #{call_day.description} with blocks #{schedule.periods.map(&:block).join(', ')}"
+    end
+  end
 
-      case call_day
-      when Holiday
-        return "#{express_date call_date} is #{call_day.description}"
-      when UnknownDay
-        return "#{express_date call_date} is #{call_day.name}, and I don't know the schedule."
-      else
-        schedule = Schedule.of_day(call_day)
-        return "#{express_date call_date} is a #{call_day.description} with blocks #{schedule.periods.map(&:block).join(', ')}"
-      end
-
-    when :myday
-      handle = @database.associated_handle(event.author.id)
+  def self.myday(init_event)
+      handle = @database.associated_handle(init_event.author.id)
       return 'You are not associated with PreMatch! Try `$$personalize`.' if handle.nil?
 
-      PersonalResponder.new(handle, Time.now, event, @database).respond
-
-      #schedule = @database.read_schedule(handle)
-      #call_day = @calendar.day_on(call_date)
-      #personal_respond(schedule, call_date, call_day, event)
-      nil
-    end
+      PersonalResponder.new(handle, Time.now, init_event, @database).respond
   end
 
   def self.express_date(date)
