@@ -21,7 +21,7 @@ def validate_token_for_info(token):
                            'https://accounts.google.com']:
     raise ValueError('Wrong issuer')
   if 'hd' not in idinfo or idinfo['hd'] != APS_DOMAIN:
-    raise ValueError('You need to use your k12.andoverma.us account')
+    raise ValueError('You need to use your k12.andoverma.us account!')
 
   handle = idinfo['email'].split('@')[0]
   grad_year = grad_year_of_handle(handle)

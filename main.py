@@ -87,7 +87,7 @@ def do_login():
     handle, name = validate_token_for_info(request.form['id_token'])
     log_in(handle)
 
-    if database.missing_some_lunch(handle):
+    if database.missing_some_lunch(handle) and database.handle_exists(handle):
       flash('You are missing some lunch numbers. To enter them, please visit the Update page.')
     else:
       flash('Successfully logged in as ' + name)
@@ -103,7 +103,7 @@ def do_login():
     return redirect(request.form.get('redirect', default))
 
   except ValueError as e:
-    return error(500, 'Authentication failed: ' + str(e))
+    return error(403, 'Authentication failed: ' + str(e))
 
 
 @app.route('/logout')
