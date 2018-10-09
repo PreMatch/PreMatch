@@ -61,9 +61,9 @@ module CurrentCalendar
       half_day(Date.new(2019, 5, 3), %w[A C E G]),
       single_holiday(Date.new(2019, 5, 27), 'Memorial Day'),
 
-      unknown_day(Date.new(2018, 6, 6), 'X'),
-      half_day(Date.new(2018, 6, 7), %w[A D C F]),
-      unknown_day(Date.new(2018, 6, 10), 'Y'),
+      unknown_day(Date.new(2019, 6, 6), 'X'),
+      half_day(Date.new(2019, 6, 7), %w[A D C F]),
+      unknown_day(Date.new(2019, 6, 10), 'Y'),
 
       exam_day(Date.new(2019, 6, 11), 'A', 'E'),
       exam_day(Date.new(2019, 6, 12), 'B', 'F'),

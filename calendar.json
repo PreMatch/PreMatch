@@ -1,0 +1,195 @@
+{
+  "name": "The 7+H Definition File",
+  "version": 1.0,
+  "blocks": ["A", "B", "C", "D", "E", "F", "G"],
+  "cycle_size": 8,
+  "start_date": "2018-08-29",
+  "end_date": "2019-06-14",
+  "exclusions": [
+    {
+      "type": "holiday",
+      "start_date": "2018-08-31",
+      "end_date": "2018-09-03",
+      "description": "Labor Day Recess"
+    },
+    {
+      "type": "holiday",
+      "start_date": "2018-09-10",
+      "end_date": "2018-09-10",
+      "description": "Rosh Hashanah"
+    },
+    {
+      "type": "holiday",
+      "start_date": "2018-09-19",
+      "end_date": "2018-09-19",
+      "description": "Yom Kippur"
+    },
+    {
+      "type": "holiday",
+      "start_date": "2018-10-08",
+      "end_date": "2018-10-08",
+      "description": "Columbus Day"
+    },
+    {
+      "type": "half_day",
+      "date": "2018-10-19",
+      "blocks": ["A", "C", "E", "G"]
+    },
+    {
+      "type": "holiday",
+      "start_date": "2018-11-06",
+      "end_date": "2018-11-06",
+      "description": "Professional Day"
+    },
+    {
+      "type": "holiday",
+      "start_date": "2018-11-12",
+      "end_date": "2018-11-12",
+      "description": "Veterans Day"
+    },
+    {
+      "type": "half_day",
+      "date": "2018-11-21",
+      "blocks": ["A", "D", "C", "PepRally"]
+    },
+    {
+      "type": "holiday",
+      "start_date": "2018-11-22",
+      "end_date": "2018-11-23",
+      "description": "Thanksgiving Break"
+    },
+    {
+      "type": "half_day",
+      "date": "2018-12-07",
+      "blocks": ["B", "A", "G", "E"]
+    },
+    {
+      "type": "holiday",
+      "start_date": "2018-12-24",
+      "end_date": "2019-01-01",
+      "description": "Christmas Break"
+    },
+    {
+      "type": "unknown",
+      "date": "2019-01-15",
+      "description": "Day X"
+    },
+    {
+      "type": "unknown",
+      "date": "2019-01-16",
+      "description": "Day Y"
+    },
+    {
+      "type": "unknown",
+      "date": "2019-01-17",
+      "description": "Day Z"
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-01-18",
+      "blocks": ["A", "E"]
+    },
+    {
+      "type": "holiday",
+      "start_date": "2019-01-21",
+      "end_date": "2019-01-21",
+      "description": "Martin Luther King Day"
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-01-22",
+      "blocks": ["B", "F"]
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-01-23",
+      "blocks": ["C", "G"]
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-01-24",
+      "blocks": ["D", "MakeUp"]
+    },
+    {
+      "type": "half_day",
+      "date": "2019-02-01",
+      "blocks": ["A", "E", "F", "C"]
+    },
+    {
+      "type": "holiday",
+      "start_date": "2019-02-18",
+      "end_date": "2019-02-22",
+      "description": "Winter Break"
+    },
+    {
+      "type": "half_day",
+      "date": "2019-03-15",
+      "blocks": ["C", "B", "F", "D"]
+    },
+    {
+      "type": "holiday",
+      "start_date": "2019-04-15",
+      "end_date": "2019-04-19",
+      "description": "Spring Break"
+    },
+    {
+      "type": "half_day",
+      "date": "2019-05-03",
+      "blocks": ["A", "C", "E", "G"]
+    },
+    {
+      "type": "holiday",
+      "start_date": "2019-05-27",
+      "end_date": "2019-05-27",
+      "description": "Memorial Day"
+    },
+    {
+      "type": "unknown",
+      "date": "2019-06-06",
+      "description": "Day X"
+    },
+    {
+      "type": "half_day",
+      "date": "2019-06-07",
+      "blocks": ["A", "D", "C", "F"]
+    },
+    {
+      "type": "unknown",
+      "date": "2019-06-10",
+      "description": "Day Y"
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-06-11",
+      "blocks": ["A", "E"]
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-06-12",
+      "blocks": ["B", "F"]
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-06-13",
+      "blocks": ["C", "G"]
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-06-14",
+      "blocks": ["D", "MakeUp"]
+    }
+  ],
+  "overrides": [
+    {
+      "type": "holiday",
+      "start_date": "2018-09-14",
+      "end_date": "2018-09-14",
+      "description": "Day after Gas Explosion Apocalypse"
+    },
+    {
+      "type": "standard_day",
+      "date": "2018-09-17",
+      "day_number": 2
+    }
+  ]
+}

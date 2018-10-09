@@ -2,8 +2,10 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 import datetime
 
-CLIENT_ID = '764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com'
+WEB_CLIENT_ID = '764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com'
+IOS_CLIENT_ID = '764760025104-70ao2s5vql3ldi54okdf9tbkd4chtama.apps.googleusercontent.com'
 APS_DOMAIN = 'k12.andoverma.us'
+CLIENT_IDS = [WEB_CLIENT_ID, IOS_CLIENT_ID]
 
 
 def grad_year_of_handle(handle):
@@ -13,9 +15,8 @@ def grad_year_of_handle(handle):
   return int(year_str)
 
 
-# returns (handle, name)
-def validate_token_for_info(token):
-  idinfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
+def validate_for_handle_name(token, client_id):
+  idinfo = id_token.verify_oauth2_token(token, requests.Request(), client_id)
 
   if idinfo['iss'] not in ['accounts.google.com',
                            'https://accounts.google.com']:
@@ -31,4 +32,12 @@ def validate_token_for_info(token):
                                 grad_year - 4 > this_year):
     raise ValueError('You are not a current student of Andover High School')
 
-  return handle, idinfo['name']
+  return handle, idinfo.get('name')
+
+
+def validate_token_for_info(token):
+  return validate_for_handle_name(token, WEB_CLIENT_ID)
+
+
+def validate_ios_token_for_info(token):
+  return validate_for_handle_name(token, IOS_CLIENT_ID)
