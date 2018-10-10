@@ -1,7 +1,10 @@
 ._*
 .vscode/
 __pycache__/
+.mypy_cache/
+Gemfile.lock
 users.db
 .idea/*
 venv/*
 PreMatch-*.json
+secrets.*

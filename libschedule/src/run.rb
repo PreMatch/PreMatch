@@ -1,12 +1,13 @@
 #$LOAD_PATH << 'src'
 require 'time'
 require './bot'
+require './secrets'
 require 'discordrb'
 
 require 'chronic'
 
 bot = Discordrb::Commands::CommandBot.new \
-  token: 'NDE4MDg5MzY5OTQyMDk3OTIx.DXcfwA.hGGJJUR66WnhL4qwWXe5sJpMn34', prefix: '$$'
+  token: $discord_token, prefix: '$$'
 
 Bot.initialize
 

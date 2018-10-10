@@ -2,12 +2,12 @@ require './calendar'
 require './schedule'
 require './database'
 require './personal'
+require './secrets'
 require 'discordrb'
 
 require 'openssl'
 
 $discord_auth_url = 'https://discordapp.com/api/oauth2/authorize?client_id=418089369942097921&redirect_uri=https%3A%2F%2Fprematch.org%2Fdiscord&response_type=code&scope=identify'.freeze
-$discord_secret = 'IIx8xkGg52On9-EkZrxm0OiIGoyOHBkv'
 $verified_guilds = [
     365183228459352067
 ]

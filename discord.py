@@ -1,9 +1,9 @@
 import requests
 import hmac
+from secrets import DISCORD_CLIENT_SECRET as CLIENT_SECRET
 
 API_ENDPOINT = 'https://discordapp.com/api'
 CLIENT_ID = '418089369942097921'
-CLIENT_SECRET = 'IIx8xkGg52On9-EkZrxm0OiIGoyOHBkv'
 REDIRECT_URI = 'https://prematch.org/discord'
 
 
