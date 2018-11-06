@@ -92,7 +92,7 @@
         </form>
         <div class="columns">
             <div class="column is-one-third">
-                {% for name, rhandle in roster %}
+                {% for name, rhandle, can_read in roster %}
                     {% if loop.index == (loop|length / 3)|round|int + 1 or loop.index == (loop|length / 3)|round|int * 2 + 1 %}
                         </div>
                         <div class="column is-one-third">
@@ -100,11 +100,13 @@
                     <div class="{{ 'is-selected' if handle == rhandle }} lunch-row">
                         <h1 class="name">{{ name }}</h1>
                         <h1 class="handle">{{ rhandle }}</h1>
+                        {% if can_read %}
                         <p class="roster-link"
                            style="{{ 'border: none!important;' if loop.index == roster|length else '' }} text-align: center;">
                             <a class="button {{ 'is-outlined' if handle == rhandle }} is-primary is-medium"
                                href="/user/{{ rhandle }}">View Schedule</a>
                         </p>
+                        {% endif %}
                     </div>
                 {% endfor %}
                 </div>

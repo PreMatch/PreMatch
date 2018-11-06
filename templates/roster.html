@@ -45,13 +45,15 @@
         </tr>
         </thead>
         <tbody>
-        {% for name, rhandle in roster %}
+        {% for name, rhandle, can_read in roster %}
             <tr class="{{ 'is-selected' if handle == rhandle }}">
                 <td class="name">{{ name }}</td>
                 <td class="handle">{{ rhandle }}</td>
                 <td class="roster-link">
+                    {% if can_read %}
                     <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-medium"
                        href="/user/{{ rhandle }}">View Schedule</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

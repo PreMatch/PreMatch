@@ -4,8 +4,8 @@ from flask import *
 import database
 import discord
 from auth import *
-from google_auth import validate_token_for_info
 from config import *
+from google_auth import validate_token_for_info
 
 PERIODS = list(map(chr, range(65, 72)))
 
@@ -43,6 +43,11 @@ def render_login_optional(template, **kwargs):
 def error_no_own_schedule():
   flash('You need to enter your schedule first', 'error')
   return redirect('/update')
+
+
+def error_private(handle):
+  flash(f'The user {handle} has decided to make their schedule private')
+  return redirect('/')
 
 
 app = Flask(__name__)
@@ -122,18 +127,22 @@ def show_own_user():
 
 @app.route('/user/<handle>', methods=['GET'])
 def show_user(handle):
-  if logged_handle() is None:
+  own_handle = logged_handle()
+  if own_handle is None:
     return error_not_logged_in()
 
-  if not database.handle_exists(handle):
-    if logged_handle() == handle:
-      return error_no_own_schedule()
+  can_read = database.can_read(own_handle, handle)
+  if not can_read:
+    return error_private(handle)
 
+  schedule = database.get_row_from_handle(handle)
+  if schedule is None:
+    if own_handle == handle:
+      return error_no_own_schedule()
     return render_template('profile_not_found.html', bad_handle=handle)
 
-  schedule = database.user_schedule(handle)
   name = database.user_name(handle)
-  lunch = database.lunch_numbers(handle)
+  lunch = database.lunch_numbers(own_handle, handle)
   return render_template('user.html', schedule=schedule, name=name,
                          handle=handle, teachers=teachers,
                          lunch_numbers=lunch, lunch_blocks=lunch.keys())
@@ -157,10 +166,16 @@ def show_dashboard(handle):
   if user_handle is None:
     return error_not_logged_in()
 
-  if not database.handle_exists(handle):
-    return render_template('profile_not_found.html', bad_handle=handle)
+  can_read = database.can_read(user_handle, handle)
+  if not can_read:
+    return error_private(handle)
 
   schedule = database.get_row_from_handle(handle)
+  if schedule is None:
+    if user_handle == handle:
+      return error_no_own_schedule()
+    return render_template('profile_not_found.html', bad_handle=handle)
+
   name = schedule['name']
   rosters = {}
   for period in PERIODS:
@@ -186,8 +201,7 @@ def do_update():
     return error_not_logged_in()
 
   if request.method == 'GET':
-
-    schedule = database.user_schedule(handle)
+    schedule = database.get_row_from_handle(handle)
 
     if schedule is None and 'name' not in session:
       flash('You need to log in again', 'error')
@@ -199,7 +213,7 @@ def do_update():
                            schedule=schedule,
                            teachers=teachers,
                            lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
-                           lunch_numbers=database.lunch_numbers(handle))
+                           lunch_numbers=database.lunch_numbers(handle, handle))
   else:
     # Redirect path reading from args
     redirect_path = request.args.get('from', '/dashboard')
@@ -224,15 +238,18 @@ def do_update():
           return error(422, f'Invalid lunch number: {nbr}')
         lunches[block] = int(nbr)
 
+    # Schedule publicly accessible?
+    make_public = request.form.get('public') is not None
+
     try:
       if database.handle_exists(handle):
-        database.update_schedule(handle, new_schedule)
+        database.update_schedule(handle, new_schedule, make_public)
         flash('Schedule updated successfully')
       else:
         if 'name' not in session:
           return error(417, 'Name unknown because it is not in user session')
 
-        database.add_schedule(handle, session.pop('name'), new_schedule)
+        database.add_schedule(handle, session.pop('name'), new_schedule, make_public)
         flash('Schedule added successfully')
 
       database.upsert_lunch(handle, lunches)
@@ -243,7 +260,8 @@ def do_update():
 
 @app.route('/roster/<period>/<teacher>')
 def show_roster(period, teacher):
-  if logged_handle() is None:
+  handle = logged_handle()
+  if handle is None:
     return error_not_logged_in()
 
   if period not in PERIODS:
@@ -252,14 +270,17 @@ def show_roster(period, teacher):
     return error(422, 'Invalid teacher: ' + teacher)
 
   roster = database.class_roster(period, teacher)
+  user_in_class = handle in list(map(lambda row: row[1], roster))
+  if not user_in_class:
+    roster = list(filter(lambda h: database.can_read(handle, h[1]), roster))
+
   if len(roster) == 0:
     flash('That class is either empty or nonexistent', 'error')
     return redirect('/')
 
-  user_in_class = logged_handle() in list(map(lambda row: row[1], roster))
-
+  roster = database.inject_privacy(handle, roster)
   return render_template('roster.html', period=period, teacher=teacher,
-                         roster=roster, handle=logged_handle(),
+                         roster=roster, handle=handle,
                          lunch_number=database.lunch_number(period, teacher),
                          lunch_periods=lunch_blocks,
                          user_in_class=user_in_class)
@@ -267,7 +288,8 @@ def show_roster(period, teacher):
 
 @app.route('/lunch/<block>/<number>')
 def show_lunch(block, number):
-  if logged_handle() is None:
+  handle = logged_handle()
+  if handle is None:
     return error_not_logged_in()
 
   if block not in lunch_blocks:
@@ -276,28 +298,31 @@ def show_lunch(block, number):
     return error(422, f'Invalid lunch number: {number}')
 
   number = int(number)
-  roster = database.lunch_roster(block, number)
+  roster = database.inject_privacy(handle,
+                                   database.restrict_roster(
+                                     handle, database.lunch_roster(block, number)))
 
   if len(roster) == 0:
     flash('No applicable classes were found', 'error')
     return redirect('/dashboard')
 
-  return render_template('lunch.html', handle=logged_handle(), roster=roster,
+  return render_template('lunch.html', handle=handle, roster=roster,
                          block=block, number=number)
 
 
 @app.route('/search')
 def do_search():
-  if logged_handle() is None:
+  handle = logged_handle()
+  if handle is None:
     return error_not_logged_in()
 
   query = request.args.get('query')
   if query is None or query.strip() == '':
-    return render_template('search-new.html', handle=logged_handle())
+    return render_template('search-new.html', handle=handle)
 
-  results = database.search_user(query.strip())
+  results = database.search_user(handle, query.strip())
   return render_template('search-result.html', query=query, results=results,
-                         handle=logged_handle())
+                         handle=handle)
 
 
 @app.route('/discord')
@@ -385,7 +410,7 @@ def admin_record_lunch():
     unchanged = []
 
     for handle in handles:
-      schedule = database.user_schedule(handle)
+      schedule = database.get_row_from_handle(handle)
       exist_number = database.lunch_number(block, schedule[block])
       if exist_number is not None:
         unchanged.append(handle)
