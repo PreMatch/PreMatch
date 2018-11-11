@@ -86,8 +86,10 @@ def api_schedule():
         return api_bad_value('handle')
     if not database.handle_exists(handle):
         return api_error(404, 'Handle not found: ' + handle)
+    if not database.can_read(logged_handle(), handle):
+        return api_error(403, 'Cannot read private handle: ' + handle)
 
-    schedule = database.user_schedule(handle)
+    schedule = database.get_row_from_handle(handle)
     response = dict(map(lambda blk: (blk, schedule.get(blk)), periods))
 
     return api_success(**response)
