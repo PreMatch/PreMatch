@@ -12,7 +12,7 @@ Behold - the 7+H schedule system of Andover High School:
 It’s a chaotic 8-day rotation of 8 different blocks that vary in length combined with 4 lunch periods. One of these blocks is the H block, a block used for student enrichment, in which you can visit your teachers arbitrarily. When schedules are released one week before school starts, nearly every student at Andover High School goes in a frenzy, sending their schedule to everyone they know in order to see which of their friends are in which of their classes. This is a frantic, inefficient process that is never completely accurate and takes a long time. 
 
 ## Our Solution
-When we, the creators of PreMatch, noticed how many students shared their schedules, and the many, many platforms they used to share it, we decided that we had to make something that would make this process easier and more efficient, while still keeping sensitive information away from the prying eyes of the general public. 
+When we, the creators of PreMatch, noticed how many students shared their schedules and the many platforms they used to share them, we decided that we had to make something that would make this process easier and more efficient, while still keeping sensitive information away from the prying eyes of the general public. 
 Thus, <a href="https://prematch.org">PreMatch</a> was born. 
 
 ![PreMatch Logo](https://prematch.org/static/img/PreMatch%20Logo.png)
