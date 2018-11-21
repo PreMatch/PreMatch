@@ -56,7 +56,7 @@ set_secret_key(app)
 
 @app.before_request
 def enforce_domain_https():
-    if request.url.startswith('http://') or 'appspot' in request.url:
+    if 'appspot' in request.url or ('prematch.org' in request.url and 'http://' in request.url):
         return redirect('https://prematch.org', code=301)
 
 
