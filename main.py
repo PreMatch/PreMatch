@@ -76,6 +76,11 @@ def show_about_discord():
     return render_login_optional('about_discord.html')
 
 
+@app.route('/about/app')
+def show_about_app():
+    return render_login_optional('about_app.html')
+
+
 # Relaying final redirect (after log-in) from originator of /login GET to /login POST
 # 1. Originator sends user to /login?redirect=<desired_url>
 # 2. login.html is rendered with redirect (template variable) set to the value above, or '' if there wasn't one
