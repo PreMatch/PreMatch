@@ -234,3 +234,10 @@ def restrict_roster(viewer: str, roster: Roster) -> Roster:
 
 def inject_privacy(viewer: str, roster: Roster) -> PrivacyRoster:
     return list(map(lambda entry: (entry[0], entry[1], can_read(viewer, entry[1])), roster))
+
+
+def has_public_schedule(handle: str) -> bool:
+    schedule = get_row_from_handle(handle)
+    if schedule is None:
+        return False
+    return schedule.get('public')

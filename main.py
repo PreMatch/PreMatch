@@ -224,7 +224,8 @@ def do_update():
                                schedule=schedule,
                                teachers=teachers,
                                lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
-                               lunch_numbers=database.lunch_numbers(handle, handle))
+                               lunch_numbers=database.lunch_numbers(handle, handle),
+                               user_public=database.has_public_schedule(handle))
     else:
         # Redirect path reading from args
         redirect_path = request.args.get('from', '/dashboard')
