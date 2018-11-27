@@ -26,10 +26,10 @@
         <div class="card-content" id="card-{{ period }}">
             <div class="table-container" id="table-container-{{ period }}">
                 <table class="table is-fullwidth" id="card-table-{{ period }}">
-                    {% for name, roster_handle in rosters[period] if roster_handle != handle %}
+                    {% for user in rosters[period] if roster_handle != handle %}
                         <tr style="{{ 'display: none;' if loop.index > 10 }}">
-                            <td class="name">{{ name }}</td>
-                            <td class="handle is-size-7">{{ roster_handle }}</td>
+                            <td class="name">{{ user.name }}</td>
+                            <td class="handle is-size-7">{{ user.handle }}</td>
                         </tr>
                     {% endfor %}
                 </table>

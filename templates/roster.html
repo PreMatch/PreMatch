@@ -45,14 +45,14 @@
         </tr>
         </thead>
         <tbody>
-        {% for name, rhandle, can_read in roster %}
-            <tr class="{{ 'is-selected' if handle == rhandle }}">
-                <td class="name">{{ name }}</td>
-                <td class="handle">{{ rhandle }}</td>
+        {% for user in roster %}
+            <tr class="{{ 'is-selected' if handle == user.handle }}">
+                <td class="name">{{ user.name }}</td>
+                <td class="handle">{{ user.handle }}</td>
                 <td class="roster-link">
-                    {% if can_read %}
-                    <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-medium"
-                       href="/user/{{ rhandle }}">View Schedule</a>
+                    {% if user.can_be_read_by_handle(handle) %}
+                    <a class="button {{ 'is-outlined' if handle != user.handle }} is-primary is-medium"
+                       href="/user/{{ user.handle }}">View Schedule</a>
                     {% endif %}
                 </td>
             </tr>

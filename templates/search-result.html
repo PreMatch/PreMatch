@@ -32,19 +32,19 @@
         </div>
     </section>
 {% else %}
-    {% for name, rhandle, can_read in results %}
-        <section class="section pushed has-background-white {{ 'is-user' if handle == rhandle }}"
+    {% for user in results %}
+        <section class="section pushed has-background-white {{ 'is-user' if handle == user.handle }}"
                  style="margin-bottom: 4px;">
             <div class="container">
                 <div class="columns is-tablet">
                     <div class="column">
-                        <h1 class="title {{ 'overridden-white' if handle == rhandle }}">{{ name }}</h1>
-                        <h2 class="subtitle {{ 'overridden-white' if handle == rhandle }}">{{ rhandle }}</h2>
+                        <h1 class="title {{ 'overridden-white' if handle == user.handle }}">{{ user.name }}</h1>
+                        <h2 class="subtitle {{ 'overridden-white' if handle == user.handle }}">{{ handle }}</h2>
                     </div>
                     <div class="column is-one-fourth">
-                        {% if can_read %}
-                            <a class="button {{ 'is-outlined' if handle != rhandle }} is-primary is-large is-pulled-right"
-                               href="/user/{{ rhandle }}">View Schedule</a>
+                        {% if user.can_be_read_by_handle(handle) %}
+                            <a class="button is-outlined is-primary is-large is-pulled-right"
+                               href="/user/{{ user.handle }}">View Schedule</a>
                         {% endif %}
                     </div>
                 </div>
