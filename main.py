@@ -251,7 +251,7 @@ def do_update():
                 lunches[block] = int(nbr)
 
         # Schedule publicly accessible?
-        make_public = request.form.get('public') is not None
+        make_public = request.form.get('public') is 'true'
 
         try:
             if database.handle_exists(handle):
