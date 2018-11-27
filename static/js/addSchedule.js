@@ -1,4 +1,37 @@
 let originalMargin = 0;
+let teachers;
+
+function submitChanges(periods) {
+
+    // Remove empty lunch inputs
+    $('.lunch-input').each((_, elem) => {
+        if (elem.value === '') {
+            $(elem).remove();
+        }
+    });
+
+    let valid = true;
+    periods.forEach((period) => {
+        let form = document.getElementById('form-invis');
+
+        let input = form.querySelector(`#input-invis-${period}`);
+        let value = input.value;
+        if (!(value.length > 0)) {
+            valid = false;
+        } else {
+            if (!teachers.includes(value)) {
+                valid = false;
+            }
+        }
+    });
+
+    if (valid) {
+        document.getElementById('form-invis').submit();
+    } else {
+        document.getElementById(
+            'err-msg').innerHTML = "Sorry, but your form isn't valid! <br> Make sure <strong>all of your classes have a teacher selected</strong> and that you <strong>didn't</strong> try to edit the site's code to break it."
+    }
+}
 
 function filterTeachers(period) {
     let input, filter, a, i;
@@ -47,7 +80,7 @@ function selectInput(period) {
     $(form).children().each((index) => {
         if (form.children[index].tagName === "DIV") {
             let contentDiv = form.children[index].children[0];
-            if (!contentDiv.id.endsWith(period)) {
+            if (typeof contentDiv.getElementsByTagName('div')[0] != 'undefined' && !contentDiv.id.endsWith(period)) {
                 contentDiv.getElementsByTagName('div')[0].style.display = "None";
                 let container = document.getElementById(`dropdown-container-${contentDiv.id.slice(-1)}`);
                 $(container).css('margin-bottom', originalMargin);
@@ -90,6 +123,29 @@ function selectTeacher(period, teacher) {
         originalMargin = 45;
         $(dropdownContainer).css('margin', `${originalMargin}px 0`);
     }
+
+    getLunchData(teacher, period);
+}
+
+function getLunchData(teacher, period) {
+    if (period === 'A' || period === 'B')
+        return;
+
+    $.ajax({
+        type: "GET",
+        url: window.location.href.split("/")[0] + "/api/lunch/number",
+        data: {'teacher': teacher, 'block': period},
+        async: false
+    }).done((data) => manageLunchData(data, period));
+}
+
+function manageLunchData(data, period) {
+    if (data.status === 'ok' && data.code === 200) {
+        let number = data.number;
+        if (number >= 1 && number <= 4) {
+            selectLunch(period, number);
+        }
+    }
 }
 
 function unselectTeacher(period) {
@@ -122,16 +178,16 @@ function openLunchDropdown(period) {
         }
     });
 
-    let optionsContainer = $(`#lunch-options-${ period }`);
-    $(`#lunch-opener-${ period }`).css('display', 'none');
+    let optionsContainer = $(`#lunch-options-${period}`);
+    $(`#lunch-opener-${period}`).css('display', 'none');
     optionsContainer.children('a').each((indx, lunch) => {
         $(lunch).show();
     });
 }
 
 function closeLunchDropdown(period) {
-    let optionsContainer = $(`#lunch-options-${ period }`);
-    $(`#lunch-opener-${ period }`).css('display', 'inline-flex');
+    let optionsContainer = $(`#lunch-options-${period}`);
+    $(`#lunch-opener-${period}`).css('display', 'inline-flex');
     optionsContainer.children('a').each((indx, lunch) => {
         $(lunch).hide();
     });
@@ -140,8 +196,8 @@ function closeLunchDropdown(period) {
 function selectLunch(period, lunch) {
     if (document.getElementById(`lunch-invis-${period}`)) {
         closeLunchDropdown(period);
-        let text = $(`#lunch-select-${ period }-${ lunch }`).html();
-        $(`#lunch-opener-${ period }`).html(text + ' <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
+        let text = $(`#lunch-select-${period}-${lunch}`).html();
+        $(`#lunch-opener-${period}`).html(text + ' <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
         document.getElementById(`lunch-invis-${period}`).value = lunch;
 
         const lunchButton = $(`#view-lunch-${period}`);
@@ -153,7 +209,7 @@ function selectLunch(period, lunch) {
 
 function clearLunch(period) {
     if (document.getElementById(`lunch-invis-${period}`)) {
-        $(`#lunch-opener-${ period }`).html('Select lunch... <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
+        $(`#lunch-opener-${period}`).html('Select lunch... <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
         document.getElementById(`lunch-invis-${period}`).value = "";
         $(`#view-lunch-${period}`).hide();
     }
@@ -161,4 +217,15 @@ function clearLunch(period) {
 
 function setOriginalMargin() {
     originalMargin = parseInt($(document.getElementsByClassName('teacher-dropdown')[0]).css('margin-bottom').replace("px", ""));
+}
+
+function togglePublic(checkBox) {
+    let checked = checkBox.checked;
+    let field = $('#public-input');
+
+    if (checked) {
+        field.attr('value', checked);
+    } else {
+        field.attr('value', '');
+    }
 }

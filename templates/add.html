@@ -18,6 +18,7 @@
         {% for lunch in lunch_periods %}
             <input type="hidden" name="lunch{{ lunch }}" class="lunch-input" id="lunch-invis-{{ lunch }}">
         {% endfor %}
+        <input type="hidden" name="public" id="public-input">
     </form>
 
     <div class="box has-text-centered">
@@ -107,43 +108,24 @@
                     {% endfor %}
                 </script>
             {% endif %}
+
+            <div>
+                <div style="display: inline-block">
+                    <input type="checkbox" name="public" onclick="togglePublic(this)"
+                           id="public-checkbox" {{ 'checked' if user_public }}>
+                    <label for="public-checkbox" style="font-size: 18px;">Make my schedule public</label>
+                </div>
+                <div class="help-tip" style="display: inline-block">
+                    <p>If you make your schedule public, it can be seen by any AHS student. <br><br> If you keep your
+                        schedule private, your name will only be shown in your classes, and no AHS student can see your
+                        entire schedule. </p>
+                </div>
+                {% if user_public %}
+                    <script type="text/javascript">togglePublic(document.getElementById("public-checkbox"));</script>
+                {% endif %}
+            </div>
+            <script type="text/javascript">teachers = {{teachers | tojson}};</script>
         </form>
-        <script type="text/javascript">
-            let teachers = {{teachers | tojson}};
-
-            function submitChanges(periods) {
-
-                // Remove empty lunch inputs
-                $('.lunch-input').each((_, elem) => {
-                    if (elem.value === '') {
-                        $(elem).remove();
-                    }
-                });
-
-                let valid = true;
-                periods.forEach((period) => {
-                    let form = document.getElementById('form-invis');
-
-                    let input = form.querySelector(`#input-invis-${period}`);
-                    let value = input.value;
-                    console.log(value, period);
-                    if (!(value.length > 0)) {
-                        valid = false;
-                    } else {
-                        if (!teachers.includes(value)) {
-                            valid = false;
-                        }
-                    }
-                });
-
-                if (valid) {
-                    document.getElementById('form-invis').submit();
-                } else {
-                    document.getElementById(
-                        'err-msg').innerHTML = "Sorry, but your form isn't valid! <br> Make sure <strong>all of your classes have a teacher selected</strong> and that you <strong>didn't</strong> try to edit the site's code to break it."
-                }
-            }
-        </script>
 
         <a class="button is-outlined is-primary is-large"
            onclick="submitChanges('ABCDEFG'.split(''))">
@@ -152,9 +134,7 @@
 
         <h1 id="err-msg" style="margin-top: 20px; font-size: 20px;"></h1>
 
-        <script type="text/javascript">
-            setOriginalMargin();
-        </script>
+        <script type="text/javascript">setOriginalMargin();</script>
     </div>
 </section>
 
