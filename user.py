@@ -36,7 +36,6 @@ class User:
     @staticmethod
     def from_entity(row: datastore.Entity) -> User:
         teachers = dict(map(lambda p: (p, row.get(p)), config.periods))
-        print(row)
         return User(row['handle'], row['name'],
                     teachers, row['public'], row['accepts_privacy'])
 
