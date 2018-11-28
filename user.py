@@ -7,16 +7,9 @@ import config
 
 
 def let_handle_search(handle: str, query: str) -> List[User]:
-    users = db.db_query().fetch()
-
-    def predicate(user: datastore.Entity) -> bool:
-        name_match = query.lower() in user['name'].lower()
-        handle_match = query.lower() in user['handle']
-        return name_match or handle_match
-
     return list(filter(lambda x: x.can_be_read_by_handle(handle),
                        map(User.from_entity,
-                           filter(predicate, users))))
+                           db.search(query))))
 
 
 class User:

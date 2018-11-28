@@ -333,7 +333,7 @@ def do_search():
     if query is None or query.strip() == '':
         return render_template('search-new.html', handle=handle)
 
-    results = let_handle_search(handle, query.strip())
+    results = list(map(User.from_entity, database.search(query.strip())))
     return render_template('search-result.html', query=query, results=results,
                            handle=handle)
 

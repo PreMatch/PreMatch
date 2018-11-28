@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Iterable
 
 from google.cloud import datastore
 
@@ -61,3 +61,14 @@ def is_admin(handle: str) -> bool:
         'hpeng2021',
         'divanovich2021'
     ]
+
+
+def search(query: str) -> Iterable[datastore.Entity]:
+    users = db_query().fetch()
+
+    def predicate(user: datastore.Entity) -> bool:
+        name_match = query.lower() in user['name'].lower()
+        handle_match = query.lower() in user['handle']
+        return name_match or handle_match
+
+    return filter(predicate, users)
