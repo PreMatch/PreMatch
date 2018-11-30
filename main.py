@@ -2,11 +2,11 @@ import requests
 from flask import *
 
 import database
-from user import User, let_handle_search
 import discord
 from auth import *
 from config import *
 from google_auth import validate_token_for_info
+from user import User
 
 DEFAULT_HOME = '/dashboard'
 
@@ -217,14 +217,25 @@ def do_update():
             flash('Sorry, but you need to log in again', 'error')
             return redirect('/login')
 
-        return render_template('add.html',
-                               handle=handle,
-                               name=session.get('name', user.name),
-                               schedule=user.teachers,
-                               teachers=teachers,
-                               lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
-                               lunch_numbers=user.lunch_numbers(),
-                               user_public=user.public)
+        if user is None:
+            empty_lunch_numbers = dict(map(lambda block: (block, None), lunch_blocks))
+            return render_template('add.html',
+                                   handle=handle,
+                                   name=session.get('name'),
+                                   schedule=None,
+                                   teachers=teachers,
+                                   lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
+                                   lunch_numbers=empty_lunch_numbers,
+                                   user_public=False)
+        else:
+            return render_template('add.html',
+                                   handle=handle,
+                                   name=session.get('name', user.name),
+                                   schedule=user.teachers,
+                                   teachers=teachers,
+                                   lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
+                                   lunch_numbers=user.lunch_numbers(),
+                                   user_public=user.public)
     else:
         # Redirect path reading from args
         redirect_path = request.args.get('from', '/dashboard')
