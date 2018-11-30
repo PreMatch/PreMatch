@@ -1,3 +1,17 @@
-{%  if is_logged_in %}
-  <h1>Boi is logged in</h1>
-{%  endif %}
+<!DOCTYPE html>
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
+{{ head('Privacy Policy | PreMatch ', True) }}
+
+<body>
+  {{ nav(is_logged_in, "/privacy") }}
+
+  {% if is_logged_in %}
+    <h1>Boi is logged in</h1>
+  {% endif %}
+
+  {{ bodyPaddingNav() }}
+  {{ importJs() }}
+</body>
+
+</html>
