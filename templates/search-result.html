@@ -39,7 +39,7 @@
                 <div class="columns is-tablet">
                     <div class="column">
                         <h1 class="title {{ 'overridden-white' if handle == user.handle }}">{{ user.name }}</h1>
-                        <h2 class="subtitle {{ 'overridden-white' if handle == user.handle }}">{{ handle }}</h2>
+                        <h2 class="subtitle {{ 'overridden-white' if handle == user.handle }}">{{ user.handle }}</h2>
                     </div>
                     <div class="column is-one-fourth">
                         {% if user.can_be_read_by_handle(handle) %}
