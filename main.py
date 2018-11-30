@@ -3,6 +3,7 @@ from flask import *
 
 import database
 import discord
+from urllib import parse
 from auth import *
 from config import *
 from google_auth import validate_token_for_info
@@ -49,9 +50,12 @@ set_secret_key(app)
 
 @app.before_request
 def enforce_domain_https():
-    is_http = 'prematch.org' in request.url and 'http://' in request.url
-    if 'appspot' in request.url or is_http:
-        return redirect('https://prematch.org', code=301)
+    url = parse.urlparse(request.url)
+    is_http = 'prematch.org' in url.netloc.lower() and url.scheme == 'http'
+    if 'appspot' in url.netloc or is_http:
+        newurl = parse.ParseResult('https', 'prematch.org',
+                                   url.path, url.params, url.query, url.fragment)
+        return redirect(newurl.geturl(), code=301)
 
 
 @app.route('/')
@@ -398,6 +402,11 @@ def verify_discord(code, state):
         print(e)
         return error(401, 'Discord authorization failed!')
 
+
+@app.route('/privacy')
+def show_privacy():
+    return render_template('privacy.html',
+                           is_logged_in=logged_handle() is not None)
 
 @app.route('/lunch/record', methods=['GET', 'POST'])
 def admin_record_lunch():
