@@ -3,15 +3,22 @@
 {% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 {{ head('Privacy Policy | PreMatch ', True) }}
 
-<body>
-  {{ nav(is_logged_in, "/privacy") }}
+<body id="body">
+{{ nav(is_logged_in, "/privacy") }}
 
-  {% if is_logged_in %}
-    <h1>Boi is logged in</h1>
-  {% endif %}
+<section class="section pushed">
 
-  {{ bodyPaddingNav() }}
-  {{ importJs() }}
+    <div id="policy-container">
+        {# TODO: Embed static/privacy_policy.md #}
+    </div>
+
+    {% if is_logged_in %}
+        <h1>Boi is logged in</h1>
+        {# TODO: Add an "I accept" checkbox / form, output results to backend and update database #}
+    {% endif %}
+</section>
+
+{{ bodyPaddingNav() }}
+{{ importJs() }}
 </body>
-
 </html>
