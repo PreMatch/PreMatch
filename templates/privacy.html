@@ -2,7 +2,8 @@
 <html lang="en">
 {% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 {{ head('Privacy Policy | PreMatch ', True) }}
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+<script src="static/js/embedMD.js"></script>
 <body id="body">
 {{ nav(is_logged_in, "/privacy") }}
 
@@ -10,6 +11,7 @@
 
     <div id="policy-container">
         {# TODO: Embed static/privacy_policy.md #}
+        <script type="text/javascript">embedMD("static/privacy-policy.md", "policy-container");</script>
     </div>
 
     {% if is_logged_in %}
