@@ -2,6 +2,7 @@
 
 <a href="https://prematch.org">PreMatch</a> is a site that allows students at Andover High School to quickly and easily enter their schedules, and find out which of their friends are in which of their classes or lunches. Since its first launch on August 22nd, 2018, it has expanded to include a <a href="https://prematch.org/about/discord">Discord bot</a> and a <a href="https://github.com/broad-well/PreMatch-iOS">mobile app</a> that comes bundled with a widget that gives any student quick access to their schedule. The widget looks like so:
 
+<div style="text-align:center"><img src ="https://i.imgur.com/INN8wxj.png" /></div>
 ![PreMatch Widget](https://i.imgur.com/INN8wxj.png?0) 
 
 ## The Problem
