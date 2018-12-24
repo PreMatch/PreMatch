@@ -103,7 +103,7 @@ $(document).ready(() => {
         sidenav.css("padding-top", $(flash).innerHeight() + nav.innerHeight());
     }
 
-    $(window).resize(() => {
+    $(window).bind('resize', () => {
         if (navOpen) {
             overlay.addClass('notransition'); // Disable transitions
             overlay.width($(window).width() - sideBarWidth);

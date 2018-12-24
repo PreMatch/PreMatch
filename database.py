@@ -56,6 +56,10 @@ def users_in_lunch(block: str, number: int) -> List[datastore.Entity]:
         lambda t: users_in_class(block, t), teachers)))
 
 
+def class_student_count(block: str, teacher: str) -> int:
+    return len(users_in_class(block, teacher))
+
+
 def is_admin(handle: str) -> bool:
     return handle in [
         'hpeng2021',

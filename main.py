@@ -3,10 +3,11 @@ from flask import *
 
 import database
 import discord
+from urllib import parse
 from auth import *
 from config import *
 from google_auth import validate_token_for_info
-from user import User
+from user import User, Reader
 
 DEFAULT_HOME = '/dashboard'
 
@@ -49,9 +50,12 @@ set_secret_key(app)
 
 @app.before_request
 def enforce_domain_https():
-    is_http = 'prematch.org' in request.url and 'http://' in request.url
-    if 'appspot' in request.url or is_http:
-        return redirect('https://prematch.org', code=301)
+    url = parse.urlparse(request.url)
+    is_http = 'prematch.org' in url.netloc.lower() and url.scheme == 'http'
+    if 'appspot' in url.netloc or is_http:
+        newurl = parse.ParseResult('https', 'prematch.org',
+                                   url.path, url.params, url.query, url.fragment)
+        return redirect(newurl.geturl(), code=301)
 
 
 @app.route('/')
@@ -144,7 +148,8 @@ def show_user(handle):
             return error_no_own_schedule()
         return render_template('profile_not_found.html', bad_handle=handle)
 
-    if not target.can_be_read_by_handle(own_handle):
+    reader = Reader(own_handle)
+    if not reader.can_read(target):
         return error_private(handle)
 
     return render_template('user.html', schedule=target.teachers, name=target.name,
@@ -171,26 +176,23 @@ def show_dashboard(handle):
     if user_handle is None:
         return error_not_logged_in()
 
+    reader = Reader(user_handle)
     target = User.from_db(handle)
     if target is None:
         if user_handle == handle:
             return error_no_own_schedule()
         return render_template('profile_not_found.html', bad_handle=handle)
 
-    if not target.can_be_read_by_handle(user_handle):
+    if not reader.can_read(target):
         return error_private(handle)
 
     rosters = {}
-    if user_handle != handle:
-        for period in periods:
-            rosters[period] = list(
-                filter(lambda it: it.can_be_read_by_handle(user_handle),
-                       target.read_class_roster(period,
-                                                target.teachers[period])))
-    else:
-        rosters = dict(map(lambda p: (
-            p, target.read_class_roster(p, target.teachers[p])),
-                           periods))
+    class_sizes = {}
+    for period in periods:
+        students = database.users_in_class(period, target.teachers[period])
+
+        class_sizes[period] = len(students)
+        rosters[period] = list(reader.read_entities(students))
 
     # Lunch rosters on dashboard not implemented
     # lunch_rosters = {}
@@ -201,7 +203,7 @@ def show_dashboard(handle):
 
     return render_template('dashboard.html',
                            handle=handle, name=target.name, schedule=target.teachers,
-                           rosters=rosters)
+                           rosters=rosters, sizes=class_sizes)
 
 
 @app.route('/update', methods=['GET', 'POST'])
@@ -298,9 +300,10 @@ def show_roster(period, teacher):
     if teacher not in teachers:
         return error(422, 'Invalid teacher: ' + teacher)
 
-    users = let_handle_read(handle, database.users_in_class(period, teacher))
+    entities = database.users_in_class(period, teacher)
+    users = list(Reader(handle).read_entities(entities))
 
-    if len(users) == 0:
+    if len(entities) == 0:
         flash('That class is either empty or nonexistent', 'error')
         return redirect('/')
 
@@ -309,6 +312,7 @@ def show_roster(period, teacher):
                            roster=users, handle=handle,
                            lunch_number=database.lunch_number(period, teacher),
                            lunch_periods=lunch_blocks,
+                           size=len(entities),
                            user_in_class=user_in_class)
 
 
@@ -324,14 +328,15 @@ def show_lunch(block, number):
         return error(422, f'Invalid lunch number: {number}')
 
     number = int(number)
-    roster = let_handle_read(handle, database.users_in_lunch(block, number))
+    entities = database.users_in_lunch(block, number)
+    roster = list(Reader(handle).read_entities(entities))
 
-    if len(roster) == 0:
+    if len(entities) == 0:
         flash('No applicable classes were found', 'error')
         return redirect('/dashboard')
 
     return render_template('lunch.html', handle=handle, roster=roster,
-                           block=block, number=number)
+                           block=block, number=number, size=len(entities))
 
 
 @app.route('/search')
@@ -398,6 +403,11 @@ def verify_discord(code, state):
         print(e)
         return error(401, 'Discord authorization failed!')
 
+
+@app.route('/privacy')
+def show_privacy():
+    return render_template('privacy.html',
+                           is_logged_in=logged_handle() is not None)
 
 @app.route('/lunch/record', methods=['GET', 'POST'])
 def admin_record_lunch():

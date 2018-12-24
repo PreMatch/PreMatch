@@ -6,14 +6,36 @@ from typing import Mapping, Optional, List, Union, Iterable
 import config
 
 
-def let_handle_search(handle: str, query: str) -> List[User]:
-    return list(filter(lambda x: x.can_be_read_by_handle(handle),
-                       map(User.from_entity,
-                           db.search(query))))
-
-
-class User:
+class Reader:
     handle: str
+
+    def __init__(self, handle: str):
+        self.handle = handle
+
+    def can_read(self, other: User) -> bool:
+        return other.can_be_read_by_handle(self.handle)
+
+    def read_class_roster(self, block: str, teacher: str) -> Iterable[User]:
+        return self.read_entities(db.users_in_class(block, teacher))
+
+    def read_lunch_roster(self, block: str, number: int) -> Iterable[User]:
+        return self.read_entities(db.users_in_lunch(block, number))
+
+    def search(self, query: str) -> List[User]:
+        return list(filter(self.can_read,
+                           map(User.from_entity,
+                               db.search(query))))
+
+    def read_entities(self, entities: Iterable[datastore.Entity]) \
+            -> Iterable[User]:
+        students = list(map(User.from_entity, entities))
+        if self.handle in map(lambda u: u.handle, students):
+            return students
+        else:
+            return filter(self.can_read, students)
+
+
+class User(Reader):
     name: str
     teachers: Mapping[str, str]
     public: bool
@@ -37,8 +59,8 @@ class User:
         return map(User.from_entity, db.db_query().fetch())
 
     def __init__(self, handle: str, name: str, teachers: Mapping[str, str],
-                 public: bool, accepts_privacy: bool):
-        self.handle = handle
+        public: bool, accepts_privacy: bool):
+        super().__init__(handle)
         self.name = name
         self.teachers = teachers
         self.public = public
@@ -68,30 +90,11 @@ class User:
 
     # == Privacy ==
 
-    def can_read(self, other: User) -> bool:
-        return other.can_be_read_by(self)
-
     def can_be_read_by(self, reader: User) -> bool:
         return self.can_be_read_by_handle(reader.handle)
 
     def can_be_read_by_handle(self, handle: str) -> bool:
         return self.public or handle == self.handle
-
-    def read_class_roster(self, block: str, teacher: str) -> Iterable[User]:
-        return self.read_entities(db.users_in_class(block, teacher))
-
-    def read_lunch_roster(self, block: str, number: int) -> Iterable[User]:
-        return self.read_entities(db.users_in_lunch(block, number))
-
-    def search(self, query: str) -> List[User]:
-        return let_handle_search(self.handle, query)
-
-    def read_entities(self, entities: Iterable[datastore.Entity]) -> Iterable[User]:
-        students = list(map(User.from_entity, entities))
-        if self in students:
-            return students
-        else:
-            return filter(self.can_read, students)
 
     # == Lunch ==
 
