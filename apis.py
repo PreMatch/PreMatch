@@ -43,13 +43,16 @@ def api_lunch_get():
 
     teacher = request.args.get('teacher')
     block = request.args.get('block')
+    semester = request.args.get('semester')
 
     if teacher not in teachers:
         return api_bad_value('teacher')
     if block not in lunch_blocks:
         return api_bad_value('block')
+    if semester not in semesters:
+        return api_bad_value('semester')
 
-    number = database.lunch_number(block, teacher)
+    number = database.lunch_number(block, int(semester), teacher)
 
     if number is None:
         return api_error(404, 'No lunch number set', status='empty')
@@ -90,6 +93,6 @@ def api_schedule():
         return api_error(403, 'Cannot read private handle: ' + handle)
 
     schedule = database.get_row_from_handle(handle)
-    response = dict(map(lambda blk: (blk, schedule.get(blk)), periods))
+    response = dict(map(lambda blk: (blk, schedule.get(blk)), all_block_keys()))
 
     return api_success(**response)

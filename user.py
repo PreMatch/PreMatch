@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import config
 import database as db
 from google.cloud import datastore
 from typing import Mapping, Optional, List, Union, Iterable
-import config
 
 
 class Reader:
@@ -58,8 +58,7 @@ class User(Reader):
     def all() -> Iterable[User]:
         return map(User.from_entity, db.db_query().fetch())
 
-    def __init__(self, handle: str, name: str, teachers: Mapping[str, str],
-        public: bool, accepts_privacy: bool):
+    def __init__(self, handle: str, name: str, teachers: Mapping[str, str], public: bool, accepts_privacy: bool):
         super().__init__(handle)
         self.name = name
         self.teachers = teachers
@@ -96,43 +95,58 @@ class User(Reader):
     def can_be_read_by_handle(self, handle: str) -> bool:
         return self.public or handle == self.handle
 
+    # == Access ==
+
+    def teacher(self, block: str, semester: int) -> str:
+        return self.teachers[f'{block}{semester}']
+
+    def semester_mapping(self, semester: int) -> Mapping[str, str]:
+        mapping = {}
+        for block in config.periods:
+            mapping[block] = self.teacher(block, semester)
+        return mapping
+
     # == Lunch ==
 
     def put_lunch(self, lunch_numbers: Mapping[str, int]) -> None:
         client = db.get_db()
         tasks: List[datastore.Entity] = []
 
-        for block in config.lunch_blocks:
-            number = lunch_numbers.get(block)
-            if number is not None:
-                task = self.db_lunch_task(block, number)
-                tasks.append(task)
+        for semester in config.semesters:
+            for block in config.lunch_blocks:
+                number = lunch_numbers.get(block + semester)
+                if number is not None:
+                    task = self.db_lunch_task(block, semester, number)
+                    tasks.append(task)
 
         if tasks:
             client.put_multi(tasks)
 
-    def db_lunch_task(self, block, number) -> datastore.Entity:
-        key = db.get_db().key('Lunch', self.teachers[block])
+    def db_lunch_task(self, block, semester: int, number) -> datastore.Entity:
+        key = db.get_db().key('Lunch', self.teacher(block, semester))
         task = db.get_db().get(key)
         if task:
             task[block] = int(number)
         else:
             task = datastore.Entity(key)
             task.update({
-                'teacher': self.teachers[block],
+                'teacher': self.teacher(block, semester),
                 block: int(number)
             })
         return task
 
-    def lunch_number(self, block: str) -> Optional[int]:
-        return db.lunch_number(block, self.teachers[block])
+    def lunch_number(self, block: str, semester: int) -> Optional[int]:
+        return db.lunch_number(block, self.teacher(block, semester))
 
-    def lunch_numbers(self) -> Mapping[str, Optional[int]]:
-        return dict(map(lambda p: (p, self.lunch_number(p)),
+    def lunch_numbers(self, semester: int) -> Mapping[str, Optional[int]]:
+        return dict(map(lambda p: (p, self.lunch_number(p, semester)),
                         config.lunch_blocks))
 
     def missing_some_lunch(self) -> bool:
-        return None in self.lunch_numbers().values()
+        for semester in config.semesters:
+            if None in self.lunch_numbers(int(semester)):
+                return True
+        return False
 
     # == Discord ==
 

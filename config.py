@@ -255,3 +255,9 @@ teachers = sorted(["Conrad",
                    ])
 periods = list('ABCDEFG')
 lunch_blocks = list('CDEFG')
+semesters = list('12')
+
+import itertools
+
+def all_block_keys():
+    return list(map(lambda x: x[0] + x[1], itertools.product(periods, semesters)))

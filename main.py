@@ -1,11 +1,11 @@
 import requests
 from flask import *
 
-import database
 import discord
+import database
+from config import *
 from urllib import parse
 from auth import *
-from config import *
 from google_auth import validate_token_for_info
 from user import User, Reader
 
@@ -56,6 +56,21 @@ def enforce_domain_https():
         newurl = parse.ParseResult('https', 'prematch.org',
                                    url.path, url.params, url.query, url.fragment)
         return redirect(newurl.geturl(), code=301)
+
+
+class ValidationError(Exception):
+    def __init__(self, problem):
+        self.problem = problem
+
+
+def demand(truth, message):
+    if not truth:
+        raise ValidationError(message)
+
+
+@app.errorhandler(ValidationError)
+def validation_error_handler(err):
+    return error(422, err.problem)
 
 
 @app.route('/')
@@ -131,13 +146,13 @@ def do_logout():
     return redirect('/')
 
 
-@app.route('/user')
-def show_own_user():
-    return show_user(logged_handle())
+@app.route('/user/<semester>')
+def show_own_user(semester):
+    return show_user(logged_handle(), semester)
 
 
-@app.route('/user/<handle>', methods=['GET'])
-def show_user(handle):
+@app.route('/user/<handle>/<semester>', methods=['GET'])
+def show_user(handle, semester):
     own_handle = logged_handle()
     if own_handle is None:
         return error_not_logged_in()
@@ -148,18 +163,20 @@ def show_user(handle):
             return error_no_own_schedule()
         return render_template('profile_not_found.html', bad_handle=handle)
 
+    demand(semester in semesters, f'Invalid semester: {semester}')
+
     reader = Reader(own_handle)
     if not reader.can_read(target):
         return error_private(handle)
 
-    return render_template('user.html', schedule=target.teachers, name=target.name,
+    return render_template('user.html', schedule=target.semester_mapping(semester), name=target.name,
                            handle=handle, teachers=teachers,
-                           lunch_numbers=target.lunch_numbers(),
+                           lunch_numbers=target.lunch_numbers(semester),
                            lunch_blocks=lunch_blocks)
 
 
-@app.route('/dashboard')
-def show_own_dashboard():
+@app.route('/dashboard/<semester>')
+def show_own_dashboard(semester):
     handle = logged_handle()
 
     if handle is None:
@@ -167,11 +184,11 @@ def show_own_dashboard():
     if not database.handle_exists(handle):
         return error_no_own_schedule()
 
-    return show_dashboard(handle)
+    return show_dashboard(handle, semester)
 
 
-@app.route('/dashboard/<handle>')
-def show_dashboard(handle):
+@app.route('/dashboard/<handle>/<semester>')
+def show_dashboard(handle, semester):
     user_handle = logged_handle()
     if user_handle is None:
         return error_not_logged_in()
@@ -183,13 +200,16 @@ def show_dashboard(handle):
             return error_no_own_schedule()
         return render_template('profile_not_found.html', bad_handle=handle)
 
+    demand(semester in semesters, f'Invalid semester: {semester}')
+    semester = int(semester)
+
     if not reader.can_read(target):
         return error_private(handle)
 
     rosters = {}
     class_sizes = {}
     for period in periods:
-        students = database.users_in_class(period, target.teachers[period])
+        students = database.users_in_class(period, semester, target.teacher(period, semester))
 
         class_sizes[period] = len(students)
         rosters[period] = list(reader.read_entities(students))
@@ -202,7 +222,7 @@ def show_dashboard(handle):
     #         if num is not None else None
 
     return render_template('dashboard.html',
-                           handle=handle, name=target.name, schedule=target.teachers,
+                           handle=handle, name=target.name, schedule=target.semester_mapping(semester),
                            rosters=rosters, sizes=class_sizes)
 
 
@@ -220,7 +240,7 @@ def do_update():
             return redirect('/login')
 
         if user is None:
-            empty_lunch_numbers = dict(map(lambda block: (block, None), lunch_blocks))
+            empty_lunch_numbers = dict(map(lambda blk: (blk, None), lunch_blocks))
             return render_template('add.html',
                                    handle=handle,
                                    name=session.get('name'),
@@ -244,22 +264,22 @@ def do_update():
         if empty(redirect_path):
             redirect_path = '/dashboard'
 
-        if any(map(missing_form_field, periods)):
-            return error(422, 'One or more periods missing')
+        for semester in semesters:
+            for period in periods:
+                required_field = period + semester
+                demand(not missing_form_field(required_field), f'Missing field {required_field}')
 
         # Teacher validity check
-        new_schedule = dict(map(lambda x: (x, request.form.get(x)), periods))
+        new_schedule = dict(map(lambda x: (x, request.form.get(x)), all_block_keys()))
         for teacher in new_schedule.values():
-            if teacher not in teachers:
-                return error(422, 'Unknown teacher: ' + teacher)
+            demand(teacher in teachers, f'Unknown teacher: {teacher}')
 
         # Read lunches (optional)
         lunches = {}
         for block in lunch_blocks:
             nbr = lunches[block] = request.form.get(f'lunch{block}')
             if nbr is not None:
-                if nbr not in list('1234'):
-                    return error(422, f'Invalid lunch number: {nbr}')
+                demand(nbr in list('1234'), f'Invalid lunch number: {nbr}')
                 lunches[block] = int(nbr)
 
         # Schedule publicly accessible?
@@ -289,18 +309,18 @@ def do_update():
             return error(500, str(e))
 
 
-@app.route('/roster/<period>/<teacher>')
-def show_roster(period, teacher):
+@app.route('/roster/<period>/<teacher>/<semester>')
+def show_roster(period, teacher, semester_str):
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
 
-    if period not in periods:
-        return error(422, 'Invalid block: ' + period)
-    if teacher not in teachers:
-        return error(422, 'Invalid teacher: ' + teacher)
+    demand(period in periods, f'Invalid block: {period}')
+    demand(teacher in teachers, f'Invalid teacher: {teacher}')
+    demand(semester_str in semesters, f'Invalid semester: {semester_str}')
+    semester = int(semester_str)
 
-    entities = database.users_in_class(period, teacher)
+    entities = database.users_in_class(period, semester, teacher)
     users = list(Reader(handle).read_entities(entities))
 
     if len(entities) == 0:
@@ -310,25 +330,25 @@ def show_roster(period, teacher):
     user_in_class = handle in list(map(lambda row: row.handle, users))
     return render_template('roster.html', period=period, teacher=teacher,
                            roster=users, handle=handle,
-                           lunch_number=database.lunch_number(period, teacher),
+                           lunch_number=database.lunch_number(period, semester, teacher),
                            lunch_periods=lunch_blocks,
                            size=len(entities),
                            user_in_class=user_in_class)
 
 
-@app.route('/lunch/<block>/<number>')
-def show_lunch(block, number):
+@app.route('/lunch/<block>/<number>/<semester>')
+def show_lunch(block, number, semester_str):
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
 
-    if block not in lunch_blocks:
-        return error(422, f'Invalid lunch block: {block}')
-    if number not in list('1234'):
-        return error(422, f'Invalid lunch number: {number}')
-
+    demand(block in lunch_blocks, f'Invalid lunch block: {block}')
+    demand(number in list('1234'), f'Invalid lunch number: {number}')
+    demand(semester_str in semesters, f'Invalid semester: {semester_str}')
+    semester = int(semester_str)
     number = int(number)
-    entities = database.users_in_lunch(block, number)
+
+    entities = database.users_in_lunch(block, number, semester)
     roster = list(Reader(handle).read_entities(entities))
 
     if len(entities) == 0:
@@ -408,54 +428,6 @@ def verify_discord(code, state):
 def show_privacy():
     return render_template('privacy.html',
                            is_logged_in=logged_handle() is not None)
-
-@app.route('/lunch/record', methods=['GET', 'POST'])
-def admin_record_lunch():
-    if logged_handle() is None:
-        return error_not_logged_in()
-
-    if not database.is_admin(logged_handle()):
-        abort(404)
-
-    if request.method == 'GET':
-        return render_template('record_lunch.html',
-                               students=list(User.all()),
-                               blocks=lunch_blocks,
-                               lunch_numbers=list('1234'),
-                               message=request.args.get('m'),
-                               handle=logged_handle())
-    else:
-        handles = request.form.get('handles').split(',')
-        block = request.form.get('block')
-        number = request.form.get('number')
-
-        if None in [handles, block, number] or len(handles) == 0:
-            flash('Missing fields')
-            return redirect('/lunch/record')
-
-        if not all(map(database.handle_exists, handles)):
-            flash(f'Invalid student')
-            return redirect('/lunch/record')
-        if block not in lunch_blocks:
-            flash(f'Invalid block: {block}')
-            return redirect('/lunch/record')
-        if number not in '1234':
-            flash(f'Invalid lunch number: {number}')
-            return redirect('/lunch/record')
-
-        unchanged = []
-
-        for handle in handles:
-            user = User.from_db(handle)
-            exist_number = user.lunch_number(block)
-            if exist_number is not None:
-                unchanged.append(handle)
-                continue
-
-            user.put_lunch({block: number})
-
-        flash(f'{unchanged} unchanged, others new')
-        return redirect('/lunch/record')
 
 
 def let_handle_read(handle, entities):

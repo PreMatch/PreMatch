@@ -70,19 +70,19 @@
       "description": "Christmas Break"
     },
     {
-      "type": "unknown",
+      "type": "standard_day",
       "date": "2019-01-15",
-      "description": "Day X"
+      "day_number": 1
     },
     {
-      "type": "unknown",
+      "type": "standard_day",
       "date": "2019-01-16",
-      "description": "Day Y"
+      "day_number": 3
     },
     {
-      "type": "unknown",
+      "type": "standard_day",
       "date": "2019-01-17",
-      "description": "Day Z"
+      "day_number": 7
     },
     {
       "type": "exam_day",

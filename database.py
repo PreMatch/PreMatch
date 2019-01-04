@@ -33,31 +33,35 @@ def schedule_count() -> int:
     return list(query.fetch())[0]['count']
 
 
-def users_in_class(block: str, teacher: str) -> List[datastore.Entity]:
+def db_entry(block: str, semester: int) -> str:
+    return f'{block}{semester}'
+
+
+def users_in_class(block: str, semester: int, teacher: str) -> List[datastore.Entity]:
     query = db_query()
-    query.add_filter(block, '=', teacher)
+    query.add_filter(db_entry(block, semester), '=', teacher)
 
     return list(query.fetch())
 
 
-def lunch_number(block: str, teacher: str) -> Optional[int]:
+def lunch_number(block: str, semester: int, teacher: str) -> Optional[int]:
     key = get_db().key('Lunch', teacher)
     entity = get_db().get(key)
 
-    return entity.get(block) if entity is not None else None
+    return entity.get(db_entry(block, semester)) if entity is not None else None
 
 
-def users_in_lunch(block: str, number: int) -> List[datastore.Entity]:
+def users_in_lunch(block: str, number: int, semester: int) -> List[datastore.Entity]:
     query: datastore.Query = get_db().query(kind='Lunch')
-    query.add_filter(block, '=', number)
+    query.add_filter(db_entry(block, semester), '=', number)
 
     teachers = map(lambda n: n['teacher'], query.fetch())
     return list(chain.from_iterable(map(
-        lambda t: users_in_class(block, t), teachers)))
+        lambda t: users_in_class(block, semester, t), teachers)))
 
 
-def class_student_count(block: str, teacher: str) -> int:
-    return len(users_in_class(block, teacher))
+def class_student_count(block: str, semester: int, teacher: str) -> int:
+    return len(users_in_class(block, semester, teacher))
 
 
 def is_admin(handle: str) -> bool:
