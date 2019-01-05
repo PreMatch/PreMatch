@@ -136,11 +136,18 @@ class User(Reader):
         return task
 
     def lunch_number(self, block: str, semester: int) -> Optional[int]:
-        return db.lunch_number(block, self.teacher(block, semester))
+        return db.lunch_number(block, semester, self.teacher(block, semester))
 
     def lunch_numbers(self, semester: int) -> Mapping[str, Optional[int]]:
         return dict(map(lambda p: (p, self.lunch_number(p, semester)),
                         config.lunch_blocks))
+
+    def full_lunch_mapping(self) -> Mapping[str, Optional[int]]:
+        mapping = {}
+        for semester in config.semesters:
+            for block in config.periods:
+                mapping[block + semester] = self.lunch_number(block, semester)
+        return mapping
 
     def missing_some_lunch(self) -> bool:
         for semester in config.semesters:

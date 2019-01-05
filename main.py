@@ -164,6 +164,7 @@ def show_user(handle, semester):
         return render_template('profile_not_found.html', bad_handle=handle)
 
     demand(semester in semesters, f'Invalid semester: {semester}')
+    semester = int(semester)
 
     reader = Reader(own_handle)
     if not reader.can_read(target):
@@ -172,7 +173,8 @@ def show_user(handle, semester):
     return render_template('user.html', schedule=target.semester_mapping(semester), name=target.name,
                            handle=handle, teachers=teachers,
                            lunch_numbers=target.lunch_numbers(semester),
-                           lunch_blocks=lunch_blocks)
+                           lunch_blocks=lunch_blocks,
+                           semester=semester)
 
 
 @app.route('/dashboard/<semester>')
@@ -223,7 +225,8 @@ def show_dashboard(handle, semester):
 
     return render_template('dashboard.html',
                            handle=handle, name=target.name, schedule=target.semester_mapping(semester),
-                           rosters=rosters, sizes=class_sizes)
+                           rosters=rosters, sizes=class_sizes,
+                           semester=semester)
 
 
 @app.route('/update', methods=['GET', 'POST'])
@@ -256,7 +259,7 @@ def do_update():
                                    schedule=user.teachers,
                                    teachers=teachers,
                                    lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
-                                   lunch_numbers=user.lunch_numbers(),
+                                   lunch_numbers=user.full_lunch_mapping(),
                                    user_public=user.public)
     else:
         # Redirect path reading from args
@@ -264,10 +267,8 @@ def do_update():
         if empty(redirect_path):
             redirect_path = '/dashboard'
 
-        for semester in semesters:
-            for period in periods:
-                required_field = period + semester
-                demand(not missing_form_field(required_field), f'Missing field {required_field}')
+        for required_field in all_block_keys():
+            demand(not missing_form_field(required_field), f'Missing field {required_field}')
 
         # Teacher validity check
         new_schedule = dict(map(lambda x: (x, request.form.get(x)), all_block_keys()))
@@ -309,7 +310,7 @@ def do_update():
             return error(500, str(e))
 
 
-@app.route('/roster/<period>/<teacher>/<semester>')
+@app.route('/roster/<period>/<teacher>/<semester_str>')
 def show_roster(period, teacher, semester_str):
     handle = logged_handle()
     if handle is None:
@@ -333,10 +334,11 @@ def show_roster(period, teacher, semester_str):
                            lunch_number=database.lunch_number(period, semester, teacher),
                            lunch_periods=lunch_blocks,
                            size=len(entities),
-                           user_in_class=user_in_class)
+                           user_in_class=user_in_class,
+                           semester=semester)
 
 
-@app.route('/lunch/<block>/<number>/<semester>')
+@app.route('/lunch/<block>/<number>/<semester_str>')
 def show_lunch(block, number, semester_str):
     handle = logged_handle()
     if handle is None:
@@ -356,7 +358,7 @@ def show_lunch(block, number, semester_str):
         return redirect('/dashboard')
 
     return render_template('lunch.html', handle=handle, roster=roster,
-                           block=block, number=number, size=len(entities))
+                           block=block, number=number, size=len(entities), semester=semester)
 
 
 @app.route('/search')
