@@ -277,11 +277,12 @@ def do_update():
 
         # Read lunches (optional)
         lunches = {}
-        for block in lunch_blocks:
-            nbr = lunches[block] = request.form.get(f'lunch{block}')
-            if nbr is not None:
-                demand(nbr in list('1234'), f'Invalid lunch number: {nbr}')
-                lunches[block] = int(nbr)
+        for semester in semesters:
+            for block in lunch_blocks:
+                nbr = lunches[block] = request.form.get(f'lunch{block}{semester}')
+                if nbr is not None:
+                    demand(nbr in list('1234'), f'Invalid lunch number: {nbr}')
+                    lunches[block] = int(nbr)
 
         # Schedule publicly accessible?
         make_public = request.form.get('public') == 'true'

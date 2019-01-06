@@ -50,7 +50,7 @@ class User(Reader):
 
     @staticmethod
     def from_entity(row: datastore.Entity) -> User:
-        teachers = dict(map(lambda p: (p, row.get(p)), config.periods))
+        teachers = dict(map(lambda p: (p, row.get(p)), config.all_block_keys()))
         return User(row['handle'], row['name'],
                     teachers, row['public'], row['accepts_privacy'])
 
