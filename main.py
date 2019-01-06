@@ -282,10 +282,10 @@ def do_update():
         lunches = {}
         for semester in semesters:
             for block in lunch_blocks:
-                nbr = lunches[block] = request.form.get(f'lunch{block}{semester}')
+                nbr = request.form.get(f'lunch{block}{semester}')
                 if nbr is not None:
                     demand(nbr in list('1234'), f'Invalid lunch number: {nbr}')
-                    lunches[block] = int(nbr)
+                    lunches[block + semester] = int(nbr)
 
         # Schedule publicly accessible?
         make_public = request.form.get('public') == 'true'
@@ -314,8 +314,8 @@ def do_update():
             return error(500, str(e))
 
 
-@app.route('/roster/<period>/<semester_str>/<teacher>')
-def show_roster(period, semester_str, teacher):
+@app.route('/roster/<semester_str>/<period>/<teacher>')
+def show_roster(semester_str, period, teacher):
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
@@ -342,8 +342,8 @@ def show_roster(period, semester_str, teacher):
                            semester=semester)
 
 
-@app.route('/lunch/<block>/<number>/<semester_str>')
-def show_lunch(block, number, semester_str):
+@app.route('/lunch/<semester_str>/<block>/<number>')
+def show_lunch(semester_str, block, number):
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
