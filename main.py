@@ -243,7 +243,10 @@ def do_update():
             return redirect('/login')
 
         if user is None:
-            empty_lunch_numbers = dict(map(lambda blk: (blk, None), lunch_blocks))
+            empty_lunch_numbers = {}
+            for semester in semesters:
+                for blk in lunch_blocks:
+                    empty_lunch_numbers[blk + semester] = None
             return render_template('add.html',
                                    handle=handle,
                                    name=session.get('name'),
@@ -311,8 +314,8 @@ def do_update():
             return error(500, str(e))
 
 
-@app.route('/roster/<period>/<teacher>/<semester_str>')
-def show_roster(period, teacher, semester_str):
+@app.route('/roster/<period>/<semester_str>/<teacher>')
+def show_roster(period, semester_str, teacher):
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
