@@ -116,7 +116,7 @@ class User(Reader):
             for block in config.lunch_blocks:
                 number = lunch_numbers.get(block + semester)
                 if number is not None:
-                    task = self.db_lunch_task(block, semester, number)
+                    task = self.db_lunch_task(block, int(semester), number)
                     tasks.append(task)
 
         if tasks:
@@ -131,7 +131,7 @@ class User(Reader):
             task = datastore.Entity(key)
             task.update({
                 'teacher': self.teacher(block, semester),
-                block: int(number)
+                f'{block}{semester}': int(number)
             })
         return task
 
