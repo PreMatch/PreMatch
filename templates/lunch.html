@@ -2,7 +2,7 @@
 <html lang="en">
 {% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
 
-{{ head('Block ' + block|string + ', Lunch ' + number|string, True) }}
+{{ head('Block ' + block|string + ', Lunch ' + number|string + ' (Semester ' + semester|string + ')', True) }}
 <body id="body" class="bg-primary">
 
 {{ nav(True, "/roster") }}
@@ -12,7 +12,7 @@
     <div class="hero-body">
         <div class="container">
             <h1 class="title overridden-white is-1">
-                Block {{ block }}, Lunch {{ number }}
+                Block {{ block }}, Lunch {{ number }}, Semester {{ semester }}
             </h1>
             <h2 class="subtitle overridden-white is-3">
                 {{ size }} student(s)
@@ -55,8 +55,7 @@
                             Array.prototype.forEach.call(document.getElementsByClassName('column'), (col) => {
                                 $(col).hide();
                             });
-                        }
-                        else {
+                        } else {
                             noResultsText.style.display = "none";
                             Array.prototype.forEach.call(document.getElementsByClassName('column'), (col) => {
                                 $(col).show();
@@ -94,18 +93,20 @@
             <div class="column is-one-third">
                 {% for user in roster %}
                     {% if loop.index == (loop|length / 3)|round|int + 1 or loop.index == (loop|length / 3)|round|int * 2 + 1 %}
-                        </div>
-                        <div class="column is-one-third">
+                        {% if loop|length != 1 %}
+                            </div>
+                            <div class="column is-one-third">
+                        {% endif %}
                     {% endif %}
                     <div class="{{ 'is-selected' if handle == user.handle }} lunch-row">
                         <h1 class="name">{{ user.name }}</h1>
                         <h1 class="handle">{{ user.handle }}</h1>
                         {% if user.can_be_read_by_handle(handle) %}
-                        <p class="roster-link"
-                           style="{{ 'border: none!important;' if loop.index == roster|length else '' }} text-align: center;">
-                            <a class="button {{ 'is-outlined' if handle == user.handle }} is-primary is-medium"
-                               href="/user/{{ user.handle }}">View Schedule</a>
-                        </p>
+                            <p class="roster-link"
+                               style="{{ 'border: none!important;' if loop.index == roster|length else '' }} text-align: center;">
+                                <a class="button {{ 'is-outlined' if handle == user.handle }} is-primary is-medium"
+                                   href="/user/{{ user.handle }}/{{ semester }}">View Schedule</a>
+                            </p>
                         {% endif %}
                     </div>
                 {% endfor %}
