@@ -1,8 +1,7 @@
 let originalMargin = 0;
 let teachers;
 
-function submitChanges(periods) {
-
+function submitChanges(periods, semesters, lunchPeriods, lunchNumbers) {
     // Remove empty lunch inputs
     $('.lunch-input').each((_, elem) => {
         if (elem.value === '') {
@@ -12,17 +11,36 @@ function submitChanges(periods) {
 
     let valid = true;
     periods.forEach((period) => {
-        let form = document.getElementById('form-invis');
+        semesters.forEach((semester) => {
+            let form = document.getElementById('form-invis');
 
-        let input = form.querySelector(`#input-invis-${period}`);
-        let value = input.value;
-        if (!(value.length > 0)) {
-            valid = false;
-        } else {
-            if (!teachers.includes(value)) {
+            let input = form.querySelector(`#input-invis-${period}-${semester}`);
+            let value = input.value;
+            if (!(value.length > 0)) {
                 valid = false;
+            } else {
+                if (!teachers.includes(value)) {
+                    valid = false;
+                }
             }
-        }
+        });
+    });
+
+    lunchPeriods.forEach((period) => {
+        semesters.forEach((semester) => {
+            let lunch = document.getElementById(`lunch-invis-${period}-${semester}`);
+
+            if (lunch != null) {
+                if (lunch.value) {
+                    let parsed = parseInt(lunch.value);
+
+                    if (isNaN(parsed))
+                        valid = false;
+                    else if (!lunchNumbers.includes(parsed))
+                        valid = false;
+                }
+            }
+        });
     });
 
     if (valid) {
@@ -33,19 +51,19 @@ function submitChanges(periods) {
     }
 }
 
-function filterTeachers(period) {
+function filterTeachers(period, semester) {
     let input, filter, a, i;
-    input = document.getElementById(`teacherInput${period}`);
+    input = document.getElementById(`teacherInput${period}-${semester}`);
     filter = input.value.toUpperCase();
 
-    let linkHolder = document.getElementById(`link-holder-${period}`);
+    let linkHolder = document.getElementById(`link-holder-${period}-${semester}`);
 
-    let noResultsText = document.getElementById(`no-results-${period}`);
+    let noResultsText = document.getElementById(`no-results-${period}-${semester}`);
     noResultsText.style.display = "none";
 
     if (filter.length > 0) {
         linkHolder.style.display = "Block";
-        let div = document.getElementById(`teacher-dropdown-${period}`);
+        let div = document.getElementById(`teacher-dropdown-${period}-${semester}`);
         a = div.getElementsByTagName("a");
 
         let hitCounter = 0;
@@ -63,26 +81,25 @@ function filterTeachers(period) {
             noResultsText.style.display = "block";
         }
 
-        let container = document.getElementById(`dropdown-container-${period}`);
+        let container = document.getElementById(`dropdown-container-${period}-${semester}`);
         if ($(linkHolder).innerHeight() > 0) {
             $(container).css('margin-bottom', originalMargin + $(linkHolder).innerHeight());
         }
 
     } else {
         linkHolder.style.display = "None";
-        $(document.getElementById(`dropdown-container-${period}`)).css('margin-bottom', originalMargin);
+        $(document.getElementById(`dropdown-container-${period}-${semester}`)).css('margin-bottom', originalMargin);
     }
-
 }
 
-function selectInput(period) {
+function selectInput(period, semester) {
     let form = document.getElementById('form');
     $(form).children().each((index) => {
         if (form.children[index].tagName === "DIV") {
             let contentDiv = form.children[index].children[0];
             if (typeof contentDiv.getElementsByTagName('div')[0] != 'undefined' && !contentDiv.id.endsWith(period)) {
                 contentDiv.getElementsByTagName('div')[0].style.display = "None";
-                let container = document.getElementById(`dropdown-container-${contentDiv.id.slice(-1)}`);
+                let container = document.getElementById(`dropdown-container-${contentDiv.id.slice(-1)}-${semester}`);
                 $(container).css('margin-bottom', originalMargin);
             }
         }
@@ -95,27 +112,27 @@ function decodeEscapes(str) {
     });
 }
 
-function selectTeacher(period, teacher) {
-    let dropdown = document.getElementById(`teacher-dropdown-${period}`);
+function selectTeacher(period, semester, teacher) {
+    let dropdown = document.getElementById(`teacher-dropdown-${period}-${semester}`);
     dropdown.style.display = "none";
 
-    let notif = document.getElementById(`teacher-notif-${period}`);
+    let notif = document.getElementById(`teacher-notif-${period}-${semester}`);
 
-    let button = document.getElementById(`view-roster-${period}`);
+    let button = document.getElementById(`view-roster-${period}-${semester}`);
     if (button !== null) {
         let currentHref = button.getAttribute('data-href-base');
         let newHref = currentHref + decodeEscapes(teacher);
         button.setAttribute('href', newHref);
     }
 
-    let notifText = document.getElementById(`teacher-notif-text-${period}`);
+    let notifText = document.getElementById(`teacher-notif-text-${period}-${semester}`);
 
     notifText.innerHTML = teacher;
     notif.style.display = "block";
 
-    document.getElementById(`input-invis-${period}`).value = teacher;
+    document.getElementById(`input-invis-${period}-${semester}`).value = teacher;
 
-    let dropdownContainer = document.getElementById(`dropdown-container-${period}`);
+    let dropdownContainer = document.getElementById(`dropdown-container-${period}-${semester}`);
 
     if (originalMargin !== 0) {
         $(dropdownContainer).css('margin', `${originalMargin}px 0`);
@@ -124,51 +141,51 @@ function selectTeacher(period, teacher) {
         $(dropdownContainer).css('margin', `${originalMargin}px 0`);
     }
 
-    getLunchData(teacher, period);
+    getLunchData(teacher, semester, period);
 }
 
-function getLunchData(teacher, period) {
+function getLunchData(teacher, semester, period) {
     if (period === 'A' || period === 'B')
         return;
 
     $.ajax({
         type: "GET",
         url: window.location.href.split("/")[0] + "/api/lunch/number",
-        data: {'teacher': teacher, 'block': period},
+        data: {'teacher': teacher, 'block': period, 'semester': semester},
         async: false
-    }).done((data) => manageLunchData(data, period));
+    }).done((data) => manageLunchData(data, semester, period));
 }
 
-function manageLunchData(data, period) {
+function manageLunchData(data, semester, period) {
     if (data.status === 'ok' && data.code === 200) {
         let number = data.number;
         if (number >= 1 && number <= 4) {
-            selectLunch(period, number);
+            selectLunch(period, semester, number);
         }
     }
 }
 
-function unselectTeacher(period) {
-    let notif = document.getElementById(`teacher-notif-${period}`);
-    let notifText = document.getElementById(`teacher-notif-text-${period}`);
+function unselectTeacher(period, semester) {
+    let notif = document.getElementById(`teacher-notif-${period}-${semester}`);
+    let notifText = document.getElementById(`teacher-notif-text-${period}-${semester}`);
 
-    clearLunch(period);
+    clearLunch(period, semester);
 
     notifText.innerHTML = "";
     notif.style.display = "none";
 
-    let dropdown = document.getElementById(`teacher-dropdown-${period}`);
+    let dropdown = document.getElementById(`teacher-dropdown-${period}-${semester}`);
     dropdown.style.display = "block";
 
     $('#form').css('margin-bottom', 100);
 
-    document.getElementById(`input-invis-${period}`).value = '';
+    document.getElementById(`input-invis-${period}-${semester}`).value = '';
 
-    document.getElementById(`teacherInput${period}`).value = '';
-    filterTeachers(period);
+    document.getElementById(`teacherInput${period}-${semester}`).value = '';
+    filterTeachers(period, semester);
 }
 
-function openLunchDropdown(period) {
+function openLunchDropdown(period, semester) {
     //Close all other dropdowns
     $('.lunch-options').each((indx, btn) => {
         let split = btn.id.split('-');
@@ -178,40 +195,40 @@ function openLunchDropdown(period) {
         }
     });
 
-    let optionsContainer = $(`#lunch-options-${period}`);
-    $(`#lunch-opener-${period}`).css('display', 'none');
+    let optionsContainer = $(`#lunch-options-${period}-${semester}`);
+    $(`#lunch-opener-${period}-${semester}`).css('display', 'none');
     optionsContainer.children('a').each((indx, lunch) => {
         $(lunch).show();
     });
 }
 
-function closeLunchDropdown(period) {
-    let optionsContainer = $(`#lunch-options-${period}`);
-    $(`#lunch-opener-${period}`).css('display', 'inline-flex');
+function closeLunchDropdown(period, semester) {
+    let optionsContainer = $(`#lunch-options-${period}-${semester}`);
+    $(`#lunch-opener-${period}-${semester}`).css('display', 'inline-flex');
     optionsContainer.children('a').each((indx, lunch) => {
         $(lunch).hide();
     });
 }
 
-function selectLunch(period, lunch) {
-    if (document.getElementById(`lunch-invis-${period}`)) {
-        closeLunchDropdown(period);
-        let text = $(`#lunch-select-${period}-${lunch}`).html();
-        $(`#lunch-opener-${period}`).html(text + ' <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
-        document.getElementById(`lunch-invis-${period}`).value = lunch;
+function selectLunch(period, semester, lunch) {
+    if (document.getElementById(`lunch-invis-${period}-${semester}`)) {
+        closeLunchDropdown(period, semester);
+        let text = $(`#lunch-select-${period}-${lunch}-${semester}`).html();
+        $(`#lunch-opener-${period}-${semester}`).html(text + ' <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
+        document.getElementById(`lunch-invis-${period}-${semester}`).value = lunch;
 
-        const lunchButton = $(`#view-lunch-${period}`);
-        lunchButton.attr('href', `/lunch/${period}/${lunch}`);
+        const lunchButton = $(`#view-lunch-${period}-${semester}`);
+        lunchButton.attr('href', `/lunch/${semester}/${period}/${lunch}`);
         lunchButton.show();
     }
 
 }
 
-function clearLunch(period) {
-    if (document.getElementById(`lunch-invis-${period}`)) {
-        $(`#lunch-opener-${period}`).html('Select lunch... <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
-        document.getElementById(`lunch-invis-${period}`).value = "";
-        $(`#view-lunch-${period}`).hide();
+function clearLunch(period, semester) {
+    if (document.getElementById(`lunch-invis-${period}-${semester}`)) {
+        $(`#lunch-opener-${period}-${semester}`).html('Select lunch... <i class="fas fa-caret-down" style="margin-left: 10px;"></i>');
+        document.getElementById(`lunch-invis-${period}-${semester}`).value = "";
+        $(`#view-lunch-${period}-${semester}`).hide();
     }
 }
 

@@ -13,10 +13,12 @@
 <section class="section pushed">
     <form method="POST" action="/update" id="form-invis">
         {% for period in 'ABCDEFG' %}
-            <input type="hidden" name="{{ period }}" id="input-invis-{{ period }}">
+            <input type="hidden" name="{{ period }}1" id="input-invis-{{ period }}-1">
+            <input type="hidden" name="{{ period }}2" id="input-invis-{{ period }}-2">
         {% endfor %}
         {% for lunch in lunch_periods %}
-            <input type="hidden" name="lunch{{ lunch }}" class="lunch-input" id="lunch-invis-{{ lunch }}">
+            <input type="hidden" name="lunch{{ lunch }}1" class="lunch-input" id="lunch-invis-{{ lunch }}-1">
+            <input type="hidden" name="lunch{{ lunch }}2" class="lunch-input" id="lunch-invis-{{ lunch }}-2">
         {% endfor %}
         <input type="hidden" name="public" id="public-input">
     </form>
@@ -30,81 +32,85 @@
 
         <form id="form" style="height: auto; margin-bottom: 40px;">
             {% for period in 'ABCDEFG' %}
-                <div class="teacher-dropdown" id="dropdown-container-{{ period }}">
-                    <div class="teacher-dropdown-content" id="teacher-dropdown-{{ period }}">
-                        <label class="block-label" for="teacherInput{{ period }}">Block {{ period }}</label>
-                        <br>
-                        <input type="text" placeholder="Search for a teacher..." id="teacherInput{{ period }}"
-                               onkeyup="filterTeachers('{{ period }}')" onfocus="selectInput('{{ period }}')">
-                        <div class="link-holder has-text-left" id="link-holder-{{ period }}">
-                            {% for teacher in teachers %}
-                                <a style="display: none;" id="{{ teacher }}-{{ period }}"
-                                   onclick="selectTeacher(&quot;{{ period }}&quot;, &quot;{{ teacher|safe }}&quot;)">{{ teacher }}</a>
-                            {% endfor %}
-                            <p style="display: none;" id="no-results-{{ period }}">No teachers found</p>
-                        </div>
-                    </div>
-                    <div class="notification is-primary" id="teacher-notif-{{ period }}">
-                        <button type="button" class="delete" onclick="unselectTeacher('{{ period }}')"></button>
-                        <p class="block-label title">Block {{ period }}:</p>
-                        <p class="subtitle" id="teacher-notif-text-{{ period }}"></p>
-
-                        {% if period in lunch_periods %}
-                            <label class="is-size-7" for="lunch-container-{{ period }}">
-                                (Optional) {{ 'Add' if lunch_numbers[period] == none else 'Update' }} your lunch:
-                            </label>
-                            <div id="lunch-container-{{ period }}">
-                                <a class="lunch-dropdown button is-accent is-outlined is-small"
-                                   id="lunch-opener-{{ period }}"
-                                   onclick="openLunchDropdown(&quot;{{ period }}&quot;)">
-                                    {% if lunch_numbers[period] == none %}
-                                        Select lunch...
-                                    {% else %}
-                                        Lunch {{ lunch_numbers[period] }}
-                                    {% endif %}
-                                    <i class="fas fa-caret-down" style="margin-left: 4px;"></i></a>
-                                <div class="lunch-options" id="lunch-options-{{ period }}">
-                                    {% for lunch in lunches %}
-                                        <a class="lunch-option button is-accent is-outlined is-small"
-                                           id="lunch-select-{{ period }}-{{ lunch }}"
-                                           onclick="selectLunch(&quot;{{ period }}&quot;, &quot;{{ lunch }}&quot;)"
-                                           style="{{ 'border-radius: 5px 5px 0 0;' if loop.index == 1 else '' }}">Lunch {{ lunch }}</a>
-                                    {% endfor %}
-                                    <a class="lunch-option button is-accent is-outlined is-small"
-                                       onclick="closeLunchDropdown(&quot;{{ period }}&quot;)"
-                                       style="border-radius: 0 0 5px 5px;">Close <i
-                                            class="fas fa-caret-up" style="margin-left: 4px"></i></a>
-                                </div>
+                {% for semester in '12' %}
+                    <div class="teacher-dropdown" id="dropdown-container-{{ period }}-{{ semester }}">
+                        <div class="teacher-dropdown-content" id="teacher-dropdown-{{ period }}-{{ semester }}">
+                            <label class="block-label" for="teacherInput{{ period }}-{{ semester }}">Block {{ period }}, Semester {{ semester }}</label>
+                            <br>
+                            <input type="text" placeholder="Search for a teacher..." id="teacherInput{{ period }}-{{ semester }}"
+                                   onkeyup="filterTeachers('{{ period }}', '{{ semester }}')" onfocus="selectInput('{{ period }}', '{{ semester }}')">
+                            <div class="link-holder has-text-left" id="link-holder-{{ period }}-{{ semester }}">
+                                {% for teacher in teachers %}
+                                    <a style="display: none;" id="{{ teacher }}-{{ period }}-{{ semester }}"
+                                       onclick="selectTeacher(&quot;{{ period }}&quot;, '{{ semester }}', &quot;{{ teacher|safe }}&quot;)">{{ teacher }}</a>
+                                {% endfor %}
+                                <p style="display: none;" id="no-results-{{ period }}-{{ semester }}">No teachers found</p>
                             </div>
-                        {% endif %}
-                        {% if schedule != none %}
-                            <a class="button is-outlined is-primary is-medium"
-                               data-href-base="/roster/{{ period }}/"
-                               id="view-roster-{{ period }}" style="border-radius: 10px;">View Classmates</a>
-                        {% endif %}
-                        {% if period in lunch_periods and lunch_numbers[period] != none %}
-                            <a class="button is-outlined is-primary is-medium lunch-button"
-                               href="/lunch/{{ period }}/{{ lunch_numbers[period] }}"
-                               id="view-lunch-{{ period }}" style="border-radius: 10px; margin-top: 10px;">View
-                                Lunch</a>
-                        {% endif %}
-                        <script type="text/javascript">
-                            $(document).ready(() => {
-                                $("#lunch-options-{{ period }}").css('max-width',
-                                    $('#lunch-opener-{{ period }}').innerWidth());
-                                $('#lunch-opener-{{ period }}').css('min-width', $('#lunch-opener-{{ period }}').innerWidth());
-                            });
-                        </script>
-                    </div>
+                        </div>
+                        <div class="notification is-primary" id="teacher-notif-{{ period }}-{{ semester }}">
+                            <button type="button" class="delete" onclick="unselectTeacher('{{ period }}', '{{ semester }}')"></button>
+                            <p class="block-label title">Block {{ period }}, Semester {{ semester }}:</p>
+                            <p class="subtitle" id="teacher-notif-text-{{ period }}-{{ semester }}"></p>
 
-                </div>
+                            {% if period in lunch_periods %}
+                                <label class="is-size-7" for="lunch-container-{{ period }}-{{ semester }}">
+                                    (Optional) {{ 'Add' if lunch_numbers[period] == none else 'Update' }} your lunch:
+                                </label>
+                                <div id="lunch-container-{{ period }}-{{ semester }}">
+                                    <a class="lunch-dropdown button is-accent is-outlined is-small"
+                                       id="lunch-opener-{{ period }}-{{ semester }}"
+                                       onclick="openLunchDropdown(&quot;{{ period }}&quot;, '{{ semester }}')">
+                                        {% if lunch_numbers[period + semester] == none %}
+                                            Select lunch...
+                                        {% else %}
+                                            Lunch {{ lunch_numbers[period + semester] }}
+                                        {% endif %}
+                                        <i class="fas fa-caret-down" style="margin-left: 4px;"></i></a>
+                                    <div class="lunch-options" id="lunch-options-{{ period }}-{{ semester }}">
+                                        {% for lunch in lunches %}
+                                            <a class="lunch-option button is-accent is-outlined is-small"
+                                               id="lunch-select-{{ period }}-{{ lunch }}-{{ semester }}"
+                                               onclick="selectLunch(&quot;{{ period }}&quot;, '{{ semester }}', &quot;{{ lunch }}&quot;)"
+                                               style="{{ 'border-radius: 5px 5px 0 0;' if loop.index == 1 else '' }}">Lunch {{ lunch }}</a>
+                                        {% endfor %}
+                                        <a class="lunch-option button is-accent is-outlined is-small"
+                                           onclick="closeLunchDropdown(&quot;{{ period }}&quot;, '{{ semester }}')"
+                                           style="border-radius: 0 0 5px 5px;">Close <i
+                                                class="fas fa-caret-up" style="margin-left: 4px"></i></a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if schedule != none %}
+                                <a class="button is-outlined is-primary is-medium"
+                                   data-href-base="/roster/{{ semester }}/{{ period }}/"
+                                   id="view-roster-{{ period }}-{{ semester }}" style="border-radius: 10px;">View Classmates</a>
+                            {% endif %}
+                            {% if period in lunch_periods and lunch_numbers[period] != none %}
+                                <a class="button is-outlined is-primary is-medium lunch-button"
+                                   href="/lunch/{{ period }}/{{ lunch_numbers[period + semester] }}"
+                                   id="view-lunch-{{ period }}-{{ semester }}" style="border-radius: 10px; margin-top: 10px;">View
+                                    Lunch</a>
+                            {% endif %}
+                            <script type="text/javascript">
+                                $(document).ready(() => {
+                                    $("#lunch-options-{{ period }}-{{ semester }}").css('max-width',
+                                        $('#lunch-opener-{{ period }}-{{ semester }}').innerWidth());
+                                    $('#lunch-opener-{{ period }}-{{ semester }}').css('min-width', $('#lunch-opener-{{ period }}-{{ semester }}').innerWidth());
+                                });
+                            </script>
+                        </div>
+
+                    </div>
+                {% endfor %}
             {% endfor %}
             {% if schedule != none %}
                 <script type="text/javascript">
                     {% for period in 'ABCDEFG' %}
-                        {% if schedule[period] != '' %}
-                            selectTeacher('{{ period }}', '{{ schedule[period] }}');
-                        {% endif %}
+                        {% for semester in '12' %}
+                            {% if schedule[period + semester] != '' %}
+                                selectTeacher('{{ period }}', '{{ semester }}', '{{ schedule[period + semester] }}');
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
                 </script>
             {% endif %}
@@ -128,7 +134,7 @@
         </form>
 
         <a class="button is-outlined is-primary is-large"
-           onclick="submitChanges('ABCDEFG'.split(''))">
+           onclick="submitChanges('ABCDEFG'.split(''), '12'.split(''), {{ lunch_periods }}, {{ lunches }})">
             {{ 'Submit' if schedule == none else 'Update' }}
         </a>
 
