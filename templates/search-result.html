@@ -44,7 +44,7 @@
                     <div class="column is-one-fourth">
                         {% if user.can_be_read_by_handle(handle) %}
                             <a class="button is-outlined is-primary is-large is-pulled-right"
-                               href="/user/{{ user.handle }}">View Schedule</a>
+                               href="/user/{{ user.handle }}/{{ semester }}">View Schedule</a>
                         {% endif %}
                     </div>
                 </div>
