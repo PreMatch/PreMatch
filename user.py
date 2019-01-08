@@ -15,11 +15,11 @@ class Reader:
     def can_read(self, other: User) -> bool:
         return other.can_be_read_by_handle(self.handle)
 
-    def read_class_roster(self, block: str, teacher: str) -> Iterable[User]:
-        return self.read_entities(db.users_in_class(block, teacher))
+    def read_class_roster(self, block: str, teacher: str, semester: int) -> Iterable[User]:
+        return self.read_entities(db.users_in_class(block, semester, teacher))
 
-    def read_lunch_roster(self, block: str, number: int) -> Iterable[User]:
-        return self.read_entities(db.users_in_lunch(block, number))
+    def read_lunch_roster(self, block: str, number: int, semester: int) -> Iterable[User]:
+        return self.read_entities(db.users_in_lunch(block, number, semester))
 
     def search(self, query: str) -> List[User]:
         return list(filter(self.can_read,
@@ -125,13 +125,15 @@ class User(Reader):
     def db_lunch_task(self, block, semester: int, number) -> datastore.Entity:
         key = db.get_db().key('Lunch', self.teacher(block, semester))
         task = db.get_db().get(key)
+        column = f'{block}{semester}'
+
         if task:
-            task[block] = int(number)
+            task[column] = int(number)
         else:
             task = datastore.Entity(key)
             task.update({
                 'teacher': self.teacher(block, semester),
-                f'{block}{semester}': int(number)
+                column: int(number)
             })
         return task
 

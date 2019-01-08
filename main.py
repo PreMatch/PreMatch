@@ -9,7 +9,7 @@ from auth import *
 from google_auth import validate_token_for_info
 from user import User, Reader
 
-DEFAULT_HOME = '/dashboard'
+DEFAULT_HOME = '/dashboard/1'
 
 
 def empty(string):
@@ -266,9 +266,9 @@ def do_update():
                                    user_public=user.public)
     else:
         # Redirect path reading from args
-        redirect_path = request.args.get('from', '/dashboard')
+        redirect_path = request.args.get('from', DEFAULT_HOME)
         if empty(redirect_path):
-            redirect_path = '/dashboard'
+            redirect_path = DEFAULT_HOME
 
         for required_field in all_block_keys():
             demand(not missing_form_field(required_field), f'Missing field {required_field}')
@@ -359,7 +359,7 @@ def show_lunch(semester_str, block, number):
 
     if len(entities) == 0:
         flash('No applicable classes were found', 'error')
-        return redirect('/dashboard')
+        return redirect(DEFAULT_HOME)
 
     return render_template('lunch.html', handle=handle, roster=roster,
                            block=block, number=number, size=len(entities), semester=semester)
