@@ -3,13 +3,16 @@ from flask import *
 
 import discord
 import database
+import ahs_calendar
 from config import *
 from urllib import parse
 from auth import *
 from google_auth import validate_token_for_info
 from user import User, Reader
 
-DEFAULT_HOME = '/dashboard/1'
+
+def default_home():
+    return '/dashboard'
 
 
 def empty(string):
@@ -104,7 +107,7 @@ def do_login():
     if request.method == 'GET':
         if logged_handle() is not None:
             flash('You are already logged in')
-            return redirect(request.args.get('redirect', DEFAULT_HOME))
+            return redirect(request.args.get('redirect', default_home()))
         return render_template('login.html',
                                redirect=request.args.get('redirect', ''))
 
@@ -123,7 +126,7 @@ def do_login():
         else:
             flash('Successfully logged in as ' + name)
 
-        default = DEFAULT_HOME
+        default = default_home()
 
         if user is None:
             session['name'] = name
@@ -146,9 +149,14 @@ def do_logout():
     return redirect('/')
 
 
-@app.route('/user/<semester>')
-def show_own_user(semester):
-    return show_user(logged_handle(), semester)
+@app.route('/user')
+def show_self_current_semester():
+    return show_user_current_semester(logged_handle())
+
+
+@app.route('/user/<handle>')
+def show_user_current_semester(handle):
+    return show_user(handle, str(ahs_calendar.current_semester()))
 
 
 @app.route('/user/<handle>/<semester>', methods=['GET'])
@@ -177,16 +185,17 @@ def show_user(handle, semester):
                            semester=semester)
 
 
-@app.route('/dashboard/<semester>')
-def show_own_dashboard(semester):
-    handle = logged_handle()
+@app.route('/dashboard')
+def show_own_dashboard_current_semester():
+    return show_dashboard(logged_handle(), str(ahs_calendar.current_semester()))
 
-    if handle is None:
-        return error_not_logged_in()
-    if not database.handle_exists(handle):
-        return error_no_own_schedule()
 
-    return show_dashboard(handle, semester)
+@app.route('/dashboard/<semester_or_handle>')
+def show_own_dashboard_current_semester_or_handle(semester_or_handle):
+    if semester_or_handle in semesters:
+        return show_dashboard(logged_handle(), semester_or_handle)
+    else:
+        return show_dashboard(semester_or_handle, str(ahs_calendar.current_semester()))
 
 
 @app.route('/dashboard/<handle>/<semester>')
@@ -266,9 +275,9 @@ def do_update():
                                    user_public=user.public)
     else:
         # Redirect path reading from args
-        redirect_path = request.args.get('from', DEFAULT_HOME)
+        redirect_path = request.args.get('from', default_home())
         if empty(redirect_path):
-            redirect_path = DEFAULT_HOME
+            redirect_path = default_home()
 
         for required_field in all_block_keys():
             demand(not missing_form_field(required_field), f'Missing field {required_field}')
@@ -314,6 +323,11 @@ def do_update():
             return error(500, str(e))
 
 
+@app.route('/roster/<period>/<teacher>')
+def show_roster_current_semester(period, teacher):
+    return show_roster(str(ahs_calendar.current_semester()), period, teacher)
+
+
 @app.route('/roster/<semester_str>/<period>/<teacher>')
 def show_roster(semester_str, period, teacher):
     handle = logged_handle()
@@ -342,6 +356,11 @@ def show_roster(semester_str, period, teacher):
                            semester=semester)
 
 
+@app.route('/lunch/<block>/<number>')
+def show_lunch_current_semester(block, number):
+    return show_lunch(str(ahs_calendar.current_semester()), block, number)
+
+
 @app.route('/lunch/<semester_str>/<block>/<number>')
 def show_lunch(semester_str, block, number):
     handle = logged_handle()
@@ -359,7 +378,7 @@ def show_lunch(semester_str, block, number):
 
     if len(entities) == 0:
         flash('No applicable classes were found', 'error')
-        return redirect(DEFAULT_HOME)
+        return redirect(default_home())
 
     return render_template('lunch.html', handle=handle, roster=roster,
                            block=block, number=number, size=len(entities), semester=semester)
