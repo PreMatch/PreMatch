@@ -11,7 +11,9 @@
     <div class="hero-body">
         <div class="container">
             <h1 class="title overridden-white is-1">
-                Class List for {{ name }}, Semester {{ semester }}
+                Class List for {{ name }}, Semester {{ semester }} <span style="margin-left: 20px"><a
+                    class="button is-medium is-primary is-outlined"
+                    href="/user/{{ handle }}/{{ 2 if semester == 1 else 1 }}">View Semester {{ 2 if semester == 1 else 1 }}</a></span>
             </h1>
             <h2 class="subtitle overridden-white is-3">
                 {{ handle }}
@@ -30,18 +32,18 @@
         </thead>
         <tbody id="table-body">
         {% for period in 'ABCDEFG' %}
-            <tr id="class-row-{{ period }}">
-                <td class="period"><span class="period-text">Block</span> {{ period }}</td>
-                <td class="teacher">{{ schedule[period] }}</td>
-                <td id="roster-data-{{ period }}" class="class-link">
-                    <a class="button is-link is-outlined is-primary is-medium overridden-white"
-                       href="/roster/{{ semester }}/{{ period }}/{{ schedule[period] }}">View Roster</a>
-                    {% if period in lunch_blocks and lunch_numbers[period] != none %}
-                        <a class="button is-link is-outlined is-primary is-medium overridden-white"
-                           href="/lunch/{{ semester }}/{{ period }}/{{ lunch_numbers[period] }}">View Lunch</a>
-                    {% endif %}
-                </td>
-            </tr>
+        <tr id="class-row-{{ period }}">
+            <td class="period"><span class="period-text">Block</span> {{ period }}</td>
+            <td class="teacher">{{ schedule[period] }}</td>
+            <td id="roster-data-{{ period }}" class="class-link">
+                <a class="button is-link is-outlined is-primary is-medium overridden-white"
+                   href="/roster/{{ semester }}/{{ period }}/{{ schedule[period] }}">View Roster</a>
+                {% if period in lunch_blocks and lunch_numbers[period] != none %}
+                <a class="button is-link is-outlined is-primary is-medium overridden-white"
+                   href="/lunch/{{ semester }}/{{ period }}/{{ lunch_numbers[period] }}">View Lunch</a>
+                {% endif %}
+            </td>
+        </tr>
         {% endfor %}
         </tbody>
     </table>
