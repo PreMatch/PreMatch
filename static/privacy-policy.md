@@ -17,7 +17,7 @@ When you join PreMatch and enter your schedule, we collect and store the followi
 - A custom browser "cookie" for session continuity. The "cookie" is an encrypted form of your email address and can only be issued and read by our system. It keeps you signed in during a browsing session.
 
 ## Children Under the Age of 13
-[PreMatch.org](https://prematch.org) restricts its user base to students at Andover High School, and we do not expect any such student to be under the age of 13.
+[PreMatch.org](https://prematch.org) restricts its user base to students at Andover High School, and we do not expect any such student to be under the age of 13. Thus, nobody under the age of 13 is allowed to use PreMatch or any of its associated products without first receiving explicit parental permission to enter and submit their schedule, along with all the data listed in the section above.
 
 ## Communications
 
@@ -27,7 +27,7 @@ If you have any uncertainties about this policy or any complaints about our comp
 
 ## Data Retention
 
-You have the right to request the removal of your schedule from our system, including all teachers for blocks A through G. To do so, please [contact us](mailto:privacy@prematch.org?subject=Request to Remove Data).
+You have the right to request the removal of your schedule from our system, including all teachers for blocks A through G. To do so, please [contact us](mailto:privacy@prematch.org?subject="Request to Remove Data").
 
 ## Future Updates
 
