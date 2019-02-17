@@ -257,7 +257,7 @@ def do_update():
             for semester in semesters:
                 for blk in lunch_blocks:
                     empty_lunch_numbers[blk + semester] = None
-            return render_template('add.html',
+            return render_template('update.html',
                                    handle=handle,
                                    name=session.get('name'),
                                    schedule=None,
@@ -266,7 +266,7 @@ def do_update():
                                    lunch_numbers=empty_lunch_numbers,
                                    user_public=False)
         else:
-            return render_template('add.html',
+            return render_template('update.html',
                                    handle=handle,
                                    name=session.get('name', user.name),
                                    schedule=user.teachers,
