@@ -4,6 +4,7 @@ from flask import *
 import discord
 import database
 import ahs_calendar
+import traceback
 from config import *
 from urllib import parse
 from auth import *
@@ -320,6 +321,8 @@ def do_update():
 
             return redirect(redirect_path)
         except Exception as e:
+            print(e)
+            traceback.print_exc()
             return error(500, str(e))
 
 

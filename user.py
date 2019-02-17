@@ -110,17 +110,12 @@ class User(Reader):
 
     def put_lunch(self, lunch_numbers: Mapping[str, int]) -> None:
         client = db.get_db()
-        tasks: List[datastore.Entity] = []
 
         for semester in config.semesters:
             for block in config.lunch_blocks:
                 number = lunch_numbers.get(block + semester)
                 if number is not None:
-                    task = self.db_lunch_task(block, int(semester), number)
-                    tasks.append(task)
-
-        if tasks:
-            client.put_multi(tasks)
+                    client.put(self.db_lunch_task(block, int(semester), number))
 
     def db_lunch_task(self, block, semester: int, number) -> datastore.Entity:
         key = db.get_db().key('Lunch', self.teacher(block, semester))
