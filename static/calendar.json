@@ -1,10 +1,10 @@
 {
   "name": "The 7+H Definition File",
-  "version": 2.0,
+  "version": 2.1,
   "blocks": ["A", "B", "C", "D", "E", "F", "G"],
   "cycle_size": 8,
   "start_date": "2018-08-29",
-  "end_date": "2019-06-14",
+  "end_date": "2019-06-18",
   "exclusions": [
     {
       "type": "holiday",
@@ -144,9 +144,9 @@
       "description": "Memorial Day"
     },
     {
-      "type": "unknown",
+      "type": "standard_day",
       "date": "2019-06-06",
-      "description": "Day X"
+      "day_number": 4
     },
     {
       "type": "half_day",
@@ -154,29 +154,39 @@
       "blocks": ["A", "D", "C", "F"]
     },
     {
-      "type": "unknown",
+      "type": "standard_day",
       "date": "2019-06-10",
-      "description": "Day Y"
+      "day_number": 6
     },
     {
-      "type": "exam_day",
+      "type": "standard_day",
       "date": "2019-06-11",
-      "blocks": ["A", "E"]
+      "day_number": 1
     },
     {
-      "type": "exam_day",
+      "type": "standard_day",
       "date": "2019-06-12",
-      "blocks": ["B", "F"]
+      "day_number": 2
     },
     {
       "type": "exam_day",
       "date": "2019-06-13",
-      "blocks": ["C", "G"]
+      "blocks": ["D", "G"]
     },
     {
       "type": "exam_day",
       "date": "2019-06-14",
-      "blocks": ["D", "MakeUp"]
+      "blocks": ["C", "F"]
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-06-17",
+      "blocks": ["B", "E"]
+    },
+    {
+      "type": "exam_day",
+      "date": "2019-06-18",
+      "blocks": ["A", "MakeUp"]
     }
   ],
   "overrides": [
@@ -190,6 +200,17 @@
       "type": "standard_day",
       "date": "2018-09-17",
       "day_number": 2
+    },
+    {
+      "type": "holiday",
+      "start_date": "2019-03-04",
+      "end_date": "2019-03-04",
+      "description": "Snow Day"
+    },
+    {
+      "type": "standard_day",
+      "date": "2019-03-05",
+      "day_number": 5
     }
   ],
   "periods": [
@@ -222,6 +243,6 @@
   ],
   "semesters": [
     ["2018-08-29", "2019-01-24"],
-    ["2019-01-25", "2019-06-14"]
+    ["2019-01-25", "2019-06-18"]
   ]
 }
