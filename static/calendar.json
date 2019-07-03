@@ -3,222 +3,178 @@
   "version": 2.1,
   "blocks": ["A", "B", "C", "D", "E", "F", "G"],
   "cycle_size": 8,
-  "start_date": "2018-08-29",
-  "end_date": "2019-06-18",
+  "start_date": "2019-08-28",
+  "end_date": "2020-06-11",
   "exclusions": [
     {
       "type": "holiday",
-      "start_date": "2018-08-31",
-      "end_date": "2018-09-03",
+      "start_date": "2019-08-30",
+      "end_date": "2019-09-02",
       "description": "Labor Day Recess"
     },
     {
-      "type": "holiday",
-      "start_date": "2018-09-10",
-      "end_date": "2018-09-10",
-      "description": "Rosh Hashanah"
-    },
-    {
-      "type": "holiday",
-      "start_date": "2018-09-19",
-      "end_date": "2018-09-19",
-      "description": "Yom Kippur"
-    },
-    {
-      "type": "holiday",
-      "start_date": "2018-10-08",
-      "end_date": "2018-10-08",
-      "description": "Columbus Day"
-    },
-    {
       "type": "half_day",
-      "date": "2018-10-19",
+      "date": "2019-10-11",
       "blocks": ["A", "C", "E", "G"]
     },
     {
       "type": "holiday",
-      "start_date": "2018-11-06",
-      "end_date": "2018-11-06",
+      "start_date": "2019-10-14",
+      "end_date": "2019-10-14",
+      "description": "Columbus Day"
+    },
+    {
+      "type": "holiday",
+      "start_date": "2019-11-08",
+      "end_date": "2019-11-08",
       "description": "Professional Day"
     },
     {
       "type": "holiday",
-      "start_date": "2018-11-12",
-      "end_date": "2018-11-12",
+      "start_date": "2019-11-11",
+      "end_date": "2019-11-11",
       "description": "Veterans Day"
     },
     {
       "type": "half_day",
-      "date": "2018-11-21",
-      "blocks": ["A", "D", "C", "PepRally"]
+      "date": "2019-11-27",
+      "blocks": ["A", "D", "C", "Pep Rally"]
     },
     {
       "type": "holiday",
-      "start_date": "2018-11-22",
-      "end_date": "2018-11-23",
+      "start_date": "2019-11-28",
+      "end_date": "2019-12-01",
       "description": "Thanksgiving Break"
     },
     {
       "type": "half_day",
-      "date": "2018-12-07",
+      "date": "2019-12-06",
       "blocks": ["B", "A", "G", "E"]
     },
     {
       "type": "holiday",
-      "start_date": "2018-12-24",
-      "end_date": "2019-01-01",
+      "start_date": "2019-12-21",
+      "end_date": "2020-01-01",
       "description": "Christmas Break"
     },
     {
-      "type": "standard_day",
-      "date": "2019-01-15",
-      "day_number": 1
+      "type": "unknown",
+      "date": "2020-01-13",
+      "description": "Day X"
     },
     {
-      "type": "standard_day",
-      "date": "2019-01-16",
-      "day_number": 3
+      "type": "unknown",
+      "date": "2020-01-14",
+      "description": "Day Y"
     },
     {
-      "type": "standard_day",
-      "date": "2019-01-17",
-      "day_number": 7
+      "type": "unknown",
+      "date": "2020-01-15",
+      "description": "Day Z"
     },
     {
       "type": "exam_day",
-      "date": "2019-01-18",
-      "blocks": ["A", "E"]
+      "date": "2020-01-16",
+      "blocks": ["?", "?"]
+    },
+    {
+      "type": "exam_day",
+      "date": "2020-01-17",
+      "blocks": ["?", "?"]
     },
     {
       "type": "holiday",
-      "start_date": "2019-01-21",
-      "end_date": "2019-01-21",
+      "start_date": "2020-01-20",
+      "end_date": "2020-01-20",
       "description": "Martin Luther King Day"
     },
     {
       "type": "exam_day",
-      "date": "2019-01-22",
-      "blocks": ["B", "F"]
+      "date": "2020-01-21",
+      "blocks": ["?", "?"]
     },
     {
       "type": "exam_day",
-      "date": "2019-01-23",
-      "blocks": ["C", "G"]
-    },
-    {
-      "type": "exam_day",
-      "date": "2019-01-24",
-      "blocks": ["D", "MakeUp"]
+      "date": "2020-01-22",
+      "blocks": ["?", "MakeUp"]
     },
     {
       "type": "half_day",
-      "date": "2019-02-01",
+      "date": "2020-01-31",
       "blocks": ["A", "E", "F", "C"]
     },
     {
       "type": "holiday",
-      "start_date": "2019-02-18",
-      "end_date": "2019-02-22",
+      "start_date": "2020-02-15",
+      "end_date": "2020-02-23",
       "description": "Winter Break"
     },
     {
       "type": "half_day",
-      "date": "2019-03-15",
+      "date": "2020-03-20",
       "blocks": ["C", "B", "F", "D"]
     },
     {
       "type": "holiday",
-      "start_date": "2019-04-15",
-      "end_date": "2019-04-19",
+      "start_date": "2020-04-18",
+      "end_date": "2020-04-26",
       "description": "Spring Break"
     },
     {
       "type": "half_day",
-      "date": "2019-05-03",
+      "date": "2020-05-08",
       "blocks": ["A", "C", "E", "G"]
     },
     {
       "type": "holiday",
-      "start_date": "2019-05-27",
-      "end_date": "2019-05-27",
+      "start_date": "2020-05-25",
+      "end_date": "2020-05-25",
       "description": "Memorial Day"
     },
     {
-      "type": "standard_day",
-      "date": "2019-06-06",
-      "day_number": 4
+      "type": "unknown",
+      "date": "2020-06-03",
+      "description": "Day X"
+    },
+    {
+      "type": "unknown",
+      "date": "2020-06-04",
+      "description": "Day Y"
     },
     {
       "type": "half_day",
-      "date": "2019-06-07",
+      "date": "2020-06-05",
       "blocks": ["A", "D", "C", "F"]
     },
     {
-      "type": "standard_day",
-      "date": "2019-06-10",
-      "day_number": 6
-    },
-    {
-      "type": "standard_day",
-      "date": "2019-06-11",
-      "day_number": 1
-    },
-    {
-      "type": "standard_day",
-      "date": "2019-06-12",
-      "day_number": 2
+      "type": "exam_day",
+      "date": "2020-06-08",
+      "blocks": ["?", "?"]
     },
     {
       "type": "exam_day",
-      "date": "2019-06-13",
-      "blocks": ["D", "G"]
+      "date": "2020-06-09",
+      "blocks": ["?", "?"]
     },
     {
       "type": "exam_day",
-      "date": "2019-06-14",
-      "blocks": ["C", "F"]
+      "date": "2020-06-10",
+      "blocks": ["?", "?"]
     },
     {
       "type": "exam_day",
-      "date": "2019-06-17",
-      "blocks": ["B", "E"]
+      "date": "2020-06-11",
+      "blocks": ["?", "MakeUp"]
     },
-    {
-      "type": "exam_day",
-      "date": "2019-06-18",
-      "blocks": ["A", "MakeUp"]
-    }
   ],
   "overrides": [
-    {
-      "type": "holiday",
-      "start_date": "2018-09-14",
-      "end_date": "2018-09-14",
-      "description": "Day after Gas Explosion Apocalypse"
-    },
-    {
-      "type": "standard_day",
-      "date": "2018-09-17",
-      "day_number": 2
-    },
-    {
-      "type": "holiday",
-      "start_date": "2019-03-04",
-      "end_date": "2019-03-04",
-      "description": "Snow Day"
-    },
-    {
-      "type": "standard_day",
-      "date": "2019-03-05",
-      "day_number": 5
-    }
   ],
   "periods": [
-    [[7, 44], [8, 44]],
-    [[8, 48], [10, 3]],
-    [[10, 7], [11, 7]],
-    [[11, 11], [13, 1]],
-    [[13, 5], [14, 5]]
+    [[7, 44], [8, 48]],
+    [[8, 52], [10, 12]],
+    [[10, 16], [11, 19]],
+    [[11, 23], [13, 13]],
+    [[13, 17], [14, 20]]
   ],
   "day_blocks": [
     ["A", "C", "H", "E", "G"],
@@ -231,10 +187,10 @@
     ["C", "B", "H", "F", "D"]
   ],
   "half_day_periods": [
-    [[7, 44], [8, 29]],
-    [[8, 33], [9, 16]],
-    [[9, 20], [10, 3]],
-    [[10, 7], [10, 50]]
+    [[7, 44], [8, 32]],
+    [[8, 36], [9, 23]],
+    [[9, 27], [10, 14]],
+    [[10, 18], [11, 5]]
   ],
   "exam_day_periods": [
     [[8, 0], [9, 30]],
@@ -242,7 +198,7 @@
     [[13, 0], [14, 0]]
   ],
   "semesters": [
-    ["2018-08-29", "2019-01-24"],
-    ["2019-01-25", "2019-06-18"]
+    ["2019-08-28", "2019-01-22"],
+    ["2019-01-23", "2019-06-11"]
   ]
 }
