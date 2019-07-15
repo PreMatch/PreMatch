@@ -102,6 +102,11 @@ def show_about_app():
     return render_login_optional('about_app.html')
 
 
+@app.route('/countdown')
+def show_countdown():
+    return redirect('/countdown', code=307)
+
+
 # Relaying final redirect (after log-in) from originator of /login GET to /login POST
 # 1. Originator sends user to /login?redirect=<desired_url>
 # 2. login.html is rendered with redirect (template variable) set to the value above, or '' if there wasn't one
@@ -171,7 +176,7 @@ def show_user(handle, semester):
         return error_not_logged_in()
 
     if should_countdown():
-        return render_template('countdown.html')
+        return redirect('/countdown', code=307)
 
     target = User.from_db(handle)
     if target is None:
@@ -213,7 +218,7 @@ def show_dashboard(handle, semester):
         return error_not_logged_in()
 
     if should_countdown():
-        return render_template('countdown.html')
+        return redirect('/countdown', code=307)
 
     reader = Reader(user_handle)
     target = User.from_db(handle)
@@ -263,7 +268,7 @@ def do_update():
             return redirect('/login')
 
         if should_countdown():
-            return render_template('countdown.html')
+            return redirect('/countdown', code=307)
 
         if user is None:
             empty_lunch_numbers = {}
@@ -351,7 +356,7 @@ def show_roster(semester_str, period, teacher):
         return error_not_logged_in()
 
     if should_countdown():
-        return render_template('countdown.html')
+        return redirect('/countdown', code=307)
 
     demand(period in periods, f'Invalid block: {period}')
     demand(teacher in teachers, f'Invalid teacher: {teacher}')
@@ -387,7 +392,7 @@ def show_lunch(semester_str, block, number):
         return error_not_logged_in()
 
     if should_countdown():
-        return render_template('countdown.html')
+        return redirect('/countdown', code=307)
 
     demand(block in lunch_blocks, f'Invalid lunch block: {block}')
     demand(number in list('1234'), f'Invalid lunch number: {number}')
@@ -413,7 +418,7 @@ def do_search():
         return error_not_logged_in()
 
     if should_countdown():
-        return render_template('countdown.html')
+        return redirect('/countdown', code=307)
 
     query = request.args.get('query')
     if query is None or query.strip() == '':
