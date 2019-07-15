@@ -48,6 +48,10 @@ def error_private(handle):
     return redirect('/')
 
 
+def should_countdown():
+    return ahs_calendar.current_semester() is None and ahs_calendar.before_schedule_release()
+
+
 app = Flask(__name__)
 set_secret_key(app)
 
@@ -79,8 +83,6 @@ def validation_error_handler(err):
 
 @app.route('/')
 def front_page():
-    if ahs_calendar.current_semester() is None and ahs_calendar.before_schedule_release():
-        return render_template('countdown.html')
     return render_login_optional('index.html',
                                  schedule_count=database.schedule_count())
 
@@ -168,6 +170,9 @@ def show_user(handle, semester):
     if own_handle is None:
         return error_not_logged_in()
 
+    if should_countdown():
+        return render_template('countdown.html')
+
     target = User.from_db(handle)
     if target is None:
         if own_handle == handle:
@@ -206,6 +211,9 @@ def show_dashboard(handle, semester):
     user_handle = logged_handle()
     if user_handle is None:
         return error_not_logged_in()
+
+    if should_countdown():
+        return render_template('countdown.html')
 
     reader = Reader(user_handle)
     target = User.from_db(handle)
@@ -253,6 +261,9 @@ def do_update():
         if user is None and 'name' not in session:
             flash('Sorry, but you need to log in again', 'error')
             return redirect('/login')
+
+        if should_countdown():
+            return render_template('countdown.html')
 
         if user is None:
             empty_lunch_numbers = {}
@@ -339,6 +350,9 @@ def show_roster(semester_str, period, teacher):
     if handle is None:
         return error_not_logged_in()
 
+    if should_countdown():
+        return render_template('countdown.html')
+
     demand(period in periods, f'Invalid block: {period}')
     demand(teacher in teachers, f'Invalid teacher: {teacher}')
     demand(semester_str in semesters, f'Invalid semester: {semester_str}')
@@ -372,6 +386,9 @@ def show_lunch(semester_str, block, number):
     if handle is None:
         return error_not_logged_in()
 
+    if should_countdown():
+        return render_template('countdown.html')
+
     demand(block in lunch_blocks, f'Invalid lunch block: {block}')
     demand(number in list('1234'), f'Invalid lunch number: {number}')
     demand(semester_str in semesters, f'Invalid semester: {semester_str}')
@@ -394,6 +411,9 @@ def do_search():
     handle = logged_handle()
     if handle is None:
         return error_not_logged_in()
+
+    if should_countdown():
+        return render_template('countdown.html')
 
     query = request.args.get('query')
     if query is None or query.strip() == '':
