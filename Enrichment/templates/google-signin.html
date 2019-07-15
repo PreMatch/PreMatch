@@ -10,10 +10,13 @@
 <div class="g-signin2" data-onsuccess="onSignIn" data-theme="light"></div>
 <form method="post" action="/">
   <input name="id_token" id="token">
+  <input name="auth_code" id="auth">
+  <label for="date">Date: </label><input name="date" id="date">
 </form>
 <script>
   function onSignIn(googleUser) {
     // Useful data for your client-side scripts:
+    document.getElementById("date").value = prompt("Date?");
     var profile = googleUser.getBasicProfile();
     console.log("ID: " + profile.getId()); // Don't send this directly to your server!
     console.log('Full Name: ' + profile.getName());
@@ -27,7 +30,7 @@
     console.log("ID Token: " + id_token);
     document.getElementById("token").value = id_token;
     document.forms[0].submit();
-  };
+  }
 </script>
 </body>
 </html>

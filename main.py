@@ -79,6 +79,8 @@ def validation_error_handler(err):
 
 @app.route('/')
 def front_page():
+    if ahs_calendar.current_semester() is None and ahs_calendar.before_schedule_release():
+        return render_template('countdown.html')
     return render_login_optional('index.html',
                                  schedule_count=database.schedule_count())
 

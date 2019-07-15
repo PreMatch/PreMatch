@@ -11,9 +11,13 @@ def login():
     else:
         token = request.form.get('id_token')
         session = enstu.login(token)
-        return str(session.fetch_schedule(request.form.get('date', '12/5/2018')))
+        date = request.form.get('date', '')
+        return str(session.fetch_schedule('6/17/2019' if date in [None, ''] else date))
 
 
 @app.route('/hello')
 def say_hello():
     return 'hello!'
+
+
+app.run()
