@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
+
+{{ head('Wait for Schedules', True) }}
+<link rel="stylesheet" type="text/css" href="/static/css/countdown.css">
+<body id="body" class="bg-primary">
+
+{{ nav(logged_in, "/countdown") }}
+
+<section class="has-background-white section pushed">
+    <div class="container is-fluid has-text-centered">
+        <div id="countdown-timer">
+            <div class="container is-fluid">
+                <h1 class="countdown-text">
+                    <span class="countdown-number countdown-days"></span>
+
+                    <span class="countdown-colon">:</span>
+
+                    <span class="countdown-number countdown-hours"></span>
+
+                    <span class="countdown-colon">:</span>
+
+                    <span class="countdown-number countdown-minutes"></span>
+
+                    <span class="countdown-colon">:</span>
+
+                    <span class="countdown-number countdown-seconds"></span></h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript" src="/static/js/countdown.js"></script>
+
+{{ bodyPaddingNav() }}
+{{ importJs() }}
+
+</body>
+</html>
