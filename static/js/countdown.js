@@ -1,3 +1,7 @@
+function leadingZero(num) {
+    return num < 10 ? "0" + num.toString() : num.toString();
+}
+
 function countdown(endDate) {
     let days, hours, minutes, seconds;
 
@@ -28,10 +32,10 @@ function countdown(endDate) {
 
             let countdown = countdownTimer.children('.container').first().children('.countdown-text').first();
 
-            countdown.children('.countdown-days').html(days.toString());
-            countdown.children('.countdown-hours').html(hours.toString());
-            countdown.children('.countdown-minutes').html(minutes.toString());
-            countdown.children('.countdown-seconds').html(seconds.toString());
+            countdown.children('.countdown-days').html(`${leadingZero(days)}<span class="timer-subtitle" id="days-subtitle">Days</span>`);
+            countdown.children('.countdown-hours').html(`${leadingZero(hours)}<span class="timer-subtitle" id="hours-subtitle">Hours</span>`);
+            countdown.children('.countdown-minutes').html(`${leadingZero(minutes)}<span class="timer-subtitle" id="minutes-subtitle">Minutes</span>`);
+            countdown.children('.countdown-seconds').html(`${leadingZero(seconds)}<span class="timer-subtitle" id="seconds-subtitle">Seconds</span>`);
         } else {
             clearInterval(updateInterval);
         }
@@ -47,15 +51,43 @@ function daysInMonth(month, year) {
 }
 
 jQuery.getJSON('/static/calendar.json', (data) => {
-    let release_date = data.schedule_release;
-    let release_time = data.release_time_est;
+    let releaseDate = data.schedule_release;
 
-    let date_data = release_date.split('-');
+    let releaseDateData = releaseDate.split('T');
 
-    let year = parseInt(date_data[0]), month = parseInt(date_data[1]) - 1, day = parseInt(date_data[2]); // 1 is subtracted from the month because the UTC constructor takes values between 0 and 11
+    let dateData = releaseDateData[0].split('-');
 
-    let time_data = release_time.split(':');
-    let hour = parseInt(time_data[0]), minute = parseInt(time_data[1]), second = parseInt(time_data[2]);
+    let year = parseInt(dateData[0]), month = parseInt(dateData[1]) - 1, day = parseInt(dateData[2]); // 1 is subtracted from the month because the UTC constructor takes values between 0 and 11
+
+    let timeData = releaseDateData[1].split(':');
+    let hour = parseInt(timeData[0]), minute = parseInt(timeData[1]), second = parseInt(timeData[2]);
+
+    // Get EST release date string
+    let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    let suffix = 'th';
+
+    if (day % 10 === 1)
+        suffix = 'st';
+    else if (day % 10 === 2)
+        suffix = 'nd';
+    else if (day % 10 === 3)
+        suffix = 'rd';
+
+    let timeEnding = 'AM';
+
+    if(hour >= 12)
+        timeEnding = 'PM';
+
+
+    let finalHour = hour % 12;
+
+    if(finalHour === 0)
+        finalHour = 12;
+
+    let timeOfRelease = `${monthNames[month]} ${day}<sup>${suffix}</sup>, at ${finalHour}:${leadingZero(minute)} ${timeEnding}`;
+
+    $('#schedule-release-time').html(timeOfRelease);
 
     // Adjust time from EST to UTC
     hour += 4;

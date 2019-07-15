@@ -1,0 +1,25 @@
+.countdown-text {
+    font-size: 3rem;
+}
+
+.countdown-number {
+    position: relative;
+}
+
+.timer-subtitle {
+    position: absolute;
+    top: 100%;
+    font-size: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#countdown-timer {
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 1087px) {
+    .timer-subtitle {
+        font-size: 14px;
+    }
+}
