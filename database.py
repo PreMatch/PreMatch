@@ -30,7 +30,8 @@ def handle_exists(handle: str) -> bool:
 def schedule_count() -> int:
     query = get_db().query(kind='__Stat_Kind__')
     query.add_filter('kind_name', '=', 'Schedule')
-    return list(query.fetch())[0]['count']
+    data = list(query.fetch())
+    return data[0]['count'] if len(data) > 0 else 0
 
 
 def db_entry(block: str, semester: int) -> str:

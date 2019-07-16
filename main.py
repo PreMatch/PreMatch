@@ -104,7 +104,7 @@ def show_about_app():
 
 @app.route('/countdown')
 def show_countdown():
-    return redirect('/countdown', code=307)
+    return render_login_optional('countdown.html')
 
 
 # Relaying final redirect (after log-in) from originator of /login GET to /login POST
