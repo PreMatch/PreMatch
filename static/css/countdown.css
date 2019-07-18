@@ -1,5 +1,6 @@
 .countdown-text {
     font-size: 3rem;
+    font-variant-numeric: tabular-nums;
 }
 
 .countdown-number {

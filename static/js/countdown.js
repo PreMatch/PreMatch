@@ -9,8 +9,12 @@ function countdown(endDate) {
         return;
     }
 
+    let intervalInitialized = false;
+
     updateCountDown();
+
     let updateInterval = setInterval(updateCountDown, 1000);
+    intervalInitialized = true;
 
     function updateCountDown() {
         let startDate = new Date();
@@ -37,7 +41,29 @@ function countdown(endDate) {
             countdown.children('.countdown-minutes').html(`${leadingZero(minutes)}<span class="timer-subtitle" id="minutes-subtitle">Minutes</span>`);
             countdown.children('.countdown-seconds').html(`${leadingZero(seconds)}<span class="timer-subtitle" id="seconds-subtitle">Seconds</span>`);
         } else {
-            clearInterval(updateInterval);
+            if (intervalInitialized)
+                clearInterval(updateInterval);
+
+            // Make sure there is a blank timer
+
+            let countdown = $('#countdown-timer').children('.container').first().children('.countdown-text').first();
+
+            countdown.children('.countdown-days').html('00<span class="timer-subtitle" id="days-subtitle">Days</span>');
+            countdown.children('.countdown-hours').html('00<span class="timer-subtitle" id="hours-subtitle">Hours</span>');
+            countdown.children('.countdown-minutes').html('00<span class="timer-subtitle" id="minutes-subtitle">Minutes</span>');
+            countdown.children('.countdown-seconds').html('00<span class="timer-subtitle" id="seconds-subtitle">Seconds</span>');
+
+            // Update title
+            $('#stay-tuned').html("They're Here!");
+
+            // Update subtitle
+            $('#subtitle').html("Schedules for the coming school year have been released on <a href='https://ma-andover.myfollett.com/aspen/logon.do' target='_blank'>Aspen!</a>");
+
+            // Update estimate
+            $("#estimate").html(`Schedules were released on: ${$('#estimate').children('strong')[0].outerHTML}`);
+
+            // Change title
+            $('title').first().html('Schedules Are Out!');
         }
     }
 }
@@ -76,13 +102,13 @@ jQuery.getJSON('/static/calendar.json', (data) => {
 
     let timeEnding = 'AM';
 
-    if(hour >= 12)
+    if (hour >= 12)
         timeEnding = 'PM';
 
 
     let finalHour = hour % 12;
 
-    if(finalHour === 0)
+    if (finalHour === 0)
         finalHour = 12;
 
     let timeOfRelease = `${monthNames[month]} ${day}<sup>${suffix}</sup>, at ${finalHour}:${leadingZero(minute)} ${timeEnding}`;
