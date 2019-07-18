@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav, hideScrollbar %}
+
+{{ head('No such help article', True) }}
+{{ hideScrollbar() }}
+<body id="body" class="bg-primary" style="">
+
+{{ nav(False, "/login") }}
+{{ bodyPaddingNav() }}
+
+<section class="section pushed">
+    <div class="container is-fluid has-text-centered">
+        No such help article
+        <h1>404</h1>
+    </div>
+</section>
+
+{{ importJs() }}
+
+</body>
+</html>

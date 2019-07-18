@@ -5,6 +5,7 @@ import discord
 import database
 import ahs_calendar
 import traceback
+from help import help_site
 from config import *
 from urllib import parse
 from auth import *
@@ -54,6 +55,8 @@ def should_countdown():
 
 app = Flask(__name__)
 set_secret_key(app)
+
+app.register_blueprint(help_site)
 
 
 @app.before_request
