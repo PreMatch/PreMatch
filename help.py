@@ -6,7 +6,7 @@ help_site = Blueprint("PreMatch Help", __name__, template_folder="templates")
 
 def render_file(filepath):
     if os.path.isdir(filepath):
-        index_within = os.path.join(filepath, "index.md")
+        index_within = filepath + "/index.md" if not filepath.endswith('/') else filepath + "index.md"
         if os.path.isfile(index_within):
             return render_template('help_page.html', filepath='/' + index_within)
 
