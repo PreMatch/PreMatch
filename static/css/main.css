@@ -231,6 +231,20 @@ div[id^="teacher-notif-"] .subtitle {
 }
 
 /*****************MAIN*****************/
+.underlined,
+a.underlined {
+    text-decoration: underline!important;
+}
+
+.white-link,
+a.white-link {
+    color: white!important;
+}
+
+.white-link:hover,
+a.white-link:hover {
+    opacity: 0.6;
+}
 
 .help-tip {
     text-align: center;

@@ -1,3 +1,3 @@
-# PreMatch Help
+# PreMatch Help Archive
 
-Hello and welcome to PreMatch! PreMatch helps you discover your classmates before school starts by allowing students to enter their schedules.
+Welcome to the PreMatch help archive! In this collection of articles, you can expect to find content guiding you through everything from finding your schedule to understanding your privacy settings. 

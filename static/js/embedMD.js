@@ -20,4 +20,21 @@ function readMD(file, embedId) {
 
 function embedHTML(html, id) {
     $(`#${id}`).append(html);
+    applyClassesToMD(id);
+}
+
+function applyClassesToEach() {
+    arguments[0].each((indx, element) => {
+        for (let i = 1; i < arguments.length; i++) {
+            $(element).addClass(arguments[i]);
+        }
+    });
+}
+
+
+function applyClassesToMD(id) {
+    let document = $(`#${id}`);
+    applyClassesToEach(document.children('h1'), 'title', 'is-size-1');
+    applyClassesToEach(document.children('h2'), 'subtitle', 'is-size-3');
+    applyClassesToEach(document.children('h3'), 'subtitle', 'is-size-5');
 }
