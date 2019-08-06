@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, Mock
 
 import pytest
+from google.cloud import firestore
 
 from adapters.firestore_repo import FirestoreStudentRepo, FirestoreTeacherRepo
 from entities.student import Student
@@ -77,7 +78,7 @@ def test_load_student_without_discord(reset_mock):
         'is_public': True
     }
     mock_db.collection('students').document('hpeng2021').get().to_dict.return_value = db_entry
-    mock_db.collection('students').document('hpeng2021').id = 'hpeng2021'
+    mock_db.collection('students').document('hpeng2021').get().id = 'hpeng2021'
 
     student = student_repo.load('hpeng2021')
 
@@ -130,7 +131,21 @@ def test_students_in_class(reset_mock):
         Student('b', 'B'),
         Student('c', 'C')
     ]
-    mock_db.collection('students').where('semesters.1.D', '==', 'Caveney').stream.return_value = classmates
+
+    def mock_student_doc_snapshot(student):
+        snapshot = Mock(id=student.handle)
+        snapshot.to_dict.return_value = {
+            'name': student.name,
+            'semesters': None,
+            'accepts_terms': False,
+            'accepts_privacy': False,
+            'is_public': False,
+            'discord_id': None
+        }
+        return snapshot
+
+    mock_db.collection('students').where('semesters.1.D', '==', 'Caveney')\
+        .stream.return_value = map(mock_student_doc_snapshot, classmates)
 
     results = student_repo.students_in_class(1, 'D', 'Caveney')
 
@@ -155,8 +170,7 @@ def populate_search_students():
     ret_val = []
     for student in search_students:
         mock = MagicMock()
-        mock.get(field_paths=['name']).get.side_effect = require(('name',), student.name)
-        mock.get().id = student.handle
+        mock.get.side_effect = require(('name',), student.name)
         mock.id = student.handle
         ret_val.append(mock)
     mock_db.collection('students').stream.return_value = iter(ret_val)
@@ -296,6 +310,7 @@ def test_load_teacher_with_lunches(reset_mock):
 def test_update_batch_lunch_one_per_teacher(reset_mock):
     mock_batch = Mock()
     mock_db.batch.return_value = mock_batch
+    mock_db.field_path.side_effect = firestore.Client.field_path
 
     updates = {
         'Donovan': {
@@ -311,9 +326,9 @@ def test_update_batch_lunch_one_per_teacher(reset_mock):
     teacher_repo.update_batch_lunch(updates)
 
     patches = {
-        'Donovan': {'semesters.2.D': 1},
-        'Reidy': {'semesters.1.G': 4},
-        'Emery': {'semesters.2.C': 3}
+        'Donovan': {'semesters.`2`.D': 1},
+        'Reidy': {'semesters.`1`.G': 4},
+        'Emery': {'semesters.`2`.C': 3}
     }
     for (teacher, patch) in patches.items():
         mock_batch.update.assert_any_call(mock_db.collection('teachers').document(teacher), patch)
@@ -324,6 +339,7 @@ def test_update_batch_lunch_one_per_teacher(reset_mock):
 def test_update_batch_lunch_multiple_per_teacher(reset_mock):
     mock_batch = Mock()
     mock_db.batch.return_value = mock_batch
+    mock_db.field_path.side_effect = firestore.Client.field_path
 
     updates = {
         'Donovan': {2: {
@@ -361,28 +377,28 @@ def test_update_batch_lunch_multiple_per_teacher(reset_mock):
 
     patches = {
         'Donovan': {
-            'semesters.2.D': 1,
-            'semesters.2.E': 3,
-            'semesters.2.F': 1,
-            'semesters.1.C': 2,
-            'semesters.1.D': 4,
-            'semesters.1.G': 2,
+            'semesters.`2`.D': 1,
+            'semesters.`2`.E': 3,
+            'semesters.`2`.F': 1,
+            'semesters.`1`.C': 2,
+            'semesters.`1`.D': 4,
+            'semesters.`1`.G': 2,
         },
         'Reidy': {
-            'semesters.1.G': 4,
-            'semesters.1.C': 2,
-            'semesters.1.D': 1,
-            'semesters.2.C': 2,
-            'semesters.2.G': 4,
-            'semesters.2.F': 3,
+            'semesters.`1`.G': 4,
+            'semesters.`1`.C': 2,
+            'semesters.`1`.D': 1,
+            'semesters.`2`.C': 2,
+            'semesters.`2`.G': 4,
+            'semesters.`2`.F': 3,
         },
         'Emery': {
-            'semesters.2.C': 3,
-            'semesters.2.D': 1,
-            'semesters.2.E': 4,
-            'semesters.1.C': 2,
-            'semesters.1.G': 4,
-            'semesters.1.F': 3,
+            'semesters.`2`.C': 3,
+            'semesters.`2`.D': 1,
+            'semesters.`2`.E': 4,
+            'semesters.`1`.C': 2,
+            'semesters.`1`.G': 4,
+            'semesters.`1`.F': 3,
         }
     }
     for (teacher, patch) in patches.items():
@@ -411,3 +427,13 @@ def test_student_exists(reset_mock):
     assert not student_repo.exists('divanovich2021')
     mock_db.collection.assert_any_call('students')
     mock_db.collection('students').document.assert_any_call('divanovich2021')
+
+
+def test_list_teacher_names(reset_mock):
+    teachers = ['Caveney', 'D\'Alise', 'Rainha']
+    mock_db.collection('teachers').list_documents.return_value =\
+        list(map(lambda name: MagicMock(id=name), teachers))
+
+    result = teacher_repo.list_teacher_names()
+
+    assert set(result) == set(teachers)

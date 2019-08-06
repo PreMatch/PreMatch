@@ -1,7 +1,9 @@
 from functools import wraps
 from html import escape
 
-from adapters.flask.common import *
+from flask import request, flash, redirect, render_template, Blueprint, session, g
+
+from adapters.flask.common import missing_form_field, adapt, DEFAULT_HOME, error, app
 from entities.student import Student
 
 
@@ -9,8 +11,9 @@ def requires_login(f):
     @wraps(f)
     def dec_fun(*args, **kwargs):
 
-        if should_countdown():
-            return redirect('/countdown', code=307)
+        # todo enable
+        # if should_countdown():
+        #     return redirect('/countdown', code=307)
 
         handle = logged_handle()
         if handle is None:
@@ -84,3 +87,42 @@ def do_logout():
 
     session_log_out()
     return redirect('/')
+
+
+@auth_app.route('/discord')
+def discord_entry_point():
+    code = request.args.get('code')
+    state = request.args.get('state')
+
+    if code is not None and state is not None:
+        return redirect(f'/discord/{code}/{state}')
+
+    if code is None:
+        flash('No code was supplied from Discord. Not our fault!', 'error')
+    if state is None:
+        flash('No state was supplied from Discord. Is this request legit?',
+              'error')
+
+    return redirect('/')
+
+
+@auth_app.route('/discord/<code>/<state>')
+@requires_login
+def verify_discord(code, state):
+    user = adapt.student_repo.load(g.handle)
+
+    try:
+        discord_user = app.account.integrate_discord(user, code, state)
+
+        return render_template('discord_integration.html',
+                               avatar_src=discord_user.avatar_url(),
+                               user_name=discord_user.username,
+                               user_discriminator=discord_user.discriminator,
+                               handle=g.handle, name=user.name)
+
+    except PermissionError as e:
+        print(e)
+        return error(401, 'Discord authorization failed!')
+    except KeyError:
+        flash('Your state appears to be invalid. Please use $$personalize to get a link for yourself.', 'error')
+        return redirect('/')

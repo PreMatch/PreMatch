@@ -1,10 +1,9 @@
 from flask import *
 
-import database
+from adapters.flask.common import adapt
+from adapters.flask.validate import valid_lunch_block, valid_semester_string
 from auth import *
-from config import *
 from google_auth import *
-from user import *
 
 rest_api = Blueprint('rest_api', __name__)
 
@@ -17,7 +16,7 @@ def api_error(code, message, status='error'):
     }), code
 
 
-def api_success(**payload):
+def api_success(payload):
     data = {
         'status': 'ok',
         'code': 200
@@ -46,14 +45,14 @@ def api_lunch_get():
     block = request.args.get('block')
     semester = request.args.get('semester')
 
-    if teacher not in teachers:
+    if not adapt.teacher_repo.exists(teacher):
         return api_bad_value('teacher')
-    if block not in lunch_blocks:
+    if not valid_lunch_block(block):
         return api_bad_value('block')
-    if semester not in semesters:
+    if not valid_semester_string(semester):
         return api_bad_value('semester')
 
-    number = database.lunch_number(block, int(semester), teacher)
+    number = adapt.teacher_repo.load(teacher).lunch_number(int(semester), block)
 
     if number is None:
         return api_error(404, 'No lunch number set', status='empty')
@@ -72,7 +71,7 @@ def api_login():
     try:
         handle, name = validate_ios_token_for_info(token)
         log_in(handle)
-        return api_success(handle=handle)
+        return api_success({'handle': handle})
 
     except ValueError as e:
         return api_error(403, str(e))
@@ -88,12 +87,10 @@ def api_schedule():
     handle = request.args.get('handle')
     if handle is None:
         return api_bad_value('handle')
-    if not database.handle_exists(handle):
+    student = adapt.student_repo.load(handle)
+    if student is None:
         return api_error(404, 'Handle not found: ' + handle)
-    if not Reader(logged_handle()).can_read(User.from_db(handle)):
+    if not student.is_public and student.handle != logged_handle():
         return api_error(403, 'Cannot read private handle: ' + handle)
 
-    schedule = database.get_row_from_handle(handle)
-    response = dict(map(lambda blk: (blk, schedule.get(blk)), all_block_keys()))
-
-    return api_success(**response)
+    return api_success(student.schedules)

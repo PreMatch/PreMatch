@@ -35,11 +35,11 @@ class FirestoreStudentRepo(StudentRepository):
 
     def load(self, handle: Handle) -> Optional[Student]:
         entry = self.client.collection(STUDENT_COL).document(handle)
-        return self._read_doc(entry)
+        return self._read_doc(entry.get())
 
     def students_in_class(self, semester: Semester, block: Block, teacher_name: Name) -> Iterable[Student]:
-        yield from self.client.collection(STUDENT_COL) \
-            .where(f'semesters.{semester}.{block}', '==', teacher_name).stream()
+        yield from map(self._read_doc, self.client.collection(STUDENT_COL)
+                       .where(self.client.field_path('semesters', str(semester), block), '==', teacher_name).stream())
 
     def search(self, query: str) -> Iterable[Student]:
         query = query.strip().lower()
@@ -48,19 +48,18 @@ class FirestoreStudentRepo(StudentRepository):
 
         for doc in self.client.collection(STUDENT_COL).stream():
             if query in doc.id.lower() \
-                    or query in doc.get(field_paths=['name']).get('name').lower():
+                    or query in doc.get('name').lower():
                 yield self._read_doc(doc)
 
     @staticmethod
-    def _read_doc(doc: firestore.DocumentReference):
-        entry = doc.get()
+    def _read_doc(entry: firestore.DocumentSnapshot) -> Optional[Student]:
         data = entry.to_dict()
 
         if data is None:
             return None
 
         return Student(
-            handle=doc.id,
+            handle=entry.id,
             name=data['name'],
             schedules=None if data['semesters'] is None else key_transform(data['semesters'], int),
             accepts_terms=data['accepts_terms'],
@@ -96,13 +95,16 @@ class FirestoreTeacherRepo(TeacherRepository):
             update_dict = {}
             for (semester, lunches) in update.items():
                 for (block, number) in lunches.items():
-                    update_dict[f'semesters.{semester}.{block}'] = number
+                    update_dict[self.client.field_path('semesters', str(semester), block)] = number
             batch.update(self.client.collection(TEACHER_COL).document(teacher), update_dict)
         batch.commit()
 
     def names_of_teachers_in_lunch(self, semester: Semester, block: Block, number: LunchNumber) -> Iterable[Name]:
-        stream = self.client.collection(TEACHER_COL).where(f'semesters.{semester}.{block}', '==', number).stream()
+        stream = self.client.collection(TEACHER_COL).where(self.client.field_path('semesters', str(semester), block), '==', number).stream()
         yield from map(lambda doc: doc.id, stream)
+
+    def list_teacher_names(self) -> Iterable[Name]:
+        yield from map(lambda doc: doc.id, self.client.collection(TEACHER_COL).list_documents())
 
 
 def key_transform(diction: Dict[Semester, Any], operation: Callable) -> Dict[Any, Any]:

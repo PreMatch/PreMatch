@@ -48,9 +48,9 @@ class ScheduleCase:
         roster = self.student_repo.students_in_class(semester, block, schedule[block])
         return roster
 
-    # None: teacher does not have this lunch recorded
-    # MissingScheduleError: viewer has no schedule
     def show_lunch_number(self, target: Student, semester: Semester, block: Block) -> Optional[LunchNumber]:
+        """ None: teacher does not have this lunch recorded
+        MissingScheduleError: viewer has no schedule """
         schedule = target.semester_schedule(semester)
         if schedule is None:
             raise MissingScheduleError(target)
@@ -59,17 +59,13 @@ class ScheduleCase:
 
     # may raise ValueError or MissingScheduleError
     def show_lunchmates(self, viewer: Student, semester: Semester,
-                        block: Block, number: Optional[LunchNumber] = None) -> Iterable[Student]:
+                        block: Block, number: LunchNumber) -> Iterable[Student]:
         schedule = viewer.semester_schedule(semester)
         if schedule is None:
             raise MissingScheduleError(viewer)
 
         own_teacher = self.teacher_repo.load(schedule[block])
         own_number = own_teacher.lunch_number(semester, block)
-        if own_number is None:
-            raise ValueError('cannot show_lunchmates without known number')
-        elif number is None:
-            number = own_number
 
         teachers = self.teacher_repo.names_of_teachers_in_lunch(semester, block, number)
 

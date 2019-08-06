@@ -16,7 +16,7 @@
             <input type="hidden" name="{{ period }}1" id="input-invis-{{ period }}-1">
             <input type="hidden" name="{{ period }}2" id="input-invis-{{ period }}-2">
         {% endfor %}
-        {% for lunch in lunch_periods %}
+        {% for lunch in 'CDEFG' %}
             <input type="hidden" name="lunch{{ lunch }}1" class="lunch-input" id="lunch-invis-{{ lunch }}-1">
             <input type="hidden" name="lunch{{ lunch }}2" class="lunch-input" id="lunch-invis-{{ lunch }}-2">
         {% endfor %}
@@ -27,7 +27,7 @@
         {% if name != '' %}
             <h1 class="title is-size-1">Welcome{{ '' if schedule == none else ' back' }}, {{ name }}!</h1>
             <h2 class="subtitle is-size-4"
-                style="color: black!important;">{{ 'Please input your schedule below' if schedule == none else 'Your current schedule is posted below. You may edit it if you wish by selecting a different teacher and pressing "update."' }}</h2>
+                style="color: black!important;">{{ 'Please input your schedule below' if schedule == none else 'Your current schedule is posted below. You may edit it if you wish by selecting a different teacher and pressing "Update."' }}</h2>
         {% endif %}
 
         <form id="form" style="height: auto; margin-bottom: 40px;">
@@ -52,18 +52,18 @@
                             <p class="block-label title">Block {{ period }}, Semester {{ semester }}:</p>
                             <p class="subtitle" id="teacher-notif-text-{{ period }}-{{ semester }}"></p>
 
-                            {% if period in lunch_periods %}
+                            {% if period in 'CDEFG' %}
                                 <label class="is-size-7" for="lunch-container-{{ period }}-{{ semester }}">
-                                    (Optional) {{ 'Add' if lunch_numbers[period] == none else 'Update' }} your lunch:
+                                    (Optional) {{ 'Add' if lunch_numbers(semester, period) == none else 'Update' }} your lunch:
                                 </label>
                                 <div id="lunch-container-{{ period }}-{{ semester }}">
                                     <a class="lunch-dropdown button is-accent is-outlined is-small"
                                        id="lunch-opener-{{ period }}-{{ semester }}"
                                        onclick="openLunchDropdown(&quot;{{ period }}&quot;, '{{ semester }}')">
-                                        {% if lunch_numbers[period + semester] == none %}
+                                        {% if lunch_numbers(semester, period) == none %}
                                             Select lunch...
                                         {% else %}
-                                            Lunch {{ lunch_numbers[period + semester] }}
+                                            Lunch {{ lunch_numbers(semester, period) }}
                                         {% endif %}
                                         <i class="fas fa-caret-down" style="margin-left: 4px;"></i></a>
                                     <div class="lunch-options" id="lunch-options-{{ period }}-{{ semester }}">
@@ -85,9 +85,9 @@
                                    data-href-base="/roster/{{ semester }}/{{ period }}/"
                                    id="view-roster-{{ period }}-{{ semester }}" style="border-radius: 10px;">View Classmates</a>
                             {% endif %}
-                            {% if period in lunch_periods and lunch_numbers[period] != none %}
+                            {% if period in lunch_periods and lunch_numbers(semester, period) != none %}
                                 <a class="button is-outlined is-primary is-medium lunch-button"
-                                   href="/lunch/{{ period }}/{{ lunch_numbers[period + semester] }}"
+                                   href="/lunch/{{ period }}/{{ lunch_numbers(semester, period) }}"
                                    id="view-lunch-{{ period }}-{{ semester }}" style="border-radius: 10px; margin-top: 10px;">View
                                     Lunch</a>
                             {% endif %}
@@ -107,8 +107,8 @@
                 <script type="text/javascript">
                     {% for period in 'ABCDEFG' %}
                         {% for semester in '12' %}
-                            {% if schedule[period + semester] != '' %}
-                                selectTeacher('{{ period }}', '{{ semester }}', '{{ schedule[period + semester] }}');
+                            {% if schedule(semester, period) != '' %}
+                                selectTeacher('{{ period }}', '{{ semester }}', '{{ schedule(semester, period) }}');
                             {% endif %}
                         {% endfor %}
                     {% endfor %}

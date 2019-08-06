@@ -1,5 +1,10 @@
-from adapters.flask.auth import requires_login
+import traceback
+
+from adapters.flask.auth import requires_login, logged_handle
 from adapters.flask.common import *
+from adapters.flask.validate import *
+from entities.student import Student, YearSchedule
+from entities.types import Semester, SemesterLunches
 from use_cases.schedule import MissingScheduleError
 
 user_app = Blueprint("PreMatch User Management", __name__, template_folder="templates")
@@ -58,15 +63,14 @@ def show_own_dashboard_current_semester_or_handle(semester_or_handle):
 @user_app.route('/dashboard/<handle>/<semester>')
 @requires_login
 def show_dashboard(handle, semester):
-    reader = adapt.student_repo.load(g.handle)
     target = adapt.student_repo.load(handle)
     if target is None or target.schedules is None:
-        raise MissingScheduleError(handle)
+        raise MissingScheduleError(target)
 
     demand(valid_semester_string(semester), f'Invalid semester: {semester}')
     semester = int(semester)
 
-    if not target.is_public:
+    if not target.is_public and target.handle != g.handle:
         return error_private(handle)
 
     rosters = {}
@@ -78,22 +82,16 @@ def show_dashboard(handle, semester):
         class_sizes[block] = len(students)
         rosters[block] = students
 
-    # Lunch rosters on dashboard not implemented
-    # lunch_rosters = {}
-    # for block in lunch_blocks:
-    #     num = database.lunch_number(block, schedule[block])
-    #     lunch_rosters[block] = database.lunch_roster(block, num) \
-    #         if num is not None else None
-
     return render_template('dashboard.html',
-                           handle=handle, name=target.name, schedule=target.semester_mapping(semester),
+                           handle=handle, name=target.name, schedule=target.semester_schedule(semester),
                            rosters=rosters, sizes=class_sizes,
                            semester=semester)
 
 
-@app.route('/update', methods=['GET', 'POST'])
+@user_app.route('/update', methods=['GET', 'POST'])
 @requires_login
 def do_update():
+    teacher_names = list(adapt.teacher_repo.list_teacher_names())
     if request.method == 'GET':
         user = adapt.student_repo.load(g.handle)
 
@@ -101,75 +99,87 @@ def do_update():
             flash('Sorry, but you need to log in again', 'error')
             return redirect('/login')
 
-        if user is None:
-            empty_lunch_numbers = {}
-            for semester in semesters:
-                for blk in lunch_blocks:
-                    empty_lunch_numbers[blk + semester] = None
+        if user.schedules is None:
             return render_template('update.html',
-                                   handle=handle,
-                                   name=session.get('name'),
+                                   handle=g.handle,
+                                   name=session.get('name', user.name),
                                    schedule=None,
-                                   teachers=teachers,
-                                   lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
-                                   lunch_numbers=empty_lunch_numbers,
+                                   teachers=teacher_names,
+                                   lunch_periods=LUNCH_BLOCKS, lunches=[1, 2, 3, 4],
+                                   lunch_numbers=lambda a, b: None,
                                    user_public=False)
         else:
+            schedule = lambda sem, b: user.semester_schedule(int(sem))[b]
+
+            def lunch_number(sem, b):
+                return app.schedule.show_lunch_number(user, int(sem), b)
+
             return render_template('update.html',
-                                   handle=handle,
+                                   handle=g.handle,
                                    name=session.get('name', user.name),
-                                   schedule=user.teachers,
-                                   teachers=teachers,
-                                   lunch_periods=lunch_blocks, lunches=[1, 2, 3, 4],
-                                   lunch_numbers=user.full_lunch_mapping(),
-                                   user_public=user.public)
+                                   schedule=schedule,
+                                   teachers=teacher_names,
+                                   lunch_periods=LUNCH_BLOCKS, lunches=[1, 2, 3, 4],
+                                   lunch_numbers=lunch_number,
+                                   user_public=user.is_public)
     else:
         # Redirect path reading from args
-        redirect_path = request.args.get('from', default_home())
+        redirect_path = request.args.get('from', DEFAULT_HOME)
         if empty(redirect_path):
-            redirect_path = default_home()
+            redirect_path = DEFAULT_HOME
 
-        for required_field in all_block_keys():
-            demand(not missing_form_field(required_field), f'Missing field {required_field}')
+        new_schedule: YearSchedule = {}
+        teachers = set()
+        for block in BLOCKS:
+            for semester in SEMESTER_STRINGS:
+                required_field = f'{block}{semester}'
+                demand(not missing_form_field(required_field), f'Missing field {required_field}')
 
-        # Teacher validity check
-        new_schedule = dict(map(lambda x: (x, request.form.get(x)), all_block_keys()))
-        for teacher in new_schedule.values():
-            demand(teacher in teachers, f'Unknown teacher: {teacher}')
+                teacher = request.form.get(required_field)
+                new_schedule.setdefault(int(semester), {})[block] = teacher
+                demand(teacher in teacher_names, f'Unknown teacher: {teacher}')
 
         # Read lunches (optional)
-        lunches = {}
-        for semester in semesters:
-            for block in lunch_blocks:
+        lunches: Dict[Semester, SemesterLunches] = {}
+        for semester in SEMESTER_STRINGS:
+            for block in LUNCH_BLOCKS:
                 nbr = request.form.get(f'lunch{block}{semester}')
                 if nbr is not None:
                     demand(nbr in list('1234'), f'Invalid lunch number: {nbr}')
-                    lunches[block + semester] = int(nbr)
+                    lunches.setdefault(int(semester), {})[block] = int(nbr)
 
         # Schedule publicly accessible?
         make_public = request.form.get('public') == 'true'
 
         try:
-            user = User.from_db(handle)
+            user = adapt.student_repo.load(g.handle)
             if user is None:
                 if 'name' not in session:
                     return error(417, 'Name unknown because not in user session')
-                user = User(handle, session.pop('name'), new_schedule,
-                            make_public, False)
+                user = Student(g.handle, session.pop('name'),
+                               schedules=new_schedule,
+                               is_public=make_public)
 
                 flash('Schedule added successfully')
             else:
-                user.teachers = new_schedule
-                user.public = make_public
+                app.account.update_schedule(user, new_schedule)
+                user.is_public = make_public
 
                 flash('Schedule updated successfully')
             # TODO add (I accept) field ^
 
-            user.put_into_db()
-            user.put_lunch(lunches)
+            app.account.update_lunches(user, lunches)
+            adapt.student_repo.save(user)
 
             return redirect(redirect_path)
         except Exception as e:
             print(e)
             traceback.print_exc()
             return error(500, str(e))
+
+
+@user_app.route('/privacy')
+def show_privacy():
+    return render_template('privacy.html',
+                           is_logged_in=logged_handle() is not None)
+

@@ -4,6 +4,9 @@ from typing import Any
 from flask import *
 
 import ahs_calendar
+from adapters.discord import DiscordVerifierImpl
+from adapters.firestore_repo import FirestoreStudentRepo, FirestoreTeacherRepo
+from adapters.google_auth import GoogleAuthProvider
 from use_cases.account import AccountCase
 from use_cases.schedule import ScheduleCase
 from use_cases.search import SearchCase
@@ -48,6 +51,13 @@ def should_countdown():
     return ahs_calendar.current_semester() is None and ahs_calendar.before_schedule_release()
 
 
+def render_login_optional(template, **kwargs):
+    logged_in = 'handle' in session
+    return render_template(template, logged_in=logged_in,
+                           user=None if not logged_in else
+                           adapt.student_repo.load(session['handle']), **kwargs)
+
+
 @dataclass
 class App:
     account: AccountCase
@@ -63,5 +73,16 @@ class Adapters:
     google: AuthProvider
 
 
-adapt: Adapters
-app: App
+adapt = Adapters(
+    DiscordVerifierImpl(),
+    FirestoreStudentRepo(),
+    FirestoreTeacherRepo(),
+    GoogleAuthProvider()
+)
+app = App(
+    AccountCase(adapt.google, adapt.student_repo,
+                adapt.teacher_repo, adapt.discord),
+    ScheduleCase(adapt.student_repo, adapt.teacher_repo),
+    SearchCase(adapt.student_repo)
+)
+

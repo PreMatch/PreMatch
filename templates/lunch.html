@@ -17,7 +17,7 @@
             <h2 class="subtitle overridden-white is-3">
                 {{ size }} student(s)
             </h2>
-            {% if period in lunch_periods %}
+            {% if period in 'CDEFG'|list %}
                 {% if lunch_number != none %}
                     <h3 class="title overridden-white is-5">Lunch {{ lunch_number }}</h3>
                 {% else %}
@@ -92,23 +92,25 @@
         <div class="columns">
             <div class="column is-one-third">
                 {% for user in roster %}
-                    {% if loop.index == (loop|length / 3)|round|int + 1 or loop.index == (loop|length / 3)|round|int * 2 + 1 %}
-                        {% if loop|length != 1 %}
-                            </div>
-                            <div class="column is-one-third">
+                    {% if viewer_in_lunch or user.is_public %}
+                        {% if loop.index == (loop|length / 3)|round|int + 1 or loop.index == (loop|length / 3)|round|int * 2 + 1 %}
+                            {% if loop|length != 1 %}
+                                </div>
+                                <div class="column is-one-third">
+                            {% endif %}
                         {% endif %}
+                        <div class="{{ 'is-selected' if handle == user.handle }} lunch-row">
+                            <h1 class="name">{{ user.name }}</h1>
+                            <h1 class="handle">{{ user.handle }}</h1>
+                            {% if user.is_public %}
+                                <p class="roster-link"
+                                   style="{{ 'border: none!important;' if loop.index == roster|length else '' }} text-align: center;">
+                                    <a class="button {{ 'is-outlined' if handle == user.handle }} is-primary is-medium"
+                                       href="/user/{{ user.handle }}/{{ semester }}">View Schedule</a>
+                                </p>
+                            {% endif %}
+                        </div>
                     {% endif %}
-                    <div class="{{ 'is-selected' if handle == user.handle }} lunch-row">
-                        <h1 class="name">{{ user.name }}</h1>
-                        <h1 class="handle">{{ user.handle }}</h1>
-                        {% if user.can_be_read_by_handle(handle) %}
-                            <p class="roster-link"
-                               style="{{ 'border: none!important;' if loop.index == roster|length else '' }} text-align: center;">
-                                <a class="button {{ 'is-outlined' if handle == user.handle }} is-primary is-medium"
-                                   href="/user/{{ user.handle }}/{{ semester }}">View Schedule</a>
-                            </p>
-                        {% endif %}
-                    </div>
                 {% endfor %}
                 </div>
         </div>

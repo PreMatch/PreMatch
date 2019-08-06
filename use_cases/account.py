@@ -1,10 +1,9 @@
 from dataclasses import dataclass
-from typing import Dict
 
 from entities.student import Student, YearSchedule
 from entities.types import *
 from use_cases.schedule import MissingScheduleError
-from use_cases.types import AuthProvider, StudentRepository, TeacherRepository, DiscordVerifier
+from use_cases.types import AuthProvider, StudentRepository, TeacherRepository, DiscordVerifier, DiscordUser
 
 
 @dataclass
@@ -54,7 +53,7 @@ class AccountCase:
     def accept_privacy(student: Student):
         student.accepts_privacy = True
 
-    def integrate_discord(self, student: Student, code: str, state: str):
+    def integrate_discord(self, student: Student, code: str, state: str) -> DiscordUser:
         if student.schedules is None:
             raise MissingScheduleError(student)
 

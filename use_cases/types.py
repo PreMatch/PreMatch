@@ -59,6 +59,10 @@ class TeacherRepository(ABC):
                                    block: Block, number: LunchNumber) -> Iterable[Name]:
         raise NotImplementedError()
 
+    @abstractmethod
+    def list_teacher_names(self) -> Iterable[Name]:
+        raise NotImplementedError()
+
 
 class DiscordVerifier(ABC):
     # throws PermissionError if code/state validation failed, KeyError if state invalid

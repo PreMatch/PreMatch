@@ -140,7 +140,7 @@ def test_show_lunchmates_of_own_lunch(reset_mock):
     teacher_repo.names_of_teachers_in_lunch.side_effect = require((1, 'D', 3), ['Smith'])
     student_repo.students_in_class.side_effect = require((1, 'D', 'Smith'), lunchmates)
 
-    output = case.show_lunchmates(viewer, 1, 'D')
+    output = case.show_lunchmates(viewer, 1, 'D', 3)
 
     assert list(output) == list(lunchmates)
 
@@ -149,18 +149,7 @@ def test_show_lunchmates_without_schedule():
     with pytest.raises(MissingScheduleError):
         viewer = Student('hpeng2021', 'Michael Peng')
         viewer.schedules = None
-        list(case.show_lunchmates(viewer, 1, 'D'))
-
-
-def test_show_lunchmates_without_known_number(reset_mock):
-    viewer = Student('hpeng2021', 'Michael Peng')
-    viewer.schedules = {1: {'E': 'Smith'}}
-    teacher = Teacher('dsmith', 'Smith', {})
-
-    teacher_repo.load.side_effect = require(('Smith',), teacher)
-
-    with pytest.raises(ValueError):
-        list(case.show_lunchmates(viewer, 1, 'E'))
+        list(case.show_lunchmates(viewer, 1, 'D', 1))
 
 
 def test_show_lunchmates_of_external_lunch(reset_mock):
