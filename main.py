@@ -1,16 +1,39 @@
+import traceback
+from urllib import parse
+
 import requests
 from flask import *
 
-import discord
-import database
 import ahs_calendar
-import traceback
-from help import help_site
-from config import *
-from urllib import parse
+import database
+import discord
+from adapters.discord import DiscordVerifierImpl
+from adapters.firestore_repo import FirestoreStudentRepo, FirestoreTeacherRepo
+from adapters.flask import common
+from adapters.flask.common import Adapters, App
+from adapters.google_auth import GoogleAuthProvider
 from auth import *
+from config import *
 from google_auth import validate_token_for_info
+from help import help_site
+from use_cases.account import AccountCase
+from use_cases.schedule import ScheduleCase
+from use_cases.search import SearchCase
 from user import User, Reader
+
+# Wiring Setup
+common.adapt = Adapters(
+    DiscordVerifierImpl(),
+    FirestoreStudentRepo(),
+    FirestoreTeacherRepo(),
+    GoogleAuthProvider()
+)
+common.app = App(
+    AccountCase(common.adapt.google, common.adapt.student_repo,
+                common.adapt.teacher_repo, common.adapt.discord),
+    ScheduleCase(common.adapt.student_repo, common.adapt.teacher_repo),
+    SearchCase(common.adapt.student_repo)
+)
 
 
 def default_home():
@@ -83,6 +106,12 @@ def demand(truth, message):
 def validation_error_handler(err):
     return error(422, err.problem)
 
+
+# TODO handle MissingScheduleError with app.errorhandler. check handle against g.handle!
+#
+#     if g.handle == handle:
+#         return error_no_own_schedule()
+#     return render_template('profile_not_found.html', bad_handle=handle)
 
 @app.route('/')
 def front_page():

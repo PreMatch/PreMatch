@@ -5,6 +5,8 @@ __pycache__/
 Gemfile.lock
 users.db
 .idea/*
-venv/*
+venv/
 PreMatch-*.json
 secrets.*
+.pytest_cache/
+PreMatch.iml

@@ -38,7 +38,7 @@
             <td id="roster-data-{{ period }}" class="class-link">
                 <a class="button is-link is-outlined is-primary is-medium overridden-white"
                    href="/roster/{{ semester }}/{{ period }}/{{ schedule[period] }}">View Roster</a>
-                {% if period in lunch_blocks and lunch_numbers[period] != none %}
+                {% if period in 'CDEFG' and lunch_numbers[period] != none %}
                 <a class="button is-link is-outlined is-primary is-medium overridden-white"
                    href="/lunch/{{ semester }}/{{ period }}/{{ lunch_numbers[period] }}">View Lunch</a>
                 {% endif %}

@@ -4,6 +4,9 @@ from typing import Optional
 from google.auth.transport import requests
 from google.oauth2 import id_token
 
+from entities.types import Handle, Name
+from use_cases.types import AuthProvider
+
 WEB_CLIENT_ID = '764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com'
 IOS_CLIENT_ID = '764760025104-70ao2s5vql3ldi54okdf9tbkd4chtama.apps.googleusercontent.com'
 APS_DOMAIN = 'k12.andoverma.us'
@@ -44,3 +47,8 @@ def validate_token_for_info(token):
 
 def validate_ios_token_for_info(token):
     return validate_for_handle_name(token, IOS_CLIENT_ID)
+
+
+class GoogleAuthProvider(AuthProvider):
+    def verify(self, token: str) -> (Handle, Name):
+        return validate_token_for_info(token)
