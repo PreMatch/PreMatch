@@ -8,5 +8,6 @@ users.db
 venv/
 PreMatch-*.json
 secrets.py
+secrets.tar
 .pytest_cache/
 PreMatch.iml
