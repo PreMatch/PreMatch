@@ -6,7 +6,7 @@ from google.cloud import firestore
 from adapters.firestore_repo import FirestoreStudentRepo, FirestoreTeacherRepo
 from entities.student import Student
 from entities.teacher import Teacher
-from mock_helper import require
+from tests.mock_helper import require
 
 mock_db = MagicMock()
 student_repo = FirestoreStudentRepo(mock_db)

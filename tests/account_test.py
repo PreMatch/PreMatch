@@ -2,9 +2,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from entities.student import Student
-from entities.types import Name
-from mock_helper import require
+from tests.mock_helper import require
 from use_cases.account import AccountCase
 from use_cases.schedule import MissingScheduleError
 from use_cases.types import *

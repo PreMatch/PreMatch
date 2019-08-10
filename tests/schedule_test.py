@@ -4,7 +4,7 @@ import pytest
 
 from entities.student import Student
 from entities.teacher import Teacher
-from mock_helper import require, switch
+from tests.mock_helper import require, switch
 from use_cases.schedule import ScheduleCase, MissingScheduleError
 
 student_repo = MagicMock()
