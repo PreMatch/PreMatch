@@ -3,7 +3,7 @@ from urllib import parse
 from flask import *
 
 from adapters.flask.auth import auth_app
-from adapters.flask.common import error, error_no_own_schedule, render_login_optional
+from adapters.flask.common import error, error_no_own_schedule, render_login_optional, ValidationError
 from adapters.flask.discovery import discovery_app
 from adapters.flask.user import user_app
 from apis import rest_api
@@ -25,16 +25,6 @@ def enforce_domain_https():
         newurl = parse.ParseResult('https', 'prematch.org',
                                    url.path, url.params, url.query, url.fragment)
         return redirect(newurl.geturl(), code=301)
-
-
-class ValidationError(Exception):
-    def __init__(self, problem):
-        self.problem = problem
-
-
-def demand(truth, message):
-    if not truth:
-        raise ValidationError(message)
 
 
 @app.errorhandler(ValidationError)
@@ -73,7 +63,6 @@ def show_about_app():
 @app.route('/countdown')
 def show_countdown():
     return render_login_optional('countdown.html')
-
 
 
 blueprints = [

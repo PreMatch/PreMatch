@@ -26,8 +26,10 @@ def show_user_current_semester(handle):
 @requires_login
 def show_user(handle, semester):
     target = adapt.student_repo.load(handle)
-    if target is None or target.schedules is None:
-        raise MissingScheduleError(handle)
+    if target is None:
+        raise MissingScheduleError(Student(handle, '<unknown>'))
+    if target.schedules is None:
+        raise MissingScheduleError(target)
 
     demand(valid_semester_string(semester), f'Invalid semester: {semester}')
     semester = int(semester)
@@ -153,19 +155,10 @@ def do_update():
 
         try:
             user = adapt.student_repo.load(g.handle)
-            if user is None:
-                if 'name' not in session:
-                    return error(417, 'Name unknown because not in user session')
-                user = Student(g.handle, session.pop('name'),
-                               schedules=new_schedule,
-                               is_public=make_public)
+            user.schedules = new_schedule
+            user.is_public = make_public
 
-                flash('Schedule added successfully')
-            else:
-                app.account.update_schedule(user, new_schedule)
-                user.is_public = make_public
-
-                flash('Schedule updated successfully')
+            flash('Schedule updated successfully')
             # TODO add (I accept) field ^
 
             app.account.update_lunches(user, lunches)
@@ -182,4 +175,3 @@ def do_update():
 def show_privacy():
     return render_template('privacy.html',
                            is_logged_in=logged_handle() is not None)
-
