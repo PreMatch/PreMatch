@@ -7,6 +7,6 @@ users.db
 .idea/*
 venv/
 PreMatch-*.json
-secrets.*
+secrets.py
 .pytest_cache/
 PreMatch.iml
