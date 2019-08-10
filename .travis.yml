@@ -8,7 +8,7 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_e88e4da5828d_key -iv $encrypted_e88e4da5828d_iv
   -in secrets.py.enc -out secrets.py -d
 - openssl aes-256-cbc -K $encrypted_e88e4da5828d_key -iv $encrypted_e88e4da5828d_iv
-  -in PreMatch-212912-ad88fef75b4e.json.enc -out ../PreMatch-212912-ad88fef75b4e.json
+  -in PreMatch-212912-ad88fef75b4e.json.enc -out PreMatch-212912-ad88fef75b4e.json
   -d
 deploy:
   provider: gae
