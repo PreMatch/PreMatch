@@ -34,13 +34,15 @@
         {% for period in 'ABCDEFG' %}
         <tr id="class-row-{{ period }}">
             <td class="period"><span class="period-text">Block</span> {{ period }}</td>
-            <td class="teacher">{{ schedule[period] }}</td>
+            <td class="teacher">{{ schedule[period] if period in schedule else 'Private' }}</td>
             <td id="roster-data-{{ period }}" class="class-link">
-                <a class="button is-link is-outlined is-primary is-medium overridden-white"
-                   href="/roster/{{ semester }}/{{ period }}/{{ schedule[period] }}">View Roster</a>
-                {% if period in lunch_blocks and lunch_numbers[period] != none %}
-                <a class="button is-link is-outlined is-primary is-medium overridden-white"
-                   href="/lunch/{{ semester }}/{{ period }}/{{ lunch_numbers[period] }}">View Lunch</a>
+                {% if period in schedule %}
+                    <a class="button is-link is-outlined is-primary is-medium overridden-white"
+                       href="/roster/{{ semester }}/{{ period }}/{{ schedule[period] }}">View Roster</a>
+                    {% if period in 'CDEFG' and lunch_numbers[period] != none %}
+                    <a class="button is-link is-outlined is-primary is-medium overridden-white"
+                       href="/lunch/{{ semester }}/{{ period }}/{{ lunch_numbers[period] }}">View Lunch</a>
+                    {% endif %}
                 {% endif %}
             </td>
         </tr>

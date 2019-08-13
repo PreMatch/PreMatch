@@ -17,7 +17,7 @@
             <h2 class="subtitle overridden-white is-size-3 is-size-4-mobile">
                 {{ size }} student(s)
             </h2>
-            {% if period in lunch_periods %}
+            {% if period in 'CDEFG' %}
                 {% if lunch_number != none %}
                     <h3 class="subtitle overridden-white is-5" style="display: flex; align-items: center;"><span
                             style="margin-right: 20px;">Lunch {{ lunch_number }}</span> <a
@@ -46,16 +46,16 @@
         </thead>
         <tbody>
         {% for user in roster %}
+            {% if user.is_public or user_in_class %}
             <tr class="{{ 'is-selected' if handle == user.handle }}">
                 <td class="name">{{ user.name }}</td>
                 <td class="handle">{{ user.handle }}</td>
                 <td class="roster-link">
-                    {% if user.can_be_read_by_handle(handle) %}
-                        <a class="button {{ 'is-outlined' if handle != user.handle }} is-primary is-medium"
-                           href="/user/{{ user.handle }}/{{ semester }}">View Schedule</a>
-                    {% endif %}
+                    <a class="button {{ 'is-outlined' if handle != user.handle }} is-primary is-medium"
+                       href="/user/{{ user.handle }}/{{ semester }}">View Schedule</a>
                 </td>
             </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>
