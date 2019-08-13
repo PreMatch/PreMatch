@@ -11,9 +11,8 @@ def requires_login(f):
     @wraps(f)
     def dec_fun(*args, **kwargs):
 
-        # todo enable
-        # if should_countdown():
-        #     return redirect('/countdown', code=307)
+        if should_countdown():
+            return redirect('/countdown', code=307)
 
         handle = logged_handle()
         if handle is None:

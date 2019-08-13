@@ -9,7 +9,7 @@ before_install:
   -in secrets.tar.enc -out secrets.tar -d
 - tar xvf secrets.tar
 - ls # to see the secrets extracted
-deploy:
-  provider: gae
-  keyfile: PreMatch-212912-ad88fef75b4e.json
-  project: prematch-212912
+#deploy:
+#  provider: gae
+#  keyfile: PreMatch-212912-ad88fef75b4e.json
+#  project: prematch-212912
