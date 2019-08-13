@@ -57,7 +57,7 @@ def api_lunch_get():
     if number is None:
         return api_error(404, 'No lunch number set', status='empty')
     else:
-        return api_success(number=number)
+        return api_success({'number': number})
 
 
 # id_token: string
