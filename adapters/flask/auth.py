@@ -3,7 +3,7 @@ from html import escape
 
 from flask import request, flash, redirect, render_template, Blueprint, session, g
 
-from adapters.flask.common import missing_form_field, adapt, DEFAULT_HOME, error, app
+from adapters.flask.common import missing_form_field, adapt, DEFAULT_HOME, error, app, should_countdown
 from entities.student import Student
 
 
