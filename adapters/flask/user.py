@@ -174,5 +174,13 @@ def do_update():
 
 @user_app.route('/privacy')
 def show_privacy():
-    return render_template('privacy.html',
-                           is_logged_in=logged_handle() is not None)
+    return render_template('embedded_document.html',
+                           is_logged_in=logged_handle() is not None, title='Privacy Policy',
+                           document_path='privacy-policy.md')
+
+
+@user_app.route('/terms')
+def show_terms():
+    return render_template('embedded_document.html',
+                           is_logged_in=logged_handle() is not None, title='Terms and Conditions of Service',
+                           document_path='terms-and-conditions.md')

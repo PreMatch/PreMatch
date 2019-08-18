@@ -6,7 +6,7 @@ Gemfile.lock
 users.db
 .idea/*
 venv/
-PreMatch-*.json
+PreMatch*.json
 secrets.py
 secrets.tar
 .pytest_cache/
