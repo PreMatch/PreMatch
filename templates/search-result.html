@@ -42,8 +42,10 @@
                         <h2 class="subtitle {{ 'overridden-white' if handle == user.handle }}">{{ user.handle }}</h2>
                     </div>
                     <div class="column is-one-fourth">
+                        {% if user.schedules != none and (user.is_public or user.handle == handle) %}
                             <a class="button {{ 'is-outlined' if handle != user.handle }} is-primary is-large is-pulled-right"
                                href="/user/{{ user.handle }}">View Schedule</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

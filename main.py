@@ -1,6 +1,7 @@
 from urllib import parse
 
 from flask import *
+from werkzeug.exceptions import HTTPException
 
 from adapters.flask.auth import auth_app
 from adapters.flask.common import error, error_no_own_schedule, render_login_optional, ValidationError
@@ -37,6 +38,11 @@ def schedule_missing_handler(err: MissingScheduleError):
     if g.handle == err.student.handle:
         return error_no_own_schedule()
     return render_template('profile_not_found.html', bad_handle=err.student.handle)
+
+
+@app.errorhandler(HTTPException)
+def generic_http_error(err):
+    return render_template('error.html', error=err)
 
 
 @app.route('/')
