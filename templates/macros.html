@@ -108,18 +108,20 @@
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
         </a>
-        <a class="" href="/">Home</a>
-        <a class="" href="/about">About</a>
-        {% if loggedIn %}
-            <hr>
-            <a class="" href="/dashboard">My Classes</a>
-            <a class="" href="/update">Update</a>
-            <a class="" href="/search">Search</a>
-            <hr>
-            <a class="" onclick="signOutAndRedirect('/logout')">Logout</a>
-        {% else %}
-            <a class="" href="/login">Login</a>
-        {% endif %}
+        <div id="sidenav-link-container">
+            <a class="" href="/">Home</a>
+            <a class="" href="/about">About</a>
+            {% if loggedIn %}
+                <hr>
+                <a class="" href="/dashboard">My Classes</a>
+                <a class="" href="/update">Update</a>
+                <a class="" href="/search">Search</a>
+                <hr>
+                <a class="" onclick="signOutAndRedirect('/logout')">Logout</a>
+            {% else %}
+                <a class="" href="/login">Login</a>
+            {% endif %}
+        </div>
         <div id="nav-bottom-links">
             <ul>
                 <li><a class="" href="/help">Help</a><a class="" href="/support">Support</a></li>

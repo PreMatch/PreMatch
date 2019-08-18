@@ -28,6 +28,10 @@ strong {
     color: #00BCD4 !important;
 }
 
+.overridden-white strong {
+    color: white !important;;
+}
+
 /* Bulma corrections & color changes */
 .is-transparent {
     background: transparent none !important;

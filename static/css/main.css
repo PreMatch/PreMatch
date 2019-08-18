@@ -157,8 +157,18 @@ a.overridden-white:hover {
     color: #03A9F4;
 }
 
+.sidenav-active.inverted {
+    background-color: #03A9F4;
+    color: white !important;
+}
+
 .sidenav-active:hover {
     opacity: 0.6;
+}
+
+#sidenav-link-container {
+    max-height: 100%;
+    overflow: auto;
 }
 
 /*****************ADD FORM*****************/
