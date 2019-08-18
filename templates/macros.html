@@ -6,7 +6,11 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143938190-1"></script>
         <script>
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
+
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
             gtag('js', new Date());
 
             gtag('config', 'UA-143938190-1');
@@ -116,7 +120,14 @@
         {% else %}
             <a class="" href="/login">Login</a>
         {% endif %}
-        <a class="" href="/help">Help</a>
+        <div id="nav-bottom-links">
+            <ul>
+                <li><a class="" href="/help">Help</a><a class="" href="/support">Support</a></li>
+                <li>
+                    <a class="" href="/privacy">Privacy Policy</a><a class="" href="/terms">Terms</a>
+                </li>
+            </ul>
+        </div>
         <script type="text/javascript">
             setActive("{{ currentHref }}");
         </script>
@@ -163,62 +174,62 @@
 {% endmacro %}
 
 {% macro footer() %}
-<footer id="ios-footer">
-    <div>
-        <h1><i>PreMatch for iOS</i> is now available!</h1>
-        <p>Get personalized insights about your schedule in real time!</p>
-    </div>
-<div id="app-store-icon">
-    <a href="https://apps.apple.com/us/app/prematch-for-ios/id1456557620">
-        <img src="/static/img/dotas.svg" alt="Get PreMatch for iOS on the App Store"/>
-    </a>
-</div>
-</footer>
+    <footer id="ios-footer">
+        <div>
+            <h1><i>PreMatch for iOS</i> is now available!</h1>
+            <p>Get personalized insights about your schedule in real time!</p>
+        </div>
+        <div id="app-store-icon">
+            <a href="https://apps.apple.com/us/app/prematch-for-ios/id1456557620">
+                <img src="/static/img/dotas.svg" alt="Get PreMatch for iOS on the App Store"/>
+            </a>
+        </div>
+    </footer>
     <style>
-    /** iOS Footer **/
+        /** iOS Footer **/
 
-    #ios-footer {
-        display: flex;
-        background: #009688;
-        padding: 20px;
-        justify-content: space-between;
-    }
-
-    #ios-footer:first-child {
-        padding: 10px;
-    }
-
-    #app-store-icon {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 15px;
-    }
-
-    #app-store-icon img {
-        height: 54px;
-    }
-
-    #ios-footer h1 {
-        font-size: 1.8em;
-        color: white !important;
-        padding: 5px !important;
-    }
-
-    #ios-footer p {
-        font-size: 1.2em;
-        color: #ddd !important;
-        padding: 5px !important;
-    }
-
-    @media screen and (max-width: 800px) {
         #ios-footer {
-            flex-direction: column;
-            align-items: center;
+            display: flex;
+            background: #009688;
+            padding: 20px;
+            justify-content: space-between;
         }
-    }
 
-</style>
+        #ios-footer:first-child {
+            padding: 10px;
+        }
+
+        #app-store-icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        #app-store-icon img {
+            height: 54px;
+        }
+
+        #ios-footer h1 {
+            font-size: 1.8em;
+            color: white !important;
+            padding: 5px !important;
+        }
+
+        #ios-footer p {
+            font-size: 1.2em;
+            color: #ddd !important;
+            padding: 5px !important;
+        }
+
+        @media screen and (max-width: 800px) {
+            #ios-footer {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+    </style>
 {% endmacro %}
 </body>
 </html>

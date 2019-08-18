@@ -15,4 +15,12 @@ function setActive(href) {
         if (i !== activeIndex)
             links[i].classList.add("overridden-white");
     }
+
+    if (!$('#body').hasClass('bg-primary')) {
+        $('#nav-bottom-links').children('ul').first().children('li').each((indx, li) => {
+            $(li).children('a').each((index, link) => {
+                $(link).addClass('overridden-white');
+            });
+        });
+    }
 }

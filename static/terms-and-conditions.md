@@ -1,7 +1,3 @@
-# TERMS OF SERVICE
-
-----
-
 ##OVERVIEW
 
 This website is operated by The PreMatch Team. Throughout the site, the terms “we”, “us” and “our” refer to The PreMatch Team. The PreMatch Team offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.
