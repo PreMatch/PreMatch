@@ -14,7 +14,7 @@ TEACHER_COL = 'teachers'
 class FirestoreStudentRepo(StudentRepository):
     client: firestore.Client
 
-    def __init__(self, client: firestore.Client = firestore.Client()):
+    def __init__(self, client: firestore.Client = firestore.Client(project="prematch-db")):
         self.client = client
 
     def save(self, student: Student):

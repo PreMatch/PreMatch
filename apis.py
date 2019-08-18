@@ -57,7 +57,7 @@ def api_lunch_get():
     if number is None:
         return api_error(404, 'No lunch number set', status='empty')
     else:
-        return api_success(number=number)
+        return api_success({'number': number})
 
 
 # id_token: string
@@ -93,4 +93,9 @@ def api_schedule():
     if not student.is_public and student.handle != logged_handle():
         return api_error(403, 'Cannot read private handle: ' + handle)
 
-    return api_success(student.schedules)
+    output = {}
+    for (semester, mapping) in student.schedules.items():
+        for (block, teacher) in mapping.items():
+            output[f'{block}{semester}'] = teacher
+
+    return api_success(output)
