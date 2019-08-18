@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav, footer %}
 
 {{ head(query + ' - Search PreMatch', True) }}
 <body id="body" class="bg-primary">
@@ -42,7 +42,7 @@
                         <h2 class="subtitle {{ 'overridden-white' if handle == user.handle }}">{{ user.handle }}</h2>
                     </div>
                     <div class="column is-one-fourth">
-                            <a class="button is-outlined is-primary is-large is-pulled-right"
+                            <a class="button {{ 'is-outlined' if handle != user.handle }} is-primary is-large is-pulled-right"
                                href="/user/{{ user.handle }}">View Schedule</a>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
         </section>
     {% endfor %}
 {% endif %}
-
+{{ footer() }}
 <style>
     @media screen and (max-width: 768px) {
         .columns {

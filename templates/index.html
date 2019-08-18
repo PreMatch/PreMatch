@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-{% from 'macros.html' import head, nav, importJs %}
+{% from 'macros.html' import head, nav, importJs, footer %}
 
 {{ head('PreMatch - Discover your classmates') }}
 
@@ -29,7 +29,7 @@
         <a class="button is-outlined is-primary is-large" href="/about">Learn More</a>
     </div>
 </section>
-
+{{ footer() }}
 <style>
     @media screen and (max-width: 600px) {
         .title {

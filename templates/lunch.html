@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav, footer %}
 
 {{ head('Block ' + block|string + ', Lunch ' + number|string + ' (Semester ' + semester|string + ')', True) }}
 <body id="body" class="bg-primary">
@@ -120,7 +120,7 @@
         </div>
     </div>
 </section>
-
+{{ footer() }}
 <style>
     .lunch-row h1 {
         flex: 1;

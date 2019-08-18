@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav, footer %}
 
 {{ head('Roster of Block ' + period + ' with ' + teacher + ' (Semester ' + semester|string + ')', True) }}
 <body id="body" class="bg-primary">
@@ -60,7 +60,7 @@
         </tbody>
     </table>
 </section>
-
+{{ footer() }}
 <style>
 
     .hero-body .container {

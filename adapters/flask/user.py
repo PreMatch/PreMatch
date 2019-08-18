@@ -29,7 +29,8 @@ def show_user(handle, semester):
     if target is None:
         raise MissingScheduleError(Student(handle, '<unknown>'))
     if target.schedules is None:
-        raise MissingScheduleError(target)
+        flash(f'The user {handle} has not entered their schedule yet', 'error')
+        return redirect(DEFAULT_HOME)
 
     demand(valid_semester_string(semester), f'Invalid semester: {semester}')
     semester = int(semester)

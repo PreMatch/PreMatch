@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav, footer %}
 
 {{ head('Dashboard for ' + name + ' (Semester ' + semester|string + ')', True) }}
 <link rel="stylesheet" type="text/css" href="/static/css/dashboard.css">
@@ -16,7 +16,7 @@
             <h1 class="card-header-title is-size-3">{{ schedule[period] }}</h1>
             <h1 class="card-header-title is-size-5 card-header-subtitle">Block {{ period }}
                 | {{ sizes[period] - 1 }} other
-                student{{ 's' if sizes[period] > 2 }}</h1>
+                student{{ 's' if sizes[period] != 2 }}</h1>
             <a href="/roster/{{ semester }}/{{ period }}/{{ schedule[period]|safe }}" class="card-header-icon"
                aria-label="more options" style="display: block; position:absolute; top: 0.5rem; right: 0.5rem;"
                title="Visit {{ schedule[period] }}, Block {{ period }}'s roster page"><span
@@ -98,6 +98,7 @@
         </div>
     </div>
 </section>
+{{ footer() }}
 <style>
     .table td {
         padding: 0.5rem 0.75rem !important;

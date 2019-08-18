@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav, footer %}
 
 {{ head('Update Schedule - PreMatch') }}
 <script type="text/javascript" src="/static/js/addSchedule.js"></script>
@@ -143,7 +143,7 @@
         <script type="text/javascript">setOriginalMargin();</script>
     </div>
 </section>
-
+{{ footer() }}
 <style>
     .box {
         width: 50%;

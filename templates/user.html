@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% from 'macros.html' import head, nav, importJs, bodyPaddingNav %}
+{% from 'macros.html' import head, nav, importJs, bodyPaddingNav, footer %}
 
 {{ head('Schedule of ' + name + ' (Semester ' + semester|string + ')', True) }}
 <body id="body" class="bg-primary">
@@ -149,6 +149,6 @@
 </style>
 {{ bodyPaddingNav() }}
 {{ importJs() }}
-
+{{ footer() }}
 </body>
 </html>

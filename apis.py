@@ -88,7 +88,7 @@ def api_schedule():
     if handle is None:
         return api_bad_value('handle')
     student = adapt.student_repo.load(handle)
-    if student is None:
+    if student is None or student.schedules is None:
         return api_error(404, 'Handle not found: ' + handle)
     if not student.is_public and student.handle != logged_handle():
         return api_error(403, 'Cannot read private handle: ' + handle)

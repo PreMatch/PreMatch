@@ -1,9 +1,10 @@
+import os
 from functools import wraps
 from html import escape
 
 from flask import request, flash, redirect, render_template, Blueprint, session, g
 
-from adapters.flask.common import missing_form_field, adapt, DEFAULT_HOME, error, app
+from adapters.flask.common import missing_form_field, adapt, DEFAULT_HOME, error, app, should_countdown
 from entities.student import Student
 
 
@@ -11,9 +12,9 @@ def requires_login(f):
     @wraps(f)
     def dec_fun(*args, **kwargs):
 
-        # todo enable
-        # if should_countdown():
-        #     return redirect('/countdown', code=307)
+        if 'PREMATCH_DEV' not in os.environ:
+            if should_countdown():
+                return redirect('/countdown', code=307)
 
         handle = logged_handle()
         if handle is None:
