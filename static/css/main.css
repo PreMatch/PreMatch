@@ -168,7 +168,8 @@ a.overridden-white:hover {
 
 #sidenav-link-container {
     max-height: 100%;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /*****************ADD FORM*****************/
@@ -434,6 +435,18 @@ body.bg-primary {
     -moz-transition: none !important;
     -o-transition: none !important;
     transition: none !important;
+}
+
+ul.overridden-white li {
+    color: white !important;
+}
+
+ul.overridden-white li a {
+    color: white !important;
+}
+
+ul.overridden-white li a:hover {
+    opacity: 0.6;
 }
 
 /*****************MEDIA QUERIES*****************/

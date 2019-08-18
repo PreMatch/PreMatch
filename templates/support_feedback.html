@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs, footer %}
+
+{{ head('Support | PreMatch', True) }}
+
+<body id="body" class="bg-primary">
+
+{{ nav(logged_in, "/support/feedback") }}
+
+<section class="is-transparent section pushed is-fluid">
+    <h1 class="title is-size-1 overridden-white has-text-centered">Feedback for PreMatch</h1>
+    <h2 class="subtitle overridden-white is-size-4 has-text-centered">Have suggestions, comments, or criticisms for the
+        PreMatch project?
+        Let us know!</h2>
+    <br><br>
+    <form action="https://formspree.io/support@prematch.org" method="POST" class="overridden-white">
+        <label for="name">Your Name:</label>
+        <input class="input" type="text" name="name" placeholder="John Doe" required>
+        <label for="email">Email:</label>
+        <input class="input" type="email" name="_replyto" placeholder="jdoe2010@k12.andoverma.us" required>
+        <label for="handle">Handle:</label>
+        <input class="input" type="text" name="handle" placeholder="jdoe2010" required>
+        <label for="message">Message:</label>
+        <textarea class="input" name="message" style="min-height: 150px;" placeholder="Please include as much relevant information as possible" required></textarea>
+        <input class="button is-large" type="submit" value="Send">
+    </form>
+    <style>
+        form {
+            margin: 0 auto;
+            width: 50%;
+        }
+
+        label {
+            margin-top: 6px;
+        }
+
+        input {
+            margin-bottom: 6px;
+        }
+
+        .button {
+            margin: 12px auto;
+            display: block;
+            color: #03A9F4;
+            transition: 0.75s all;
+        }
+
+        .button:hover {
+            background-color: rgba(0, 0, 0, 0);
+            color: white;
+            border-color: white;
+        }
+
+        textarea {
+            width:100%!important;
+        }
+    </style>
+</section>
+
+{{ importJs() }}
+
+</body>
+</html>

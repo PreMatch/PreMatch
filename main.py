@@ -42,7 +42,7 @@ def schedule_missing_handler(err: MissingScheduleError):
 @app.route('/')
 def front_page():
     return render_login_optional('index.html',
-                                 schedule_count=0) # FIXME
+                                 schedule_count=0)  # FIXME
 
 
 @app.route('/about')
@@ -63,6 +63,21 @@ def show_about_app():
 @app.route('/countdown')
 def show_countdown():
     return render_login_optional('countdown.html')
+
+
+@app.route('/support')
+def show_support_home():
+    return render_login_optional('support_home.html')
+
+
+@app.route('/support/feedback')
+def show_feedback_page():
+    return render_login_optional('support_feedback.html')
+
+
+@app.route('/support/teachers')
+def show_teachers_page():
+    return render_login_optional('support_teachers.html')
 
 
 blueprints = [
