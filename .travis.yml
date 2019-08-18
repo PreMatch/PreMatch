@@ -8,7 +8,7 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_e88e4da5828d_key -iv $encrypted_e88e4da5828d_iv
   -in secrets.tar.enc -out secrets.tar -d
 - tar xvf secrets.tar
-deploy:
-  provider: gae
-  keyfile: PreMatch-212912-ad88fef75b4e.json
-  project: prematch-212912
+#deploy:
+#  provider: gae
+#  keyfile: PreMatch-212912-ad88fef75b4e.json
+#  project: prematch-212912
