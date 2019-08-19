@@ -4,7 +4,8 @@ from flask import *
 from werkzeug.exceptions import HTTPException
 
 from adapters.flask.auth import auth_app
-from adapters.flask.common import error, error_no_own_schedule, render_login_optional, ValidationError
+from adapters.flask.common import error, error_no_own_schedule, render_login_optional, ValidationError, \
+    flash_ios_announcement
 from adapters.flask.discovery import discovery_app
 from adapters.flask.user import user_app
 from apis import rest_api
@@ -47,12 +48,14 @@ def generic_http_error(err):
 
 @app.route('/')
 def front_page():
+    flash_ios_announcement()
     return render_login_optional('index.html',
                                  schedule_count=0)  # FIXME
 
 
 @app.route('/about')
 def show_about():
+    flash_ios_announcement()
     return render_login_optional('about.html')
 
 

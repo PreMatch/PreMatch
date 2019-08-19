@@ -14,6 +14,8 @@ def show_roster_current_semester(period, teacher):
 @discovery_app.route('/roster/<semester_str>/<period>/<teacher>')
 @requires_login
 def show_roster(semester_str, period, teacher):
+    flash_ios_announcement()
+
     demand(valid_block(period), f'Invalid block: {period}')
     demand(teacher in adapt.teacher_repo.list_teacher_names(), f'Invalid teacher: {teacher}')
     demand(valid_semester_string(semester_str), f'Invalid semester: {semester_str}')
@@ -69,6 +71,8 @@ def show_lunch(semester_str, block, number):
 @discovery_app.route('/search')
 @requires_login
 def do_search():
+    flash_ios_announcement()
+
     query = request.args.get('query')
     if query is None or query.strip() == '':
         return render_template('search-new.html', handle=g.handle)

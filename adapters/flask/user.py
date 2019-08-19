@@ -25,6 +25,8 @@ def show_user_current_semester(handle):
 @user_app.route('/user/<handle>/<semester>')
 @requires_login
 def show_user(handle, semester):
+    flash_ios_announcement()
+
     target = adapt.student_repo.load(handle)
     if target is None:
         raise MissingScheduleError(Student(handle, '<unknown>'))
@@ -66,6 +68,8 @@ def show_own_dashboard_current_semester_or_handle(semester_or_handle):
 @user_app.route('/dashboard/<handle>/<semester>')
 @requires_login
 def show_dashboard(handle, semester):
+    flash_ios_announcement()
+
     target = adapt.student_repo.load(handle)
     if target is None or target.schedules is None:
         raise MissingScheduleError(target)

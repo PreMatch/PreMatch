@@ -58,6 +58,12 @@ def render_login_optional(template, **kwargs):
                            adapt.student_repo.load(session['handle']), **kwargs)
 
 
+def flash_ios_announcement():
+    flash(Markup('<a href="/about/ios" style="text-decoration:none;font-weight:bold;color:white!important">PreMatch '
+                 'for iOS is here!</a> Download it to master your 7+H schedule.&nbsp;<a href="/about/ios" '
+                 'style="color:white!important">Learn More</a>'))
+
+
 @dataclass
 class App:
     account: AccountCase
