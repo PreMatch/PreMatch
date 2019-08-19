@@ -61,9 +61,9 @@ def show_about_discord():
     return render_login_optional('about_discord.html')
 
 
-@app.route('/about/app')
+@app.route('/about/ios')
 def show_about_app():
-    return render_login_optional('about_app.html')
+    return render_login_optional('about_ios.html')
 
 
 @app.route('/countdown')

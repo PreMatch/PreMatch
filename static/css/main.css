@@ -45,6 +45,15 @@
     color: #ffffff !important;
 }
 
+#sidenav-link-container a.overridden-white,
+#nav-bottom-links ul li a.overridden-white {
+    text-decoration: none;
+}
+
+a.overridden-white {
+    text-decoration: underline;
+}
+
 a.overridden-white:hover {
     opacity: 0.6;
     color: #ffffff !important;

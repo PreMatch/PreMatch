@@ -28,7 +28,7 @@
             <h1 class="title is-size-1">Welcome{{ '' if schedule == none else ' back' }}, {{ name }}!</h1>
             <h2 class="subtitle is-size-4"
                 style="color: black!important;">{{ 'Please input your schedule below' if schedule == none else 'Your current schedule is posted below. You may edit it if you wish by selecting a different teacher and pressing "Update."' }}</h2>
-            <h3 class="is-size-5">Can't find a teacher? Request their addition <a href="/support/teachers" target="_blank">here</a>!</h3>
+            <h3 class="subtitle has-text-black is-size-5">Can't find a teacher? Request their addition <a href="/support/teachers" target="_blank">here</a>!</h3>
         {% endif %}
 
         <form id="form" style="height: auto; margin-bottom: 40px;">
@@ -119,12 +119,12 @@
             <div>
                 <div style="display: inline-block">
                     <input type="checkbox" name="public" onclick="togglePublic(this)"
-                           id="public-checkbox" {{ 'checked' if user_public }}>
+                           id="public-checkbox" {{ 'checked' if user_public or schedule == none }}>
                     <label for="public-checkbox" style="font-size: 18px;">Make my schedule public</label>
                 </div>
                 <div class="help-tip" style="display: inline-block">
                     <p>If you make your schedule public, it can be seen by any AHS student. <br><br> If you keep your
-                        schedule private, your name will only be shown in your classes, and no AHS student can see your
+                        schedule private, your name will only be shown to classmates who share classes with you, and only in the classes you have in common. No AHS student can see your
                         entire schedule. </p>
                 </div>
                 {% if user_public %}
