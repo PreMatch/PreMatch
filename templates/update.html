@@ -20,7 +20,7 @@
             <input type="hidden" name="lunch{{ lunch }}1" class="lunch-input" id="lunch-invis-{{ lunch }}-1">
             <input type="hidden" name="lunch{{ lunch }}2" class="lunch-input" id="lunch-invis-{{ lunch }}-2">
         {% endfor %}
-        <input type="hidden" name="public" id="public-input">
+        <input type="hidden" name="public" id="public-input" value="{{ 'true' if user_public or schedule == none }}">
     </form>
 
     <div class="box has-text-centered">

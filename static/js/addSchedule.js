@@ -246,3 +246,24 @@ function togglePublic(checkBox) {
         field.attr('value', '');
     }
 }
+
+let allPeriods = 'ABCDEFG'.split(''), allSemesters = '12'.split('');
+
+function adjustLinkHolderWidths() {
+    allPeriods.forEach((period) => {
+        allSemesters.forEach((semester) => {
+            let linkHolder = $(`#link-holder-${period}-${semester}`);
+            let input = $(`#teacherInput${period}-${semester}`);
+
+            linkHolder.css('min-width', `${input.outerWidth()}px`);
+        });
+    });
+}
+
+$(() => {
+   adjustLinkHolderWidths();
+});
+
+$(window).on('resize', () => {
+    adjustLinkHolderWidths();
+});
