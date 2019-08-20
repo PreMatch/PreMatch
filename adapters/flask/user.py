@@ -25,7 +25,6 @@ def show_user_current_semester(handle):
 @user_app.route('/user/<handle>/<semester>')
 @requires_login
 def show_user(handle, semester):
-    flash_ios_announcement()
 
     target = adapt.student_repo.load(handle)
     if target is None:
@@ -36,6 +35,8 @@ def show_user(handle, semester):
 
     demand(valid_semester_string(semester), f'Invalid semester: {semester}')
     semester = int(semester)
+
+    flash_ios_announcement()
 
     viewer = adapt.student_repo.load(g.handle)
     result = app.schedule.show_schedule(viewer, target, semester)
@@ -68,7 +69,6 @@ def show_own_dashboard_current_semester_or_handle(semester_or_handle):
 @user_app.route('/dashboard/<handle>/<semester>')
 @requires_login
 def show_dashboard(handle, semester):
-    flash_ios_announcement()
 
     target = adapt.student_repo.load(handle)
     if target is None or target.schedules is None:
@@ -79,6 +79,8 @@ def show_dashboard(handle, semester):
 
     if not target.is_public and target.handle != g.handle:
         return error_private(handle)
+
+    flash_ios_announcement()
 
     rosters = {}
     class_sizes = {}

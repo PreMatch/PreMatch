@@ -34,7 +34,7 @@
         {% for period in 'ABCDEFG' %}
         <tr id="class-row-{{ period }}">
             <td class="period"><span class="period-text">Block</span> {{ period }}</td>
-            <td class="teacher">{{ schedule[period] if period in schedule else 'Private' }}</td>
+            <td class="teacher">{{ schedule[period] if period in schedule else '<i private>(Private)</i>'|safe }}</td>
             <td id="roster-data-{{ period }}" class="class-link">
                 {% if period in schedule %}
                     <a class="button is-link is-outlined is-primary is-medium overridden-white"
@@ -52,6 +52,10 @@
 </section>
 
 <style>
+    i[private] {
+        opacity: 0.4;
+    }
+
     table {
         margin: 0 auto;
     }
