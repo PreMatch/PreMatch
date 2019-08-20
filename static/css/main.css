@@ -440,11 +440,11 @@ body.bg-primary {
 }
 
 .flash {
-    margin: 0!important;
+    margin: 0 !important;
 }
 
 .flash:not(:last-child) {
-    margin-bottom: 0.5rem!important;
+    margin-bottom: 0.5rem !important;
 }
 
 .is-user {
@@ -468,6 +468,17 @@ ul.overridden-white li a {
 
 ul.overridden-white li a:hover {
     opacity: 0.6;
+}
+
+.download-button {
+    height: 60px;
+    width: auto;
+    display: block;
+    margin: 8px;
+}
+
+.download-button img {
+    height: 100%;
 }
 
 /*****************MEDIA QUERIES*****************/

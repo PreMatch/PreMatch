@@ -15,9 +15,14 @@
             <img src="/static/img/PreMatch%20Logo.png" alt="PreMatch: Find your classmates" id="title-logo">
             <h2 class="title is-size-1">Discover your classmates</h2>
             {% if schedule_count > 10 %}
-            <h2 class="subtitle is-size-4">{{ schedule_count }} schedules entered and counting!</h2>
+                <h2 class="subtitle is-size-4">{{ schedule_count }} schedules entered and counting!</h2>
             {% endif %}
             <a class="button is-outlined is-primary is-large" href="/login">Get started</a>
+            <br><br>
+            <a class="download-button" href="https://apps.apple.com/us/app/prematch-for-ios/id1456557620"
+               target="_blank">
+                <img src="/static/img/iOS/Download.svg">
+            </a>
         </div>
     </div>
 </section>
@@ -46,7 +51,7 @@
     }
 
     #nav {
-        z-index: 1!important;
+        z-index: 1 !important;
     }
 </style>
 
