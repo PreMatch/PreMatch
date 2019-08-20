@@ -1,10 +1,12 @@
-import os
+import base64
 
 from flask import session
+from google.cloud import firestore
 
 
 def set_secret_key(app):
-    app.secret_key = os.urandom(16)
+    client = firestore.Client(project='prematch-db')
+    app.secret_key = base64.b64decode(client.document('auth/key').get().get('encoded').encode())
 
 
 def log_in(handle):
