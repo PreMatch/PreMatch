@@ -66,15 +66,15 @@
 
 {% macro nav(loggedIn, currentHref) %}
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages[0] %}
-            {% if messages[0][0] == 'error' %}
-                <div id="flashes" class="notification is-danger">
-            {% else %}
-                <div id="flashes" class="notification is-primary">
-            {% endif %}
-        <button class="delete" onclick="closeFlash()"></button>
-        {{ messages[0][1] }}
-        </div>
+        {% if messages|length > 0 %}
+            <div id="flashes">
+                {% for message in messages %}
+                    <div id="flash-{{ loop.index0 }}" class="flash notification is-{{ 'danger' if message[0] == 'error' else 'primary' }}">
+                        <button class="delete" onclick="closeFlash({{ loop.index0 }})"></button>
+                        {{ message[1] }}
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
     {% endwith %}
     <nav class="navbar is-transparent" role="navigation" aria-label="main navigation" id="nav">

@@ -439,6 +439,14 @@ body.bg-primary {
     display: none;
 }
 
+.flash {
+    margin: 0!important;
+}
+
+.flash:not(:last-child) {
+    margin-bottom: 0.5rem!important;
+}
+
 .is-user {
     background-color: #00d1b2 !important;
 }
