@@ -34,21 +34,27 @@
     <div class="container">
         <h1 class="title is-size-2 is-size-3-mobile">Personalize with Ease</h1>
         <img src="/static/img/iOS/Personalization.png" alt="Personalization Prompt"/>
-        <p class="subtitle is-size-5 is-size-6-mobile">A simple sign in with your <strong>k12.andoverma.us</strong> Google account is all it takes to integrate your schedule data from PreMatch.org. Move on from confusing letters - learn which teacher you're seeing at any time.</p>
+        <p class="subtitle is-size-5 is-size-6-mobile">A simple sign in with your <strong>k12.andoverma.us</strong>
+            Google account is all it takes to integrate your schedule data from PreMatch.org. Move on from confusing
+            letters - learn which teacher you're seeing at any time.</p>
     </div>
 </section>
 <section class="section pushed has-text-centered">
     <div class="container">
         <h1 class="title is-size-2 is-size-3-mobile">Avoid Morning Forgetfulness</h1>
         <img src="/static/img/iOS/daily-briefing.jpg" alt="Daily Briefing Customization Screen"/>
-        <p class="subtitle is-size-5 is-size-6-mobile">Never bring the wrong materials to school again with <strong>customizable daily briefings</strong>. Receive notifications displaying your schedule at a customizable time every school day and say goodbye to early morning confusion and mix-ups.</p>
+        <p class="subtitle is-size-5 is-size-6-mobile">Never bring the wrong materials to school again with <strong>customizable
+            daily briefings</strong>. Receive notifications displaying your schedule at a customizable time every school
+            day and say goodbye to early morning confusion and mix-ups.</p>
     </div>
 </section>
 <section class="section pushed has-text-centered">
     <div class="container">
         <h1 class="title is-size-2 is-size-3-mobile">Always Accessible</h1>
         <img src="/static/img/iOS/widget.jpg" alt="iOS Widget"/>
-        <p class="subtitle is-size-5 is-size-6-mobile">Available without unlocking your phone, our easy-to-use widget ensures you always know where to go. It even can <strong>tell you what block you are in or should be heading to at any time</strong>!</p>
+        <p class="subtitle is-size-5 is-size-6-mobile">Available without unlocking your phone, our easy-to-use widget
+            ensures you always know where to go. It even can <strong>tell you what block you are in or should be heading
+                to at any time</strong>!</p>
     </div>
 </section>
 <section class="section pushed has-text-centered">
@@ -61,14 +67,34 @@
 
         <br>
         <h6 class="title is-size-5">Compatibility:</h6>
-        <p class="subtitle is-size-6">PreMatch for iOS requires <strong>iOS 10.0</strong> or later, and is compatible with iPhone<sup>&reg;</sup>, iPad<sup>&reg;</sup>, and iPod touch<sup>&reg;</sup>.</p>
+        <p class="subtitle is-size-6">PreMatch for iOS requires <strong>iOS 10.0</strong> or later, and is compatible
+            with iPhone<sup>&reg;</sup>, iPad<sup>&reg;</sup>, and iPod touch<sup>&reg;</sup>.</p>
         <br>
-        <p class="subtitle"><em>Apple, the Apple logo, iPhone, and iPad are trademarks of Apple Inc., registered in the U.S. and other countries and regions. App Store is a service mark of Apple Inc.</em></p>
+        <p class="subtitle"><em>Apple, the Apple logo, iPhone, and iPad are trademarks of Apple Inc., registered in the
+            U.S. and other countries and regions. App Store is a service mark of Apple Inc.</em></p>
     </div>
 </section>
 <style>
     .section .container img {
         max-width: 35%;
+    }
+
+    @media screen and (max-width: 768px) {
+        .section .container img {
+            max-width: 50%;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .section .container img {
+            max-width: 65%;
+        }
+    }
+
+    @media screen and (max-width: 375px) {
+        .section .container img {
+            max-width: 85%;
+        }
     }
 </style>
 {{ importJs() }}
