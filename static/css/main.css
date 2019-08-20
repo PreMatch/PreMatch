@@ -481,6 +481,29 @@ ul.overridden-white li a:hover {
     height: 100%;
 }
 
+.link-holder::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.link-holder::-webkit-scrollbar:vertical {
+    width: 12px;
+}
+
+.link-holder::-webkit-scrollbar:horizontal {
+    height: 12px;
+}
+
+.link-holder::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+}
+
+.link-holder::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
 /*****************MEDIA QUERIES*****************/
 @media screen and (min-width: 1600px) {
     .small-text {
