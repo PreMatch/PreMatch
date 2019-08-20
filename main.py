@@ -5,7 +5,7 @@ from werkzeug.exceptions import HTTPException
 
 from adapters.flask.auth import auth_app
 from adapters.flask.common import error, error_no_own_schedule, render_login_optional, ValidationError, \
-    flash_ios_announcement
+    flash_ios_announcement, adapt
 from adapters.flask.discovery import discovery_app
 from adapters.flask.user import user_app
 from apis import rest_api
@@ -50,7 +50,7 @@ def generic_http_error(err):
 def front_page():
     flash_ios_announcement()
     return render_login_optional('index.html',
-                                 schedule_count=0)  # FIXME
+                                 schedule_count=adapt.student_repo.user_count())
 
 
 @app.route('/about')

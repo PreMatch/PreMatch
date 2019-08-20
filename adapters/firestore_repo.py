@@ -51,6 +51,9 @@ class FirestoreStudentRepo(StudentRepository):
                     or query in doc.get('name').lower():
                 yield self._read_doc(doc)
 
+    def user_count(self) -> int:
+        return len(list(self.client.collection('students').list_documents()))
+
     @staticmethod
     def _read_doc(entry: firestore.DocumentSnapshot) -> Optional[Student]:
         data = entry.to_dict()

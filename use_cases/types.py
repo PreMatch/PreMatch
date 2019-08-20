@@ -36,6 +36,10 @@ class StudentRepository(ABC):
     def search(self, query: str) -> Iterable[Student]:
         raise NotImplementedError()
 
+    @abstractmethod
+    def user_count(self) -> int:
+        raise NotImplementedError()
+
 
 class TeacherRepository(ABC):
     @abstractmethod

@@ -20,6 +20,8 @@ def current_semester():
             if now_in_date_range(date_ranges[i]):
                 return i + 1
 
+    return 1
+
 
 def before_schedule_release():
     with open('static/calendar.json') as the_file:
