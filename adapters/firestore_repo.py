@@ -72,7 +72,7 @@ class FirestoreStudentRepo(StudentRepository):
 class FirestoreTeacherRepo(TeacherRepository):
     client: firestore.Client
 
-    def __init__(self, client: firestore.Client = firestore.Client()):
+    def __init__(self, client: firestore.Client = firestore.Client(project="prematch-db")):
         self.client = client
 
     def save(self, teacher: Teacher):
