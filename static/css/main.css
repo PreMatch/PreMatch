@@ -482,26 +482,26 @@ ul.overridden-white li a:hover {
 }
 
 .link-holder::-webkit-scrollbar {
-    -webkit-appearance: none;
+    -webkit-appearance: none !important;
 }
 
 .link-holder::-webkit-scrollbar:vertical {
-    width: 12px;
+    width: 12px !important;
 }
 
 .link-holder::-webkit-scrollbar:horizontal {
-    height: 12px;
+    height: 12px !important;
 }
 
 .link-holder::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, .5);
-    border-radius: 10px;
-    border: 2px solid #ffffff;
+    background-color: rgba(0, 0, 0, .5) !important;
+    border-radius: 10px !important;
+    border: 2px solid #ffffff !important;
 }
 
 .link-holder::-webkit-scrollbar-track {
-    border-radius: 10px;
-    background-color: #ffffff;
+    border-radius: 10px !important;
+    background-color: #ffffff !important;
 }
 
 /*****************MEDIA QUERIES*****************/
