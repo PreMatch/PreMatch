@@ -54,7 +54,7 @@ function submitChanges(periods, semesters, lunchPeriods, lunchNumbers) {
 function filterTeachers(period, semester) {
     let input, filter, a, i;
     input = document.getElementById(`teacherInput${period}-${semester}`);
-    filter = decodeEscapes(input.value.toUpperCase()).replace(/['‘’]/g,'');
+    filter = decodeEscapes(input.value.toUpperCase()).replace(/['‘’´]/g,'');
     console.log(filter);
 
     let linkHolder = document.getElementById(`link-holder-${period}-${semester}`);
@@ -70,7 +70,7 @@ function filterTeachers(period, semester) {
         let hitCounter = 0;
 
         for (i = 0; i < a.length; i++) {
-            if (decodeEscapes(a[i].innerHTML.toUpperCase()).replace(/['‘’]/g,'').indexOf(filter) > -1 && filter !== '') {
+            if (decodeEscapes(a[i].innerHTML.toUpperCase()).replace(/['‘’´]/g,'').indexOf(filter) > -1 && filter !== '') {
                 a[i].style.display = "block";
                 hitCounter++;
             } else {
