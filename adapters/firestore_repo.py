@@ -1,3 +1,4 @@
+import random
 from typing import Iterable, Optional, Dict, Any, Callable
 
 from google.cloud import firestore
@@ -7,6 +8,7 @@ from entities.teacher import Teacher
 from entities.types import Semester, Block, Name, Handle, LunchNumber, SemesterLunches
 from use_cases.types import StudentRepository, TeacherRepository
 
+USER_COUNTER_DOC = 'counters/user'
 STUDENT_COL = 'students'
 TEACHER_COL = 'teachers'
 
@@ -16,6 +18,7 @@ class FirestoreStudentRepo(StudentRepository):
 
     def __init__(self, client: firestore.Client = firestore.Client(project="prematch-db")):
         self.client = client
+        self._sync_user_count()
 
     def save(self, student: Student):
         data = {
@@ -27,6 +30,9 @@ class FirestoreStudentRepo(StudentRepository):
         }
         if student.discord_id is not None:
             data['discord_id'] = student.discord_id
+
+        if not self.exists(student.handle):
+            self._increment_user_count()
 
         self.client.collection(STUDENT_COL).document(student.handle).set(data)
 
@@ -52,7 +58,17 @@ class FirestoreStudentRepo(StudentRepository):
                 yield self._read_doc(doc)
 
     def user_count(self) -> int:
-        return len(list(self.client.collection('students').list_documents()))
+        if random.random() < 0.1:
+            self._sync_user_count()
+        return self.client.document(USER_COUNTER_DOC).get().get('value')
+
+    def _sync_user_count(self):
+        self.client.document(USER_COUNTER_DOC).set({
+            'value': len(list(self.client.collection('students').list_documents()))
+        })
+
+    def _increment_user_count(self):
+        self.client.document(USER_COUNTER_DOC).update({'value': self.user_count() + 1})
 
     @staticmethod
     def _read_doc(entry: firestore.DocumentSnapshot) -> Optional[Student]:

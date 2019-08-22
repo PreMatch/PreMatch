@@ -437,3 +437,22 @@ def test_list_teacher_names(reset_mock):
     result = teacher_repo.list_teacher_names()
 
     assert set(result) == set(teachers)
+
+
+def test_add_new_user(reset_mock):
+    mock_db.collection('students').document('hpeng2021').get().exists = False
+    mock_db.document('counters/user').get().get.side_effect = require(('value',), 412)
+
+    student_repo.save(Student('hpeng2021', 'Michael'))
+
+    mock_db.document.assert_called_with('counters/user')
+    mock_db.document('counters/user').update.assert_called_once_with({'value': 413})
+
+
+def test_add_existing_user(reset_mock):
+    mock_db.collection('students').document('hpeng2021').get().exists = True
+    mock_db.document('counters/user').get().get.side_effect = require(('value',), 412)
+
+    student_repo.save(Student('hpeng2021', 'Michael'))
+
+    mock_db.document.assert_called_with('counters/user')
