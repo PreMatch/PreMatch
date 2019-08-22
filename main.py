@@ -1,6 +1,8 @@
 from urllib import parse
 
+import sentry_sdk
 from flask import *
+from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.exceptions import HTTPException
 
 from adapters.flask.auth import auth_app
@@ -12,6 +14,11 @@ from apis import rest_api
 from auth import *
 from help import help_site
 from use_cases.schedule import MissingScheduleError
+
+sentry_sdk.init(
+    dsn="https://11b83f7d2a054364bf7883476e681eea@sentry.io/1536746",
+    integrations=[FlaskIntegration()]
+)
 
 app = Flask(__name__)
 set_secret_key(app)
@@ -31,6 +38,7 @@ def enforce_domain_https():
 
 @app.errorhandler(ValidationError)
 def validation_error_handler(err):
+    sentry_sdk.capture_message(f'Validation error: {err.problem}')
     return error(422, err.problem)
 
 
@@ -38,11 +46,13 @@ def validation_error_handler(err):
 def schedule_missing_handler(err: MissingScheduleError):
     if g.handle == err.student.handle:
         return error_no_own_schedule()
+    sentry_sdk.capture_message(f'Attempt to access nonexistent schedule of {err.student}')
     return render_template('profile_not_found.html', bad_handle=err.student.handle)
 
 
 @app.errorhandler(HTTPException)
 def generic_http_error(err):
+    sentry_sdk.capture_exception(err)
     return render_template('error.html', error=err)
 
 

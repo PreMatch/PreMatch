@@ -94,7 +94,8 @@ def show_dashboard(handle, semester):
     return render_template('dashboard.html',
                            handle=handle, name=target.name, schedule=target.semester_schedule(semester),
                            rosters=rosters, sizes=class_sizes,
-                           semester=semester)
+                           semester=semester,
+                           user=target)
 
 
 @user_app.route('/update', methods=['GET', 'POST'])
