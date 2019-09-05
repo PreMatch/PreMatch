@@ -13,6 +13,7 @@ When you join PreMatch and enter your schedule, we collect and store the followi
 - Whether or not you accept to make your schedule public, for your control over schedule visibility.
 - Details of your requests to PreMatch.org, including IP address, browser type and version, operating system and computer platform. These help us improve the website's experience by learning about how our website is being accessed.
 - A custom browser "cookie" for session continuity. The "cookie" is an encrypted form of your email address and can only be issued and read by our system. It keeps you signed in during a browsing session.
+- The room numbers of your classes, if you choose to share them with us through _PreMatch for iOS_. We only use these to set the room number of each class for your classmates automatically. We will never share these numbers with anyone except those classmates.
 
 ## Children Under the Age of 13
 [PreMatch.org](https://prematch.org) restricts its user base to students at Andover High School, and we do not expect any such student to be under the age of 13. Thus, nobody under the age of 13 is allowed to use PreMatch or any of its associated products without first receiving explicit parental permission to enter and submit their schedule, along with all the data listed in the section above.
