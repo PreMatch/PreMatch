@@ -1,6 +1,6 @@
 {
   "name": "The 7+H Definition File",
-  "version": 3.0,
+  "version": 3.1,
   "blocks": ["A", "B", "C", "D", "E", "F", "G"],
   "cycle_size": 8,
   "start_date": "2019-08-28",
@@ -16,7 +16,7 @@
     {
       "type": "half_day",
       "date": "2019-10-11",
-      "blocks": ["A", "C", "E", "G"]
+      "blocks": ["B", "A", "G", "E"]
     },
     {
       "type": "holiday",
@@ -39,7 +39,7 @@
     {
       "type": "half_day",
       "date": "2019-11-27",
-      "blocks": ["A", "D", "C", "Pep Rally"]
+      "blocks": ["B", "A", "E", "Pep Rally"]
     },
     {
       "type": "holiday",
@@ -50,7 +50,7 @@
     {
       "type": "half_day",
       "date": "2019-12-06",
-      "blocks": ["B", "A", "G", "E"]
+      "blocks": ["A", "E", "F", "C"]
     },
     {
       "type": "holiday",
@@ -102,7 +102,7 @@
     {
       "type": "half_day",
       "date": "2020-01-31",
-      "blocks": ["A", "E", "F", "C"]
+      "blocks": ["B", "A", "G", "E"]
     },
     {
       "type": "holiday",
@@ -124,7 +124,7 @@
     {
       "type": "half_day",
       "date": "2020-05-08",
-      "blocks": ["A", "C", "E", "G"]
+      "blocks": ["B", "A", "G", "E"]
     },
     {
       "type": "holiday",
@@ -145,7 +145,7 @@
     {
       "type": "half_day",
       "date": "2020-06-05",
-      "blocks": ["A", "D", "C", "F"]
+      "blocks": ["C", "B", "F", "D"]
     },
     {
       "type": "exam_day",
