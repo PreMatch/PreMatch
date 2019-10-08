@@ -1,5 +1,5 @@
 from adapters.flask.common import *
-from adapters.flask.validate import valid_block, valid_semester_string
+from adapters.flask.validate import *
 from auth import *
 from google_auth import *
 
