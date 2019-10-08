@@ -1,3 +1,4 @@
+import datetime
 import traceback
 
 from adapters.flask.auth import requires_login, logged_handle
@@ -191,3 +192,28 @@ def show_terms():
     return render_template('embedded_document.html',
                            is_logged_in=logged_handle() is not None, title='Terms and Conditions of Service',
                            document_path='terms-and-conditions.md')
+
+
+@user_app.route('/open_house')
+@requires_login
+def open_house_table():
+    user = adapt.student_repo.load(g.handle)
+    schedule = user.semester_schedule(ahs_calendar.current_semester())
+    if schedule is None:
+        flash('You must enter your schedule to get your customized open house table', 'error')
+        return redirect('/')
+
+    times = [
+        {'time': '6:30 – 6:40', 'block': 'H1'},
+        {'time': '6:45 – 6:55', 'block': 'A'},
+        {'time': '7:00 – 7:10', 'block': 'B'},
+        {'time': '7:15 – 7:25', 'block': 'C'},
+        {'time': '7:30 – 7:40', 'block': 'D'},
+        {'time': '7:45 – 7:55', 'block': 'E'},
+        {'time': '8:00 – 8:10', 'block': 'F'},
+        {'time': '8:15 – 8:25', 'block': 'G'}
+    ]
+
+    return render_template('openhouse-table.html', user=user,
+                           schedule=schedule, blocks=times,
+                           time=datetime.datetime.now())

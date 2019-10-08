@@ -1,7 +1,5 @@
-from flask import *
-
-from adapters.flask.common import adapt
-from adapters.flask.validate import valid_lunch_block, valid_semester_string
+from adapters.flask.common import *
+from adapters.flask.validate import valid_block, valid_semester_string
 from auth import *
 from google_auth import *
 
@@ -99,3 +97,29 @@ def api_schedule():
             output[f'{block}{semester}'] = teacher
 
     return api_success(output)
+
+# block: string
+# semester: 1 or 2
+@rest_api.route('/api/classmates')
+def api_classmates():
+    handle = logged_handle()
+    if handle is None:
+        return api_error_unauthorized()
+
+    block = request.args.get('block')
+    semester = request.args.get('semester')
+    user = adapt.student_repo.load(handle)
+
+    if block is None or not valid_block(block):
+        return api_bad_value('block')
+    if semester is None or not valid_semester_string(semester):
+        return api_bad_value('semester')
+    if user is None:
+        return api_error_unauthorized()
+
+    # End of validation
+
+    students = app.schedule.show_classmates(user, int(semester), block)
+    students = list(map(lambda student: {'name': student.name, 'handle': student.handle}, students))
+
+    return api_success({'students': students})

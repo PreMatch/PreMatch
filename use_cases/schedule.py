@@ -40,7 +40,7 @@ class ScheduleCase:
 
         return dict(set(schedule.items()) & set(viewer_schedule.items()))
 
-    def show_classmates(self, viewer: Student, semester: Semester, block: Block) -> Optional[Iterable[Student]]:
+    def show_classmates(self, viewer: Student, semester: Semester, block: Block) -> Iterable[Student]:
         schedule = viewer.semester_schedule(semester)
         if schedule is None:
             raise MissingScheduleError(viewer)
