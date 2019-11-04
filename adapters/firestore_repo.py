@@ -3,10 +3,10 @@ from typing import Iterable, Optional, Dict, Any, Callable
 
 from google.cloud import firestore
 
+from entities.klass import Class
 from entities.student import Student
-from entities.teacher import Teacher
-from entities.types import Semester, Block, Name, Handle, LunchNumber, SemesterLunches
-from use_cases.types import StudentRepository, TeacherRepository
+from entities.types import Semester, Block, Name, Handle, LunchNumber
+from use_cases.types import StudentRepository, ClassRepository
 
 USER_COUNTER_DOC = 'counters/user'
 STUDENT_COL = 'students'
@@ -88,42 +88,47 @@ class FirestoreStudentRepo(StudentRepository):
         )
 
 
-class FirestoreTeacherRepo(TeacherRepository):
+class FirestoreClassRepo(ClassRepository):
     client: firestore.Client
 
     def __init__(self, client: firestore.Client = firestore.Client(project="prematch-db")):
         self.client = client
 
-    def save(self, teacher: Teacher):
-        self.client.collection(TEACHER_COL).document(teacher.name).set({
-            'handle': teacher.handle,
-            'semesters': key_transform(teacher.lunches, str)
+    def save(self, klass: Class):
+        self.classes_col(klass.block, klass.semester).document(klass.teacher).set({
+            'lunch': klass.lunch,
+            'location': klass.location
         })
 
-    def exists(self, name: Name) -> bool:
-        return self.client.collection(TEACHER_COL).document(name).get(field_paths=[]).exists
+    def exists(self, teacher: Name, block: Block, semester: Semester) -> bool:
+        return self.classes_col(block, semester).document(teacher).get(field_paths=[]).exists
 
-    def load(self, name: Name) -> Optional[Teacher]:
-        diction = self.client.collection(TEACHER_COL).document(name).get().to_dict()
+    def load(self, teacher: Name, block: Block, semester: Semester) -> Optional[Class]:
+        diction = self.classes_col(block, semester).document(teacher).get().to_dict()
         return None if diction is None else \
-            Teacher(diction['handle'], name, key_transform(diction['semesters'], int))
+            Class(teacher, block, semester, lunch=diction.get('lunch'), location=diction.get('location'))
 
-    def update_batch_lunch(self, updates: Dict[Name, Dict[Semester, SemesterLunches]]):
+    def update_batch(self, classes: Iterable[Class]):
         batch = self.client.batch()
-        for (teacher, update) in updates.items():
-            update_dict = {}
-            for (semester, lunches) in update.items():
-                for (block, number) in lunches.items():
-                    update_dict[self.client.field_path('semesters', str(semester), block)] = number
-            batch.update(self.client.collection(TEACHER_COL).document(teacher), update_dict)
+
+        for klass in classes:
+            doc_ref = self.classes_col(klass.block, klass.semester).document(klass.teacher)
+            batch.update(doc_ref, {
+                'lunch': klass.lunch,
+                'location': klass.location
+            })
+
         batch.commit()
 
     def names_of_teachers_in_lunch(self, semester: Semester, block: Block, number: LunchNumber) -> Iterable[Name]:
-        stream = self.client.collection(TEACHER_COL).where(self.client.field_path('semesters', str(semester), block), '==', number).stream()
+        stream = self.classes_col(block, semester).where('lunch', '==', number).stream()
         yield from map(lambda doc: doc.id, stream)
 
     def list_teacher_names(self) -> Iterable[Name]:
         yield from map(lambda doc: doc.id, self.client.collection(TEACHER_COL).list_documents())
+
+    def classes_col(self, block: Block, semester: Semester) -> firestore.CollectionReference:
+        return self.client.collection('classes', str(semester), block)
 
 
 def key_transform(diction: Dict[Semester, Any], operation: Callable) -> Dict[Any, Any]:

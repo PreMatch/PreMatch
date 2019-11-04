@@ -2,20 +2,20 @@ from unittest.mock import MagicMock
 
 import pytest
 
+from entities.klass import Class
 from entities.student import Student
-from entities.teacher import Teacher
 from tests.mock_helper import require, switch
 from use_cases.schedule import ScheduleCase, MissingScheduleError
 
 student_repo = MagicMock()
-teacher_repo = MagicMock()
-case = ScheduleCase(student_repo, teacher_repo)
+class_repo = MagicMock()
+case = ScheduleCase(student_repo, class_repo)
 
 
 @pytest.fixture
 def reset_mock():
     student_repo.reset_mock()
-    teacher_repo.reset_mock()
+    class_repo.reset_mock()
 
 
 def test_own_schedule_exists():
@@ -107,10 +107,10 @@ def test_show_lunch_number(reset_mock):
         1: {'C': 'Ream', 'D': 'DiBenedetto', 'E': 'Emery'},
         2: {'C': 'Ream', 'D': 'DiBenedetto', 'E': 'Messina'}
     }
-    emery = Teacher('memery', 'Emery', {1: {'E': 2}})
-    messina = Teacher('mmessina', 'Messina', {})
+    emery = Class('Emery', 'E', 1, lunch=2)
+    messina = Class('Messina', 'E', 2, lunch=None)
 
-    teacher_repo.load.side_effect = switch({('Emery',): emery, ('Messina',): messina})
+    class_repo.load.side_effect = switch({('Emery', 'E', 1): emery, ('Messina', 'E', 2): messina})
 
     e1_out = case.show_lunch_number(viewer, 1, 'E')
     e2_out = case.show_lunch_number(viewer, 2, 'E')
@@ -134,10 +134,10 @@ def test_show_lunchmates_of_own_lunch(reset_mock):
         Student('azenith', 'Ayush Zenith'),
         Student('jmann', 'Jordan Mann')
     ]
-    teacher = Teacher('dsmith', 'Smith', {1: {'D': 3}})
+    klass = Class('Smith', 'D', 1, lunch=3)
 
-    teacher_repo.load.side_effect = require(('Smith',), teacher)
-    teacher_repo.names_of_teachers_in_lunch.side_effect = require((1, 'D', 3), ['Smith'])
+    class_repo.load.side_effect = require(('Smith', 'D', 1), klass)
+    class_repo.names_of_teachers_in_lunch.side_effect = require((1, 'D', 3), ['Smith'])
     student_repo.students_in_class.side_effect = require((1, 'D', 'Smith'), lunchmates)
 
     output = case.show_lunchmates(viewer, 1, 'D', 3)
@@ -158,11 +158,11 @@ def test_show_lunchmates_of_external_lunch(reset_mock):
 
     viewer = Student('hpeng2021', 'Michael Peng')
     viewer.schedules = {1: {'C': 'Smith', 'F': 'Shea'}}
-    smith = Teacher('dsmith', 'Smith', {1: {'C': 2}})
-    shea = Teacher('bshea', 'Shea', {})
+    smith = Class('Smith', 'C', 1, lunch=2)
+    shea = Class('Shea', 'F', 1, lunch=None)
 
-    teacher_repo.load.side_effect = switch({('Smith',): smith, ('Shea',): shea})
-    teacher_repo.names_of_teachers_in_lunch.side_effect = switch({
+    class_repo.load.side_effect = switch({('Smith', 'C', 1): smith, ('Shea', 'F', 1): shea})
+    class_repo.names_of_teachers_in_lunch.side_effect = switch({
         (1, 'C', 2): ['Messina', 'Smith', 'Caveney'],
         (1, 'C', 4): ['Emery', 'Gonzalez', 'Parsons']
     })

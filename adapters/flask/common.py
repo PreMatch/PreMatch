@@ -5,12 +5,12 @@ from flask import *
 
 import ahs_calendar
 from adapters.discord import DiscordVerifierImpl
-from adapters.firestore_repo import FirestoreStudentRepo, FirestoreTeacherRepo
+from adapters.firestore_repo import FirestoreStudentRepo, FirestoreClassRepo
 from adapters.google_auth import GoogleAuthProvider
 from use_cases.account import AccountCase
 from use_cases.schedule import ScheduleCase
 from use_cases.search import SearchCase
-from use_cases.types import DiscordVerifier, StudentRepository, TeacherRepository, AuthProvider
+from use_cases.types import DiscordVerifier, StudentRepository, ClassRepository, AuthProvider
 
 DEFAULT_HOME = '/dashboard'
 
@@ -75,20 +75,20 @@ class App:
 class Adapters:
     discord: DiscordVerifier
     student_repo: StudentRepository
-    teacher_repo: TeacherRepository
+    class_repo: ClassRepository
     google: AuthProvider
 
 
 adapt = Adapters(
     DiscordVerifierImpl(),
     FirestoreStudentRepo(),
-    FirestoreTeacherRepo(),
+    FirestoreClassRepo(),
     GoogleAuthProvider()
 )
 app = App(
     AccountCase(adapt.google, adapt.student_repo,
-                adapt.teacher_repo, adapt.discord),
-    ScheduleCase(adapt.student_repo, adapt.teacher_repo),
+                adapt.class_repo, adapt.discord),
+    ScheduleCase(adapt.student_repo, adapt.class_repo),
     SearchCase(adapt.student_repo)
 )
 

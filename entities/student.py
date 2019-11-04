@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional, Dict
+from typing import Optional
 
 from entities.types import *
 

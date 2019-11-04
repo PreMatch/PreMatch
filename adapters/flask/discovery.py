@@ -17,7 +17,7 @@ def show_roster(semester_str, period, teacher):
     flash_ios_announcement()
 
     demand(valid_block(period), f'Invalid block: {period}')
-    demand(teacher in adapt.teacher_repo.list_teacher_names(), f'Invalid teacher: {teacher}')
+    demand(teacher in adapt.class_repo.list_teacher_names(), f'Invalid teacher: {teacher}')
     demand(valid_semester_string(semester_str), f'Invalid semester: {semester_str}')
     semester = int(semester_str)
 
@@ -28,7 +28,7 @@ def show_roster(semester_str, period, teacher):
         return redirect('/')
 
     user_in_class = g.handle in list(map(lambda student: student.handle, classmates))
-    lunch_number = adapt.teacher_repo.load(teacher).lunch_number(semester, period)
+    lunch_number = adapt.class_repo.load(teacher, period, semester).lunch
 
     return render_template('roster.html', period=period, teacher=teacher,
                            roster=classmates, handle=g.handle,

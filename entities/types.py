@@ -7,6 +7,8 @@ Name = str
 LunchNumber = int
 # 1 <= Semester <= 2
 Semester = int
+# Location is either XXX (room number) or GYM/FIELD HOUSE, etc.
+Location = str
 
 SemesterSchedule = Dict[Block, Name]
 SemesterLunches = Dict[Block, LunchNumber]

@@ -43,14 +43,10 @@ def api_lunch_get():
     block = request.args.get('block')
     semester = request.args.get('semester')
 
-    if not adapt.teacher_repo.exists(teacher):
-        return api_bad_value('teacher')
-    if not valid_lunch_block(block):
-        return api_bad_value('block')
-    if not valid_semester_string(semester):
-        return api_bad_value('semester')
+    if not adapt.class_repo.exists(teacher, block, semester):
+        return api_error(422, 'Class does not exist')
 
-    number = adapt.teacher_repo.load(teacher).lunch_number(int(semester), block)
+    number = adapt.class_repo.load(teacher, block, semester).lunch
 
     if number is None:
         return api_error(404, 'No lunch number set', status='empty')

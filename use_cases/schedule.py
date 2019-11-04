@@ -3,7 +3,7 @@ from typing import Optional, Iterable
 
 from entities.student import Student
 from entities.types import *
-from use_cases.types import StudentRepository, TeacherRepository
+from use_cases.types import StudentRepository, ClassRepository
 
 
 @dataclass
@@ -14,7 +14,7 @@ class MissingScheduleError(ValueError):
 @dataclass
 class ScheduleCase:
     student_repo: StudentRepository
-    teacher_repo: TeacherRepository
+    class_repo: ClassRepository
 
     # May raise KeyError if semester invalid or schedule not defined
     @staticmethod
@@ -54,8 +54,9 @@ class ScheduleCase:
         schedule = target.semester_schedule(semester)
         if schedule is None:
             raise MissingScheduleError(target)
-        teacher = self.teacher_repo.load(schedule[block])
-        return teacher.lunch_number(semester, block)
+        klass = self.class_repo.load(schedule[block], block, semester)
+
+        return klass.lunch
 
     # may raise ValueError or MissingScheduleError
     def show_lunchmates(self, viewer: Student, semester: Semester,
@@ -64,10 +65,8 @@ class ScheduleCase:
         if schedule is None:
             raise MissingScheduleError(viewer)
 
-        own_teacher = self.teacher_repo.load(schedule[block])
-        own_number = own_teacher.lunch_number(semester, block)
-
-        teachers = self.teacher_repo.names_of_teachers_in_lunch(semester, block, number)
+        # TODO restrict
+        teachers = self.class_repo.names_of_teachers_in_lunch(semester, block, number)
 
         for teacher in teachers:
             yield from self.student_repo.students_in_class(semester, block, teacher)

@@ -1,3 +1,4 @@
+from typing import List
 from unittest.mock import MagicMock
 
 import pytest
@@ -9,9 +10,9 @@ from use_cases.types import *
 
 auth = MagicMock()
 student_repo = MagicMock()
-teacher_repo = MagicMock()
+class_repo = MagicMock()
 discord_verifier = MagicMock()
-account_case = AccountCase(auth, student_repo, teacher_repo, discord_verifier)
+account_case = AccountCase(auth, student_repo, class_repo, discord_verifier)
 
 sample_schedule = {
     1: {
@@ -39,13 +40,13 @@ sample_schedule = {
 def mock_setup():
     auth.reset_mock()
     student_repo.reset_mock()
-    teacher_repo.reset_mock()
+    class_repo.reset_mock()
     discord_verifier.reset_mock()
 
 
 @pytest.fixture
-def fill_teacher_repo():
-    teacher_repo.load.return_value = Teacher("Desfosse", "bdesfosse")
+def fill_class_repo():
+    class_repo.load.return_value = Class('Desfosse', 'D', 1)
 
 
 def test_call_auth_verify(mock_setup):
@@ -86,7 +87,7 @@ def test_update_schedule_saves(mock_setup):
     student_repo.save.assert_called_once_with(student)
 
 
-def test_update_lunch_bulk(mock_setup, fill_teacher_repo):
+def test_update_lunch_bulk(mock_setup, fill_class_repo):
     student = Student('hpeng2021', 'Michael Peng')
     student.schedules = sample_schedule
 
@@ -104,15 +105,16 @@ def test_update_lunch_bulk(mock_setup, fill_teacher_repo):
     }
     account_case.update_lunches(student, lunch_updates)
 
-    expected_batch_update: Dict[Name, Dict[Semester, SemesterLunches]] = {
-        sample_schedule[1]['B']: {1: {'B': 1}},
-        sample_schedule[1]['C']: {1: {'C': 3}},
-        sample_schedule[1]['E']: {1: {'E': 2}},
-        sample_schedule[1]['G']: {1: {'G': 1}, 2: {'G': 1}},
-        sample_schedule[2]['E']: {2: {'E': 4}}
-    }
+    expected_batch_update: List[Class] = [
+        Class(sample_schedule[1]['B'], 'B', 1, lunch=1),
+        Class(sample_schedule[1]['C'], 'C', 1, lunch=3),
+        Class(sample_schedule[1]['E'], 'E', 1, lunch=2),
+        Class(sample_schedule[1]['G'], 'G', 1, lunch=1),
+        Class(sample_schedule[2]['E'], 'E', 2, lunch=4),
+        Class(sample_schedule[1]['G'], 'G', 2, lunch=1)
+    ]
 
-    teacher_repo.update_batch_lunch.assert_called_once_with(expected_batch_update)
+    class_repo.update_batch.assert_called_once_with(expected_batch_update)
 
 
 def test_update_lunch_without_schedule():

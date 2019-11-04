@@ -3,8 +3,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional, Iterable
 
+from entities.klass import Class
 from entities.student import Student
-from entities.teacher import Teacher
 from entities.types import *
 
 
@@ -41,21 +41,21 @@ class StudentRepository(ABC):
         raise NotImplementedError()
 
 
-class TeacherRepository(ABC):
+class ClassRepository(ABC):
     @abstractmethod
-    def save(self, teacher: Teacher):
+    def save(self, klass: Class):
         raise NotImplementedError()
 
     @abstractmethod
-    def exists(self, name: Name) -> bool:
+    def exists(self, teacher: Name, block: Block, semester: Semester) -> bool:
         raise NotImplementedError()
 
     @abstractmethod
-    def load(self, name: Name) -> Optional[Teacher]:
+    def load(self, teacher: Name, block: Block, semester: Semester) -> Optional[Class]:
         raise NotImplementedError()
 
     @abstractmethod
-    def update_batch_lunch(self, updates: Dict[Name, Dict[Semester, SemesterLunches]]):
+    def update_batch(self, classes: Iterable[Class]):
         raise NotImplementedError()
 
     @abstractmethod

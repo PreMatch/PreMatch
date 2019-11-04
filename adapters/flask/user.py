@@ -102,7 +102,7 @@ def show_dashboard(handle, semester):
 @user_app.route('/update', methods=['GET', 'POST'])
 @requires_login
 def do_update():
-    teacher_names = list(adapt.teacher_repo.list_teacher_names())
+    teacher_names = list(adapt.class_repo.list_teacher_names())
     if request.method == 'GET':
         user = adapt.student_repo.load(g.handle)
 
