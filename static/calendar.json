@@ -1,6 +1,6 @@
 {
   "name": "The 7+H Definition File",
-  "version": 3.2,
+  "version": 3.3,
   "blocks": ["A", "B", "C", "D", "E", "F", "G"],
   "cycle_size": 8,
   "start_date": "2019-08-28",
@@ -179,6 +179,17 @@
       "type": "standard_day",
       "date": "2019-12-04",
       "day_number": 4
+    },
+    {
+      "type": "holiday",
+      "start_date": "2019-12-17",
+      "end_date": "2019-12-17",
+      "description": "Snow Day"
+    },
+    {
+      "type": "standard_day",
+      "date": "2019-12-18",
+      "day_number": 6
     }
   ],
   "periods": [
