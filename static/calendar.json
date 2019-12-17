@@ -1,6 +1,7 @@
 {
   "name": "The 7+H Definition File",
-  "version": 3.3,
+  "version": 3.4,
+  "last_changes": "Added midterm exam schedule",
   "blocks": ["A", "B", "C", "D", "E", "F", "G"],
   "cycle_size": 8,
   "start_date": "2019-08-28",
@@ -76,12 +77,12 @@
     {
       "type": "exam_day",
       "date": "2020-01-16",
-      "blocks": ["?", "?"]
+      "blocks": ["A", "E"]
     },
     {
       "type": "exam_day",
       "date": "2020-01-17",
-      "blocks": ["?", "?"]
+      "blocks": ["B", "F"]
     },
     {
       "type": "holiday",
@@ -92,12 +93,12 @@
     {
       "type": "exam_day",
       "date": "2020-01-21",
-      "blocks": ["?", "?"]
+      "blocks": ["C", "G"]
     },
     {
       "type": "exam_day",
       "date": "2020-01-22",
-      "blocks": ["?", "MakeUp"]
+      "blocks": ["D", "MakeUp"]
     },
     {
       "type": "half_day",
