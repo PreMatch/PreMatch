@@ -1,7 +1,7 @@
 {
   "name": "The 7+H Definition File",
-  "version": 3.4,
-  "last_changes": "Added midterm exam schedule",
+  "version": 3.5,
+  "last_changes": "Replaced midterm XYZ days",
   "blocks": ["A", "B", "C", "D", "E", "F", "G"],
   "cycle_size": 8,
   "start_date": "2019-08-28",
@@ -60,19 +60,19 @@
       "description": "Christmas Break"
     },
     {
-      "type": "unknown",
+      "type": "standard_day",
       "date": "2020-01-13",
-      "description": "Day X"
+      "day_number": 5
     },
     {
-      "type": "unknown",
+      "type": "standard_day",
       "date": "2020-01-14",
-      "description": "Day Y"
+      "day_number": 6
     },
     {
-      "type": "unknown",
+      "type": "standard_day",
       "date": "2020-01-15",
-      "description": "Day Z"
+      "day_number": 7
     },
     {
       "type": "exam_day",
