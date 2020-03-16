@@ -191,6 +191,12 @@
       "type": "standard_day",
       "date": "2019-12-18",
       "day_number": 6
+    },
+    {
+      "type": "holiday",
+      "start_date": "2020-03-16",
+      "end_date": "2020-04-07",
+      "description": "Closure due to Coronavirus (COVID-19)"
     }
   ],
   "periods": [
