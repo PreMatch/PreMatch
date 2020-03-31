@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+{% from 'macros.html' import head, importJs, footer %}
+
+{{ head('PreMatch - Match Maker?') }}
+<link rel="stylesheet" href="/static/css/match.css"/>
+<script type="text/javascript" src="/static/js/match.js"></script>
+<script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
+<body id="body">
+
+<section class="bg-primary section" id="entry-section">
+    <div class="container has-text-centered main-container">
+        <h1 class="title overridden-white is-size-2 is-size-4-mobile">The Great Pre... Match Maker?</h1>
+        <p class="subtitle overridden-white is-size-4 is-size-6-mobile" id="entry-subtitle">You asked, we listened</p>
+
+        <div class="container" id="form-container">
+            <div class="teacher-dropdown-content" id="partner-dropdown">
+                <label class="block-label overridden-white is-size-4 is-size-6-mobile" for="teacherInput">Please
+                    Select a Partner</label>
+                <br>
+                <input type="text" placeholder="Search for a partner..." id="teacherInput" onkeyup="presearch()">
+                <div class="link-holder has-text-left" id="link-holder">
+                    <p style="display: none;" id="loader">Loading...</p>
+                    <p style="display: none;" id="no-results">No partners found</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="is-transparent section" id="loading-section" style="bottom: -100%">
+    <div class="container has-text-centered main-container">
+        <h1 class="title is-size-2 is-size-4-mobile">Making magic happen...</h1>
+    </div>
+</section>
+<section class="bg-primary section" id="score-section" style="bottom: -100%">
+    <div class="container has-text-centered main-container">
+        <h1 class="title overridden-white is-size-2 is-size-4-mobile">{{ name }}</h1>
+        <p class="subtitle overridden-white is-size-4 is-size-6-mobile" style="margin-top: -2rem;">{{ handle }}</p>
+
+        <div id="heart-container">
+            <img id="heart-icon" alt="heart icon" src="/static/img/Heart.svg">
+            <p class="is-size-1 is-size-3-mobile overridden-white" id="match-score"></p>
+        </div>
+        <h1 class="title overridden-white is-size-3 is-size-5-mobile" id="relationship-classification">
+            Classficiation</h1>
+
+        <h1 class="title overridden-white is-size-2 is-size-4-mobile" id="partner-name">Their Name</h1>
+        <p class="subtitle overridden-white is-size-4 is-size-6-mobile" style="margin-top: -2rem;" id="partner-handle">
+            Their Handle</p>
+
+        <a class="title overridden-white is-size-3 is-size-5-mobile" href="javascript:void(0);" onclick="reset()">Try
+            again?</a>
+
+    </div>
+</section>
+<script type="text/javascript">
+    let userHandle = "{{ handle }}";
+</script>
+{{ importJs() }}
+
+</body>
+</html>

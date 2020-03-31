@@ -1,0 +1,78 @@
+section {
+    position: fixed;
+    left: 0;
+    right: 0;
+    transition: all 0.75s;
+    height: 100vh;
+}
+
+#entry-section {
+    top: 0;
+}
+
+.main-container {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+input {
+    color: black !important;
+    background-color: white !important;
+    border-color: white !important;
+    background-position: 14px 10px !important;
+}
+
+input:focus {
+    outline: none !important;
+}
+
+#heart-icon {
+    width: 150px;
+}
+
+#heart-container {
+    position: relative;
+    padding: 0;
+    text-align: center;
+}
+
+#match-score {
+    position: absolute;
+    top: 45%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    color: white;
+}
+
+@media screen and (min-width: 401px) {
+    input {
+        background-position: 14px 12px !important;
+    }
+}
+
+@media screen and (max-height: 400px) {
+    .main-container .subtitle {
+        margin-bottom: 0;
+        padding: 0.5rem;
+    }
+
+    #entry-subtitle {
+        padding: 0;
+    }
+
+    #heart-icon {
+        width: 100px;
+    }
+
+    #match-score {
+        font-size: 1.5rem !important;
+    }
+
+    #relationship-classification {
+        margin-bottom: 0.75rem;
+    }
+}
