@@ -9,6 +9,7 @@ from adapters.flask.auth import auth_app
 from adapters.flask.common import error, error_no_own_schedule, render_login_optional, ValidationError, \
     flash_ios_announcement, adapt
 from adapters.flask.discovery import discovery_app
+from adapters.flask.match import match_app
 from adapters.flask.user import user_app
 from apis import rest_api
 from auth import *
@@ -104,6 +105,7 @@ blueprints = [
     discovery_app,
     user_app,
     auth_app,
+    match_app
 ]
 
 for bp in blueprints:

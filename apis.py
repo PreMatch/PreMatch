@@ -1,6 +1,10 @@
+import itertools
+from typing import Callable
+
 from adapters.flask.common import *
 from adapters.flask.validate import *
 from auth import *
+from entities.student import Student
 from google_auth import *
 
 rest_api = Blueprint('rest_api', __name__)
@@ -94,6 +98,7 @@ def api_schedule():
 
     return api_success(output)
 
+
 # block: string
 # semester: 1 or 2
 @rest_api.route('/api/classmates')
@@ -119,3 +124,33 @@ def api_classmates():
     students = list(map(lambda student: {'name': student.name, 'handle': student.handle}, students))
 
     return api_success({'students': students})
+
+
+@rest_api.route('/api/student/search', methods=['POST'])
+def api_search_student():
+    handle = logged_handle()
+    if handle is None:
+        return api_error_unauthorized()
+
+    query: str = request.form.get('query')
+    if query is None or query.strip() == '':
+        return api_bad_value('query')
+
+    results = list(map(lambda student: {'handle': student.handle, 'name': student.name},
+                       sorted(itertools.islice(adapt.student_repo.search(query), 15), key=completion_distance(query))))
+    return api_success({'results': results})
+
+
+def completion_distance(query: str) -> Callable[[Student], int]:
+    def string_dist(a: str, b: str) -> int:
+        base_len = min(len(a), len(b))
+        result = 0
+        for i in range(base_len):
+            if a[i] != b[i]:
+                result += 1
+        return result
+
+    def dist(result: Student):
+        return min(string_dist(result.handle, query), string_dist(result.name, query))
+
+    return dist
