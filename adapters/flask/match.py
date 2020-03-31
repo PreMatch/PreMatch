@@ -21,8 +21,12 @@ def rate_match():
     if logged_handle() is None:
         return '-1', 401
 
-    handle1: Optional[str] = request.form.get('handle1')
-    handle2: Optional[str] = request.form.get('handle2')
+    req_json = request.get_json(silent=True)
+    if req_json is None:
+        return '-1', 422
+
+    handle1: Optional[str] = req_json.get('handle1')
+    handle2: Optional[str] = req_json.get('handle2')
 
     if handle1 is None or handle1.strip() == '' or handle2 is None or handle2.strip() == '':
         return '-1', 422

@@ -132,7 +132,11 @@ def api_search_student():
     if handle is None:
         return api_error_unauthorized()
 
-    query: str = request.form.get('query')
+    req_json = request.get_json(silent=True)
+    if req_json is None:
+        return api_bad_value('query')
+
+    query: str = req_json.get('query')
     if query is None or query.strip() == '':
         return api_bad_value('query')
 
