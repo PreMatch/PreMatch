@@ -48,6 +48,14 @@ input:focus {
     color: white;
 }
 
+.partner-result {
+    transition: 0.5s ease;
+}
+
+.partner-result:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
 @media screen and (min-width: 401px) {
     input {
         background-position: 14px 12px !important;

@@ -29,5 +29,5 @@ def match_score(a: Student, b: Student):
     # same grade?
     grade_score = (3 - abs(a.graduating_year() - b.graduating_year())) / 3
 
-    print(f"match score query between {a.handle} and {b.handle}: name_score={name_score:.3f} classes_score={classes_score:.3f} grade_score={grade_score:.3f}")
+    # print(f"match score query between {a.handle} and {b.handle}: name_score={name_score:.3f} classes_score={classes_score:.3f} grade_score={grade_score:.3f}")
     return name_score * 0.3 + classes_score * 0.5 + grade_score * 0.2

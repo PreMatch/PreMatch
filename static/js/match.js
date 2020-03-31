@@ -14,10 +14,6 @@ function adjustLinkHolderWidths() {
     });
 }
 
-$(() => {
-    adjustLinkHolderWidths();
-});
-
 $(window).on('resize', () => {
     adjustLinkHolderWidths();
 });
@@ -69,6 +65,7 @@ function getResults(query) {
                 if (returnArr.length === 0) {
                     $('#no-results').show();
                 } else {
+                    returnArr.reverse();
                     $('#no-results').hide();
                     returnArr.forEach((partner) => {
                         $('#link-holder').prepend(`<a class="partner-result" onclick="selectPartner(&quot;${partner[1]}&quot;, &quot;${partner[0]}&quot;)">${partner[0]}</a>`);
@@ -129,13 +126,13 @@ function showMatchRating(theirHandle, theirName) {
 
             if (matchScore >= 0.9)
                 classification = "Soul Mates!";
-            else if (matchScore >= 0.8)
+            else if (matchScore >= 0.75)
                 classification = "Great Match!";
-            else if (matchScore >= 0.7)
+            else if (matchScore >= 0.6)
                 classification = "Pretty Good!";
-            else if (matchScore >= 0.5)
+            else if (matchScore >= 0.4)
                 classification = "Nothing Special";
-            else if (matchScore >= 0.25)
+            else if (matchScore >= 0.2)
                 classification = "Permanent Friend Zone";
             else
                 classification = "No Chance";
@@ -168,6 +165,7 @@ function reset() {
 
 function presearch() {
     partnerSearch();
+    adjustLinkHolderWidths();
     $('#loader').show();
     $('#no-results').hide();
 
