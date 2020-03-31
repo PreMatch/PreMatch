@@ -13,6 +13,7 @@ APS_DOMAIN = 'k12.andoverma.us'
 CLIENT_IDS = [WEB_CLIENT_ID, IOS_CLIENT_ID]
 
 
+# FIXME duplicated in Student
 def grad_year_of_handle(handle) -> Optional[int]:
     year_str = ''.join(filter(lambda char: char.isdigit(), handle))[:4]
     if len(year_str) == 0:

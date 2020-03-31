@@ -22,3 +22,21 @@ def test_hash_by_handle():
     student = Student('divanovich2021', 'Daniel')
 
     assert hash(student) == hash(student.handle)
+
+
+def test_grade_normal():
+    student = Student('hpeng2021', 'Michael')
+
+    assert student.graduating_year() == 2021
+
+
+def test_grade_normal_2():
+    student = Student('divanovich2023', 'Daniel')
+
+    assert student.graduating_year() == 2023
+
+
+def test_grade_duplicate():
+    student = Student('echen20212', 'Echen')
+
+    assert student.graduating_year() == 2021

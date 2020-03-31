@@ -23,5 +23,11 @@ class Student:
             return None
         return self.schedules.get(semester)
 
+    def graduating_year(self) -> Optional[int]:
+        year_str = ''.join(filter(lambda char: char.isdigit(), self.handle))[:4]
+        if len(year_str) == 0:
+            return None
+        return int(year_str)
+
     def __hash__(self):
         return hash(self.handle)
