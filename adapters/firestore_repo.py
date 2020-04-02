@@ -1,7 +1,8 @@
 import random
-from typing import Iterable, Optional, Dict, Any, Callable
+from typing import Iterable, Optional, Dict, Any, Callable, List
 
 from google.cloud import firestore
+from google.cloud.firestore_v1 import DocumentSnapshot
 
 from entities.klass import Class
 from entities.student import Student
@@ -15,6 +16,7 @@ TEACHER_COL = 'teachers'
 
 class FirestoreStudentRepo(StudentRepository):
     client: firestore.Client
+    cache: Optional[List[DocumentSnapshot]] = None
 
     def __init__(self, client: firestore.Client = firestore.Client(project="prematch-db")):
         self.client = client
@@ -35,6 +37,7 @@ class FirestoreStudentRepo(StudentRepository):
             self._increment_user_count()
 
         self.client.collection(STUDENT_COL).document(student.handle).set(data)
+        cache = None
 
     def exists(self, handle: Handle) -> bool:
         return self.client.collection(STUDENT_COL).document(handle).get(field_paths=[]).exists
@@ -52,7 +55,10 @@ class FirestoreStudentRepo(StudentRepository):
         if len(query) == 0:
             return
 
-        for doc in self.client.collection(STUDENT_COL).stream():
+        if self.cache is None:
+            self._populate_cache()
+
+        for doc in self.cache:
             if query in doc.id.lower() \
                     or query in doc.get('name').lower():
                 yield self._read_doc(doc)
@@ -69,6 +75,9 @@ class FirestoreStudentRepo(StudentRepository):
 
     def _increment_user_count(self):
         self.client.document(USER_COUNTER_DOC).update({'value': self.user_count() + 1})
+
+    def _populate_cache(self):
+        self.cache = list(self.client.collection(STUDENT_COL).stream())
 
     @staticmethod
     def _read_doc(entry: firestore.DocumentSnapshot) -> Optional[Student]:

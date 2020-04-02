@@ -46,7 +46,7 @@ function debounce(func, wait, immediate) {
 
 function getResults(query) {
     $.ajax({
-            async: false,
+            async: true,
             url: '/api/student/search',
             data: JSON.stringify({query: query}),
             contentType: 'application/json; charset=utf-8',
@@ -105,7 +105,7 @@ function selectPartner(handle, name) {
 
 function showMatchRating(theirHandle, theirName) {
     $.ajax({
-        async: false,
+        async: true,
         url: '/match/rate',
         data: JSON.stringify({
             handle1: theirHandle,
@@ -135,9 +135,10 @@ function showMatchRating(theirHandle, theirName) {
             else if (matchScore >= 0.2)
                 classification = "Permanent Friend Zone";
             else
-                classification = "No Chance";
+                classification = "No Chance :(";
 
-            $('#relationship-classification').html(classification);
+            $('#classification-box').text(classification);
+            applyHeartColor(matchScore);
 
             setTimeout(() => {
                 $('#loading-section').css('bottom', '100%');
@@ -173,4 +174,15 @@ function presearch() {
         $('#link-holder').show();
     else
         $('#link-holder').hide();
+}
+
+function applyHeartColor(rating) {
+    // max: #D32F2F (211, 47, 47)
+    const multiplier = (1 - Math.cos(Math.PI * rating)) / 2;
+    const rgb = [211, 47, 47].map(comp => comp * multiplier);
+    const rgbCss = `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+
+    $('#heart-path').css('fill', rgbCss);
+    // jQuery doesn't understand !important using .css(...)
+    $('#classification-box').attr('style', 'display: inline-block; padding: 5px; background-color: ' + rgbCss + ' !important');
 }

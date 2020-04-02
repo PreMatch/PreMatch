@@ -33,6 +33,10 @@ input:focus {
     width: 150px;
 }
 
+#relationship-classification {
+    color: #dddddd !important;
+}
+
 #heart-container {
     position: relative;
     padding: 0;
@@ -46,6 +50,19 @@ input:focus {
     right: 0;
     transform: translateY(-50%);
     color: white;
+}
+
+#match-score::before {
+    content: "PreMatchScore™";
+    font-size: 12px;
+    display: block;
+}
+
+#the-title::after {
+    content: "Featuring PreMatchScore™";
+    font-size: 18px;
+    display: block;
+    font-style: italic;
 }
 
 .partner-result {

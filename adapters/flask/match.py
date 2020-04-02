@@ -1,6 +1,6 @@
 from typing import Optional
 
-from flask import Blueprint, render_template, g, request
+from flask import Blueprint, render_template, g, request, flash, redirect
 
 from adapters.flask.auth import requires_login, logged_handle
 from adapters.flask.common import adapt
@@ -12,8 +12,18 @@ match_app = Blueprint("PreMatch Matchmaker", __name__, template_folder="template
 @match_app.route('/match')
 @requires_login
 def show_match():
-    visitor = adapt.student_repo.load(g.handle)
-    return render_template('match.html', handle=g.handle, name=visitor.name)
+    return show_match_as(g.handle)
+
+
+@match_app.route('/match/<handle>')
+@requires_login
+def show_match_as(handle: str):
+    visitor = adapt.student_repo.load(handle)
+    if visitor is None:
+        flash(f'{handle} is not a valid handle', 'error')
+        return redirect('/')
+
+    return render_template('match.html', handle=handle, name=visitor.name)
 
 
 @match_app.route('/match/rate', methods=['POST'])
