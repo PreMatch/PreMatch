@@ -6,6 +6,7 @@ from adapters.flask.common import *
 from adapters.flask.validate import *
 from entities.student import Student, YearSchedule
 from entities.types import Semester, SemesterLunches
+from use_cases.calendar import IcsCalendarCase
 from use_cases.schedule import MissingScheduleError
 
 user_app = Blueprint("PreMatch User Management", __name__, template_folder="templates")
@@ -217,3 +218,27 @@ def open_house_table():
     return render_template('openhouse-table.html', user=user,
                            schedule=schedule, blocks=times,
                            time=datetime.datetime.now())
+
+
+@user_app.route('/calendar')
+@requires_login
+def download_ahs_at_home_ics():
+    user = adapt.student_repo.load(g.handle)
+    calendar = IcsCalendarCase.generate_calendar_except_break(user)
+    ics = IcsCalendarCase.generate_ics(calendar)
+    print(f'event download_calendar_except_break {g.handle}')
+
+    ics.seek(0)
+    return send_file(ics, mimetype='text/calendar', as_attachment=True, attachment_filename='classes-with-break.ics')
+
+
+@user_app.route('/calendar/break')
+@requires_login
+def download_ahs_at_home_break_ics():
+    user = adapt.student_repo.load(g.handle)
+    calendar = IcsCalendarCase.generate_april_break_calendar(user)
+    ics = IcsCalendarCase.generate_ics(calendar)
+    print(f'event download_calendar_break_only {g.handle}')
+
+    ics.seek(0)
+    return send_file(ics, mimetype='text/calendar', as_attachment=True, attachment_filename='classes-during-break.ics')

@@ -1,3 +1,4 @@
+import os
 from urllib import parse
 
 import sentry_sdk
@@ -16,10 +17,11 @@ from auth import *
 from help import help_site
 from use_cases.schedule import MissingScheduleError
 
-sentry_sdk.init(
-    dsn="https://11b83f7d2a054364bf7883476e681eea@sentry.io/1536746",
-    integrations=[FlaskIntegration()]
-)
+if 'PREMATCH_DEV' not in os.environ:
+    sentry_sdk.init(
+        dsn="https://11b83f7d2a054364bf7883476e681eea@sentry.io/1536746",
+        integrations=[FlaskIntegration()]
+    )
 
 app = Flask(__name__)
 set_secret_key(app)

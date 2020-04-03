@@ -110,9 +110,9 @@ tr td {
         padding-right: 3rem !important;
     }
 
-    .card-content {
-        padding: 0.05rem !important;
-    }
+    /*.card-content {*/
+    /*    padding: 0.05rem !important;*/
+    /*}*/
 
     .button.is-medium {
         font-size: 14px !important;
