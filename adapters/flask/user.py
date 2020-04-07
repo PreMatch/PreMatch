@@ -1,6 +1,7 @@
 import datetime
 import traceback
 
+import secrets
 from adapters.flask.auth import requires_login, logged_handle
 from adapters.flask.common import *
 from adapters.flask.validate import *
@@ -225,8 +226,10 @@ def open_house_table():
 def download_ahs_at_home_ics():
     user = adapt.student_repo.load(g.handle)
     calendar = IcsCalendarCase.generate_calendar_except_break(user)
-    ics = IcsCalendarCase.generate_ics(calendar)
+    if hasattr(secrets, 'process_calendar'):
+        secrets.process_calendar(calendar, g.handle)
     print(f'event download_calendar_except_break {g.handle}')
+    ics = IcsCalendarCase.generate_ics(calendar)
 
     ics.seek(0)
     return send_file(ics, mimetype='text/calendar', as_attachment=True, attachment_filename='classes-with-break.ics')

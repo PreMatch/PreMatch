@@ -1,6 +1,8 @@
 import itertools
 from typing import Callable
 
+from flask_cors import CORS
+
 from adapters.flask.common import *
 from adapters.flask.validate import *
 from auth import *
@@ -8,6 +10,7 @@ from entities.student import Student
 from google_auth import *
 
 rest_api = Blueprint('rest_api', __name__)
+CORS(rest_api, supports_credentials=True)
 
 
 def api_error(code, message, status='error'):
@@ -71,8 +74,14 @@ def api_login():
         log_in(handle)
         return api_success({'handle': handle})
 
-    except ValueError as e:
-        return api_error(403, str(e))
+    except ValueError as e1:
+        try:
+            handle, name = validate_token_for_info(token)
+            log_in(handle)
+            return api_success({'handle': handle})
+
+        except ValueError as e2:
+            return api_error(403, str(e2))
 
 
 # handle: string
@@ -84,7 +93,7 @@ def api_schedule():
 
     handle = request.args.get('handle')
     if handle is None:
-        return api_bad_value('handle')
+        handle = logged_handle()
     student = adapt.student_repo.load(handle)
     if student is None or student.schedules is None:
         return api_error(404, 'Handle not found: ' + handle)

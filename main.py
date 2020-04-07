@@ -28,6 +28,12 @@ set_secret_key(app)
 
 app.register_blueprint(help_site)
 
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax'
+)
+
 
 @app.before_request
 def enforce_domain_https():

@@ -68,4 +68,4 @@ class IcsCalendarCase:
                      begin=begin,
                      end=begin + BLOCK_LEN,
                      categories=['AHS at home', f'AHS at home: {block} Block'],
-                     alarms=[AudioAlarm(datetime.timedelta(minutes=5))])
+                     alarms=[AudioAlarm(-datetime.timedelta(minutes=5))])

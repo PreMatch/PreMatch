@@ -86,3 +86,9 @@ class DiscordUser:
 
     def avatar_url(self) -> str:
         return f'https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png'
+
+
+class AnalyticsSink(ABC):
+    @abstractmethod
+    def record_event(self, user: Optional[Student], event_name: str, event_value: Optional[str]):
+        raise NotImplementedError()

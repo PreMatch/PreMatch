@@ -21,3 +21,4 @@ users.db
 venv/*
 tests/*
 PreMatch-*.json
+virtual-bell/

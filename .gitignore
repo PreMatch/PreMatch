@@ -11,3 +11,6 @@ secrets.py
 secrets.tar
 .pytest_cache/
 PreMatch.iml
+
+# it's stored this way on my machine
+virtual-bell/
