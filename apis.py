@@ -1,4 +1,5 @@
 import itertools
+from functools import wraps
 from typing import Callable
 
 from flask_cors import CORS
@@ -13,12 +14,18 @@ rest_api = Blueprint('rest_api', __name__)
 CORS(rest_api, supports_credentials=True)
 
 
-def api_error(code, message, status='error'):
-    return jsonify({
+def api_error(code, message, status='error', extra=None):
+    if extra is None:
+        extra = dict()
+
+    data = {
         'status': status,
         'code': code,
         'message': message
-    }), code
+    }
+    data.update(extra)
+
+    return jsonify(data), code
 
 
 def api_success(payload):
@@ -30,22 +37,43 @@ def api_success(payload):
     return jsonify(data)
 
 
-def api_error_unauthorized():
-    return api_error(401, 'Unauthorized (not logged in)')
+def api_error_unauthorized(err: Optional[str] = None):
+    return api_error(401, 'Unauthorized (not logged in)', extra=None if err is None else {'error': err})
 
 
 def api_bad_value(problem_key):
     return api_error(422, f'Invalid or missing value for "{problem_key}"')
 
 
+def requires_api_auth(f):
+    @wraps(f)
+    def dec_fun(*args, **kwargs):
+        handle = logged_handle()
+
+        if handle is None:
+            try:
+                data = request.get_json()
+                if data is None:
+                    raise LookupError('missing id_token data')
+                token = data['id_token']
+                handle, name = validate_firebase_token_for_info(token)
+                g.handle = handle
+            except Exception as e:
+                return api_error_unauthorized(str(e))
+        else:
+            g.handle = handle
+
+        return f(*args, **kwargs)
+
+    return dec_fun
+
+
 # teacher: string
 # block: string (letter)
 # log-in required
-@rest_api.route('/api/lunch/number', methods=['GET'])
+@rest_api.route('/api/lunch/number', methods=['GET', 'POST'])
+@requires_api_auth
 def api_lunch_get():
-    if logged_handle() is None:
-        return api_error_unauthorized()
-
     teacher = request.args.get('teacher')
     block = request.args.get('block')
     semester = request.args.get('semester')
@@ -86,18 +114,17 @@ def api_login():
 
 # handle: string
 # log-in required
-@rest_api.route('/api/schedule', methods=['GET'])
+@rest_api.route('/api/schedule', methods=['GET', 'POST'])
+@requires_api_auth
 def api_schedule():
-    if logged_handle() is None:
-        return api_error_unauthorized()
-
     handle = request.args.get('handle')
     if handle is None:
-        handle = logged_handle()
+        handle = g.handle
+
     student = adapt.student_repo.load(handle)
     if student is None or student.schedules is None:
         return api_error(404, 'Handle not found: ' + handle)
-    if not student.is_public and student.handle != logged_handle():
+    if not student.is_public and student.handle != g.handle:
         return api_error(403, 'Cannot read private handle: ' + handle)
 
     output = {}
@@ -111,14 +138,11 @@ def api_schedule():
 # block: string
 # semester: 1 or 2
 @rest_api.route('/api/classmates')
+@requires_api_auth
 def api_classmates():
-    handle = logged_handle()
-    if handle is None:
-        return api_error_unauthorized()
-
     block = request.args.get('block')
     semester = request.args.get('semester')
-    user = adapt.student_repo.load(handle)
+    user = adapt.student_repo.load(g.handle)
 
     if block is None or not valid_block(block):
         return api_bad_value('block')
@@ -136,11 +160,8 @@ def api_classmates():
 
 
 @rest_api.route('/api/student/search', methods=['POST'])
+@requires_api_auth
 def api_search_student():
-    handle = logged_handle()
-    if handle is None:
-        return api_error_unauthorized()
-
     req_json = request.get_json(silent=True)
     if req_json is None:
         return api_bad_value('query')

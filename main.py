@@ -29,7 +29,8 @@ set_secret_key(app)
 app.register_blueprint(help_site)
 
 app.config.update(
-    SESSION_COOKIE_SECURE=True,
+    # secure if not dev, as https on localhost is hard
+    SESSION_COOKIE_SECURE='PREMATCH_DEV' not in os.environ,
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax'
 )

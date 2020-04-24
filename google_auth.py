@@ -18,11 +18,11 @@ def grad_year_of_handle(handle) -> Optional[int]:
 
 
 # Throws ValueError
-def validate_for_handle_name(token, client_id):
-    idinfo = id_token.verify_oauth2_token(token, requests.Request(), client_id)
+def validate_for_handle_name(idinfo):
 
     if idinfo['iss'] not in ['accounts.google.com',
-                             'https://accounts.google.com']:
+                             'https://accounts.google.com',
+                             'https://securetoken.google.com/prematch-212912']:
         raise ValueError('Wrong issuer')
     if 'hd' not in idinfo or idinfo['hd'] != APS_DOMAIN:
         raise ValueError('You need to use your k12.andoverma.us account!')
@@ -39,8 +39,16 @@ def validate_for_handle_name(token, client_id):
 
 
 def validate_token_for_info(token):
-    return validate_for_handle_name(token, WEB_CLIENT_ID)
+    id_info = id_token.verify_oauth2_token(token, requests.Request(), WEB_CLIENT_ID)
+    return validate_for_handle_name(id_info)
 
 
 def validate_ios_token_for_info(token):
-    return validate_for_handle_name(token, IOS_CLIENT_ID)
+    id_info = id_token.verify_oauth2_token(token, requests.Request(), IOS_CLIENT_ID)
+    return validate_for_handle_name(id_info)
+
+
+def validate_firebase_token_for_info(token):
+    id_info = id_token.verify_firebase_token(token, requests.Request(),
+                                             audience='prematch-212912')
+    return validate_for_handle_name(id_info)

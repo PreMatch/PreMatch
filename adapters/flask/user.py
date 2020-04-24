@@ -7,6 +7,7 @@ from adapters.flask.common import *
 from adapters.flask.validate import *
 from entities.student import Student, YearSchedule
 from entities.types import Semester, SemesterLunches
+from use_cases import ap
 from use_cases.calendar import IcsCalendarCase
 from use_cases.schedule import MissingScheduleError
 
@@ -245,3 +246,23 @@ def download_ahs_at_home_break_ics():
 
     ics.seek(0)
     return send_file(ics, mimetype='text/calendar', as_attachment=True, attachment_filename='classes-during-break.ics')
+
+
+@user_app.route('/ap-exam/events', methods=['GET', 'POST'])
+@requires_login
+def ap_exam_events():
+    if request.method == 'GET':
+        return render_template('ap_events.html', handle=g.handle, subjects=ap.AP_TEST_DESCRIPTIONS.keys())
+
+    payload = request.form
+    try:
+        subjects = dict(payload)
+        makeup = subjects.pop('__makeup', False)
+        calendar = ap.calendar_of_exams(ap.exam_events(subjects.keys(), makeup))
+        ics = IcsCalendarCase.generate_ics(calendar)
+        print(f'event exam_events_download makeup={payload.get("makeup")} len={len(calendar.events)} {g.handle}')
+
+        ics.seek(0)
+        return send_file(ics, mimetype='text/calendar', as_attachment=True, attachment_filename='ap-exams.ics')
+    except KeyError as key:
+        return error(422, f'Unknown subject: {key}')

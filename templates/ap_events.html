@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+    <title>AP events</title>
+</head>
+<body>
+    <form method="post">
+        {% for subject in subjects %}
+        <div>
+            <label>
+                {{ subject }}
+                <input type="checkbox" name="{{ subject }}">
+            </label>
+        </div>
+        {% endfor %}
+        <label>
+            Tick for June (makeup) events
+            <input type="checkbox" name="__makeup">
+        </label>
+        <input type="submit" value="Get Events">
+    </form>
+</body>
