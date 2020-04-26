@@ -70,7 +70,8 @@
 <section class="hero is-primary pushed">
     <div class="hero-body">
         <div class="container">
-            <h1 class="is-size-2 overridden-white title">Dashboard for {{ name }}, Semester {{ semester }} <span style="margin-left: 20px"><a
+            <h1 class="is-size-2 overridden-white title">Dashboard for {{ name }}, Semester {{ semester }} <span
+                    style="margin-left: 20px"><a
                     class="button is-medium is-primary is-outlined"
                     href="/dashboard/{{ 2 if semester == 1 else 1 }}">View Semester {{ 2 if semester == 1 else 1 }}</a></span>
             </h1>
@@ -85,15 +86,36 @@
         </header>
         <div class="card-content">
             <div class="content is-size-7 is-size-6-tablet">
-                Following the release of the new 5-day cycle, you can now receive personalized calendar entries representing
-                your classes. You can <a href="https://www.lifewire.com/how-to-import-ics-calendar-files-in-ical-1172177" target="_blank">import</a> the downloaded iCal events directly into Google Calendar, Outlook, and more.
+                Following the release of the new 5-day cycle, you can now receive personalized calendar entries
+                representing
+                your classes. You can <a
+                    href="https://www.lifewire.com/how-to-import-ics-calendar-files-in-ical-1172177" target="_blank">import</a>
+                the downloaded iCal events directly into Google Calendar, Outlook, and more.
                 <br>
-                <i>Following the announcement that the closure has been extended to the end of the school year, you may now download calendar entries representing class sessions during the month of May.</i>
+                <i>Following the announcement that the closure has been extended to the end of the school year, you may
+                    now download calendar entries representing class sessions during the month of May.</i>
             </div>
         </div>
         <footer class="card-footer is-size-7 is-size-6-tablet is-block-mobile">
-            <a href="/calendar" class="card-footer-item" onclick="justDownloadedCalendar('{{ handle }}', 'normal')">Download entries until May (.ics)</a>
-            <a href="/calendar/until-june" class="card-footer-item" onclick="justDownloadedCalendar('{{ handle }}', 'may')">Download May entries (.ics)</a>
+            <a href="/calendar" class="card-footer-item" onclick="justDownloadedCalendar('{{ handle }}', 'normal')">Download
+                entries until May (.ics)</a>
+            <a href="/calendar/until-june" class="card-footer-item"
+               onclick="justDownloadedCalendar('{{ handle }}', 'may')">Download May entries (.ics)</a>
+        </footer>
+    </div>
+    <div class="card" style="margin: 20px;">
+        <header class="card-header" style="padding: 0.5rem;">
+            <p class="card-header-title is-size-4">Personalized AP Exam Calendar</p>
+        </header>
+        <div class="card-content">
+            <div class="content is-size-7 is-size-6-tablet">
+                Use this tool to generate a file that can be <a
+                    href="https://www.lifewire.com/how-to-import-ics-calendar-files-in-ical-1172177" target="_blank">imported</a>
+               to add events for your AP exams directly into Google Calendar, Outlook, Apple Calendar, and more.
+            </div>
+        </div>
+        <footer class="card-footer is-size-7 is-size-6-tablet is-block-mobile">
+            <a href="/ap-exam/events" class="card-footer-item">Visit Tool</a>
         </footer>
     </div>
     <div class="roster-container">
