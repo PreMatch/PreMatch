@@ -260,7 +260,7 @@ def ap_exam_events():
         makeup = subjects.pop('__makeup', False)
         calendar = ap.calendar_of_exams(ap.exam_events(subjects.keys(), makeup))
         ics = IcsCalendarCase.generate_ics(calendar)
-        print(f'event exam_events_download makeup={payload.get("makeup")} len={len(calendar.events)} '
+        print(f'event exam_events_download makeup={makeup} len={len(calendar.events)} '
               f'handle={logged_handle()}')
 
         ics.seek(0)
