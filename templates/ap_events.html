@@ -1,21 +1,79 @@
 <!DOCTYPE html>
-<head>
-    <title>AP events</title>
-</head>
-<body>
-    <form method="post">
-        {% for subject in subjects %}
-        <div>
-            <label>
-                {{ subject }}
-                <input type="checkbox" name="{{ subject }}">
+<html lang="en">
+{% from 'macros.html' import head, nav, importJs, footer %}
+
+{{ head('AP Exam Scheduler', True) }}
+
+<body id="body" class="bg-primary">
+
+{{ nav(logged_in, "/ap-exam/events") }}
+
+<section class="is-transparent is-medium section pushed">
+    <div class="container is-fluid has-text-centered">
+        <h1 class="title overridden-white is-size-1 is-size-3-mobile">AP Exam Scheduler</h1>
+        <p class="subtitle overridden-white is-size-4 is-size-5-mobile">Please select each AP exam that you intend to take. Then press
+            the button to recieve a .ics file, which may be <strong>imported into just about any calendar
+                program</strong>, such as Google Calendar and Apple Calendar.</p>
+        <form method="post" class="has-text-left overridden-white is-size-5 is-size-6-mobile">
+            {% for subject in subjects %}
+                <div>
+                    <label class="checkbox">
+                        <input type="checkbox" name="{{ subject }}">
+                        {{ subject }}
+                    </label>
+                </div>
+            {% endfor %}
+            <hr>
+            <label class="checkbox">
+                <input type="checkbox" name="__makeup">
+                I am taking these exams in <strong>June</strong>
             </label>
-        </div>
-        {% endfor %}
-        <label>
-            Tick for June (makeup) events
-            <input type="checkbox" name="__makeup">
-        </label>
-        <input type="submit" value="Get Events">
-    </form>
+            <div class="has-text-centered">
+                <a class="button is-outlined is-primary is-medium" href="javascript:void(0)" onclick="attemptSubmit()"
+                   title="Submit">Get File</a>
+            </div>
+            <p class="overridden-white" id="error-msg">Please select <strong>at least one</strong> item!</p>
+        </form>
+        <style>
+            form {
+                width: 360px;
+                margin: 0 auto;
+            }
+
+            label:hover {
+                color: white !important;
+            }
+
+            .button {
+                transition: 1s all ease;
+                margin-top: 1rem;
+            }
+
+            .button.is-outlined.is-primary:hover {
+                border-color: white !important;
+            }
+
+            @media screen and (max-width: 678px) {
+                form {
+                    width: 300px;
+                }
+            }
+        </style>
+        <script type="text/javascript">
+            $('#error-msg').hide();
+
+            function attemptSubmit() {
+                if ($('input:checked').length > 0) {
+                    $('#error-msg').hide();
+                    $('form').first().submit();
+                } else
+                    $('#error-msg').show();
+            }
+        </script>
+    </div>
+</section>
+
+{{ importJs() }}
+
 </body>
+</html>
