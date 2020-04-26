@@ -250,10 +250,9 @@ def download_ahs_at_home_ics_until_june():
 
 
 @user_app.route('/ap-exam/events', methods=['GET', 'POST'])
-@requires_login
 def ap_exam_events():
     if request.method == 'GET':
-        return render_template('ap_events.html', handle=g.handle, subjects=ap.AP_TEST_DESCRIPTIONS.keys())
+        return render_template('ap_events.html', handle=logged_handle(), subjects=ap.AP_TEST_DESCRIPTIONS.keys())
 
     payload = request.form
     try:
@@ -261,7 +260,8 @@ def ap_exam_events():
         makeup = subjects.pop('__makeup', False)
         calendar = ap.calendar_of_exams(ap.exam_events(subjects.keys(), makeup))
         ics = IcsCalendarCase.generate_ics(calendar)
-        print(f'event exam_events_download makeup={payload.get("makeup")} len={len(calendar.events)} {g.handle}')
+        print(f'event exam_events_download makeup={payload.get("makeup")} len={len(calendar.events)} '
+              f'handle={logged_handle()}')
 
         ics.seek(0)
         return send_file(ics, mimetype='text/calendar', as_attachment=True, attachment_filename='ap-exams.ics')

@@ -11,8 +11,8 @@
 <section class="is-transparent is-medium section pushed">
     <div class="container is-fluid has-text-centered">
         <h1 class="title overridden-white is-size-1 is-size-3-mobile">Add AP Exams to Your Calendar</h1>
-        <p class="subtitle overridden-white is-size-4 is-size-5-mobile">Please select each AP exam that you intend to take. Then press
-            the button to recieve a .ics file, which may be <strong>imported into just about any calendar
+        <p class="subtitle overridden-white is-size-4 is-size-5-mobile">Please select each AP exam that you intend to take. Then, press
+            the <i>Get Events</i> button to receive a .ics file that you can <strong>import into just about any calendar
                 program</strong>, such as Google Calendar and Apple Calendar.</p>
         <form method="post" class="has-text-left overridden-white is-size-5 is-size-6-mobile">
             {% for subject in subjects %}
@@ -25,12 +25,13 @@
             {% endfor %}
             <hr>
             <label class="checkbox">
-                <input type="checkbox" name="__makeup">
+                <input type="checkbox" id="makeup-input" name="__makeup">
                 I am taking these exams in <strong>June</strong>
             </label>
             <div class="has-text-centered">
                 <a class="button is-outlined is-primary is-medium" href="javascript:void(0)" onclick="attemptSubmit()"
-                   title="Submit">Get File</a>
+                   title="Submit">Get Events</a><br>
+                <i id="selection-counter-container"><span id="selection-counter">0</span> exam(s) selected</i>
             </div>
             <p class="overridden-white" id="error-msg">Please select <strong>at least one</strong> item!</p>
         </form>
@@ -69,6 +70,15 @@
                 } else
                     $('#error-msg').show();
             }
+            $(() => {
+                const counterElement = $('#selection-counter');
+                let counter = 0;
+
+                $('input:checkbox:not(#makeup-input)').on('change', function() {
+                    counter += (this.checked ? 1 : -1);
+                    counterElement.text(counter);
+                });
+            });
         </script>
     </div>
 </section>
