@@ -236,17 +236,18 @@ def download_ahs_at_home_ics():
     return send_file(ics, mimetype='text/calendar', as_attachment=True, attachment_filename='classes-with-break.ics')
 
 
-@user_app.route('/calendar/until-june')
+@user_app.route('/calendar/june')
 @requires_login
-def download_ahs_at_home_ics_until_june():
+def download_ahs_at_home_ics_june():
     user = adapt.student_repo.load(g.handle)
-    calendar = IcsCalendarCase.generate_calendar(user, start_date=datetime.date(2020, 5, 4),
-                                                 end_date=datetime.date(2020, 5, 29))
+    # Confirmed in Mr. Conrad's email
+    calendar = IcsCalendarCase.generate_calendar(user, start_date=datetime.date(2020, 6, 1),
+                                                 end_date=datetime.date(2020, 6, 15))
     ics = IcsCalendarCase.generate_ics(calendar)
-    print(f'event download_calendar_until_june {g.handle}')
+    print(f'event download_calendar_june {g.handle}')
 
     ics.seek(0)
-    return send_file(ics, mimetype='text/calendar', as_attachment=True, attachment_filename='classes-may.ics')
+    return send_file(ics, mimetype='text/calendar', as_attachment=True, attachment_filename='classes-june.ics')
 
 
 @user_app.route('/ap-exam/events', methods=['GET', 'POST'])
