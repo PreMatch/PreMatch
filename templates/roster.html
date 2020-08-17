@@ -12,10 +12,10 @@
     <div class="hero-body">
         <div class="container">
             <h1 class="title overridden-white is-size-1 is-size-2-mobile">
-                Block {{ period }} with {{ teacher }}, Semester {{ semester }}
+                Block {{ period }} with {{ teacher }} (semester {{ semester }})
             </h1>
             <h2 class="subtitle overridden-white is-size-3 is-size-4-mobile">
-                {{ size }} student(s)
+                {{ size }} student{{ '' if size == 1 else 's' }}
             </h2>
             {% if period in 'CDEFG' %}
                 {% if lunch_number != none %}

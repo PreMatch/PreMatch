@@ -12,6 +12,18 @@ body {
     padding-top: 52px;
 }
 
+@import url('https://rsms.me/inter/inter.css');
+
+body, button, input, select, textarea {
+    font-family: 'Inter', sans-serif !important;
+}
+
+@supports (font-variation-settings: normal) {
+  body, button, input, select, textarea {
+      font-family: 'Inter var', sans-serif !important;
+  }
+}
+
 h1, h2, h3, h4, h5, h6, a {
     color: #03A9F4 !important;
 }

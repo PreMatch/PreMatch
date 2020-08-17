@@ -1,5 +1,5 @@
 let navOpen = false;
-const sideBarWidth = 250;
+const sideBarWidth = 270;
 
 let sidenav = $("#sidenav");
 let overlay = $("#overlay");

@@ -70,51 +70,18 @@
 <section class="hero is-primary pushed">
     <div class="hero-body">
         <div class="container">
-            <h1 class="is-size-2 overridden-white title">Dashboard for {{ name }}, Semester {{ semester }} <span
-                    style="margin-left: 20px"><a
-                    class="button is-medium is-primary is-outlined"
-                    href="/dashboard/{{ 2 if semester == 1 else 1 }}">View Semester {{ 2 if semester == 1 else 1 }}</a></span>
+            <h1 class="is-size-2 overridden-white title">
+                Dashboard for {{ name }} (semester {{ semester }})
             </h1>
             <h2 class="is-size-4 overridden-white subtitle">{{ handle }}</h2>
+            <a class="button is-medium is-primary is-outlined"
+                href="/dashboard/{{ 2 if semester == 1 else 1 }}">
+                View Semester {{ 2 if semester == 1 else 1 }}
+            </a>
         </div>
     </div>
 </section>
 <section class="pushed" style="margin: 0 10%;">
-    <div class="card" style="margin: 20px;">
-        <header class="card-header" style="padding: 0.5rem;">
-            <p class="card-header-title is-size-4">Personalized Online Class Calendar</p>
-        </header>
-        <div class="card-content">
-            <div class="content is-size-7 is-size-6-tablet">
-                Following the release of the new 5-day cycle, you can now receive personalized calendar entries
-                representing
-                your classes. You can <a
-                    href="https://www.lifewire.com/how-to-import-ics-calendar-files-in-ical-1172177" target="_blank">import</a>
-                the downloaded iCal events directly into Google Calendar, Outlook, and more.
-                <br>
-                <i>The last day of normal classes will be on June 15th. You may download calendar entries for your class sessions in June.</i>
-            </div>
-        </div>
-        <footer class="card-footer is-size-7 is-size-6-tablet is-block-mobile">
-            <a href="/calendar/june" class="card-footer-item"
-               onclick="justDownloadedCalendar('{{ handle }}', 'june')">Download June entries (.ics)</a>
-        </footer>
-    </div>
-    <div class="card" style="margin: 20px;">
-        <header class="card-header" style="padding: 0.5rem;">
-            <p class="card-header-title is-size-4">Personalized AP Exam Calendar 📅</p>
-        </header>
-        <div class="card-content">
-            <div class="content is-size-7 is-size-6-tablet">
-                <b>Get calendar events for your 2020 AP exams.</b> You can <a
-                    href="https://www.lifewire.com/how-to-import-ics-calendar-files-in-ical-1172177" target="_blank">import</a>
-                these events directly into Google Calendar, Outlook, Apple Calendar, and more. Good luck!
-            </div>
-        </div>
-        <footer class="card-footer is-size-7 is-size-6-tablet is-block-mobile">
-            <a href="/ap-exam/events" class="card-footer-item">Get Events</a>
-        </footer>
-    </div>
     <div class="roster-container">
         <div class="roster-row" id="row-1">
             {{ rosterCard('A') }}

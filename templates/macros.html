@@ -1,81 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 {% macro head(title, whiteBurger) %}
-    <head>
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143938190-1"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
 
-            function gtag() {
-                dataLayer.push(arguments);
-            }
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-143938190-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-143938190-1');
+    </script>
 
-            gtag('js', new Date());
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/img/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/img/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/img/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/img/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/img/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/img/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/img/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/img/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/img/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#03A9F4">
+    <meta name="msapplication-TileImage" content="/static/img/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#03A9F4">
+    <meta name="google-signin-client_id"
+        content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script type="text/javascript" src="/static/js/macroScripts.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/theme.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    {% if title %}
+    <title>{{ title }}</title>
+    {% else %}
+    <title>PreMatch</title>
+    {% endif %}
 
-            gtag('config', 'UA-143938190-1');
-        </script>
+    {% if whiteBurger %}
+    <style>
+        .navbar-burger {
+            color: white !important;
+        }
+    </style>
+    {% endif %}
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="apple-touch-icon" sizes="57x57" href="/static/img/favicon/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="/static/img/favicon/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="/static/img/favicon/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="/static/img/favicon/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="/static/img/favicon/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="/static/img/favicon/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="/static/img/favicon/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="/static/img/favicon/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="/static/img/favicon/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon/favicon-16x16.png">
-        <link rel="manifest" href="/manifest.json">
-        <meta name="msapplication-TileColor" content="#ffffff">
-        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-        <meta name="theme-color" content="#ffffff">
-        <meta name="google-signin-client_id"
-              content="764760025104-is3262o216isl5tbfj4aakcel2tirl7n.apps.googleusercontent.com">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
-        <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <script src="https://apis.google.com/js/client:platform.js" async defer></script>
-        <script type="text/javascript" src="/static/js/macroScripts.js"></script>
-        <link rel="stylesheet" type="text/css" href="/static/css/theme.css">
-        <link rel="stylesheet" type="text/css" href="/static/css/main.css">
-        {% if title %}
-            <title>{{ title }}</title>
-        {% else %}
-            <title>PreMatch</title>
-        {% endif %}
-
-        {% if whiteBurger %}
-            <style>
-                .navbar-burger {
-                    color: white !important;
-                }
-            </style>
-        {% endif %}
-
-    </head>
+</head>
 {% endmacro %}
+
 <body>
 
 
-{% macro nav(loggedIn, currentHref) %}
+    {% macro nav(loggedIn, currentHref) %}
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages|length > 0 %}
-            <div id="flashes">
-                {% for message in messages %}
-                    <div id="flash-{{ loop.index0 }}" class="flash notification is-{{ 'danger' if message[0] == 'error' else 'primary' }}">
-                        <button class="delete" onclick="closeFlash({{ loop.index0 }})"></button>
-                        {{ message[1] }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+    {% if messages|length > 0 %}
+    <div id="flashes">
+        {% for message in messages %}
+        <div id="flash-{{ loop.index0 }}"
+            class="flash notification is-{{ 'danger' if message[0] == 'error' else 'primary' }}">
+            <button class="delete" onclick="closeFlash({{ loop.index0 }})"></button>
+            {{ message[1] }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
     <nav class="navbar is-transparent" role="navigation" aria-label="main navigation" id="nav">
         <div id="navbar-brand" class="navbar-brand">
@@ -84,7 +81,7 @@
             </a>
 
             <a role="button" class="navbar-burger is-large" aria-label="menu" aria-expanded="false"
-               onclick="toggleNav()" id="nav-burg">
+                onclick="toggleNav()" id="nav-burg">
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
@@ -101,32 +98,32 @@
 
     </nav>
     <div id="overlay"></div>
-    <div id="sidenav" class="sidenav is-size-2">
-        <a role="button" class="navbar-burger is-large" aria-label="menu" aria-expanded="false"
-           onclick="toggleNav()" id="nav-burg-sidenav">
+    <div id="sidenav" class="sidenav is-size-3">
+        <a role="button" class="navbar-burger is-large" aria-label="menu" aria-expanded="false" onclick="toggleNav()"
+            id="nav-burg-sidenav">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
         </a>
         <div id="sidenav-link-container">
-            <a class="" href="/">Home</a>
-            <a class="" href="/about">About</a>
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <a href="/about"><i class="fas fa-info-circle"></i> About</a>
             {% if loggedIn %}
                 <hr>
-                <a class="" href="/dashboard">My Classes</a>
-                <a class="" href="/update">Update</a>
-                <a class="" href="/search">Search</a>
+                <a href="/dashboard"><i class="fas fa-calendar-alt"></i> My Classes</a>
+                <a href="/update"><i class="fas fa-pen"></i> Update</a>
+                <a href="/search"><i class="fas fa-search"></i> Search</a>
                 <hr>
-                <a class="" onclick="signOutAndRedirect('/logout')">Logout</a>
+                <a onclick="signOutAndRedirect('/logout')"><i class="fas fa-sign-out-alt"></i> Logout</a>
             {% else %}
-                <a class="" href="/login">Login</a>
+                <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
             {% endif %}
         </div>
         <div id="nav-bottom-links">
             <ul>
-                <li><a class="" href="/help">Help</a><a class="" href="/support">Support</a></li>
+                <li><a href="/help">Help</a><a href="/support">Support</a></li>
                 <li>
-                    <a class="" href="/privacy">Privacy Policy</a><a class="" href="/terms">Terms</a>
+                    <a href="/privacy">Privacy Policy</a><a href="/terms">Terms</a>
                 </li>
             </ul>
         </div>
@@ -134,9 +131,9 @@
             setActive("{{ currentHref }}");
         </script>
     </div>
-{% endmacro %}
+    {% endmacro %}
 
-{% macro bodyPaddingNav() %}
+    {% macro bodyPaddingNav() %}
     <script type="text/javascript">
         $("#body").css("padding-top", $("#nav").innerHeight());
 
@@ -159,20 +156,21 @@
             }
         });
     </script>
-{% endmacro %}
+    {% endmacro %}
 
-{% macro importJs() %}
+    {% macro importJs() %}
     <script src="/static/js/sideBar.js"></script>
     <script src="/static/js/googleSignIn.js"></script>
     <script src="/static/js/flash.js"></script>
-{% endmacro %}
+    {% endmacro %}
 
-{% macro hideScrollbar() %}
+    {% macro hideScrollbar() %}
     <style>
         ::-webkit-scrollbar {
             display: none;
         }
     </style>
-{% endmacro %}
+    {% endmacro %}
 </body>
+
 </html>
