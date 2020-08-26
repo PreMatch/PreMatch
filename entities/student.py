@@ -13,10 +13,9 @@ class Student:
     handle: Handle
     name: Name
     discord_id: Optional[str] = None
-    accepts_terms: bool = False
-    accepts_privacy: bool = False
     schedules: Optional[YearSchedule] = None
     is_public: bool = False
+    cohort: Optional[Cohort] = None
 
     def semester_schedule(self, semester: Semester) -> Optional[SemesterSchedule]:
         if self.schedules is None:

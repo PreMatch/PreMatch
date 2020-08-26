@@ -1,3 +1,4 @@
+from entities.types import Cohort
 from unittest.mock import MagicMock, Mock
 
 import pytest
@@ -6,7 +7,7 @@ from google.cloud import firestore
 from adapters.firestore_repo import FirestoreStudentRepo, FirestoreClassRepo
 from entities.klass import Class
 from entities.student import Student
-from tests.mock_helper import require
+from tests.mock_helper import require, switch
 
 mock_db = MagicMock()
 student_repo = FirestoreStudentRepo(mock_db)
@@ -20,7 +21,8 @@ def reset_mock():
 
 def test_set_student_without_discord(reset_mock):
     student = Student('hpeng2021', 'Michael Peng',
-                      schedules={1: {'C': 'Messina'}, 2: {'F': 'Parsons'}})
+                      schedules={1: {'C': 'Messina'}, 2: {'F': 'Parsons'}},
+                      cohort=Cohort.blue)
 
     student_repo.save(student)
 
@@ -34,9 +36,8 @@ def test_set_student_without_discord(reset_mock):
                 'F': 'Parsons'
             }
         },
-        'accepts_terms': student.accepts_terms,
-        'accepts_privacy': student.accepts_privacy,
-        'is_public': student.is_public
+        'is_public': student.is_public,
+        'cohort': 'blue'
     })
 
 
@@ -50,10 +51,9 @@ def test_set_student_with_discord(reset_mock):
     mock_db.collection('students').document('hpeng2021').set.assert_called_once_with({
         'name': 'Michael Peng',
         'semesters': None,
-        'accepts_terms': student.accepts_terms,
-        'accepts_privacy': student.accepts_privacy,
         'is_public': student.is_public,
-        'discord_id': student.discord_id
+        'discord_id': student.discord_id,
+        'cohort': None
     })
 
 
@@ -73,9 +73,8 @@ def test_load_student_without_discord(reset_mock):
                 'G': 'Reidy'
             }
         },
-        'accepts_terms': True,
-        'accepts_privacy': True,
-        'is_public': True
+        'is_public': True,
+        'cohort': 'blue'
     }
     mock_db.collection('students').document('hpeng2021').get().to_dict.return_value = db_entry
     mock_db.collection('students').document('hpeng2021').get().id = 'hpeng2021'
@@ -89,10 +88,9 @@ def test_load_student_without_discord(reset_mock):
             1: db_entry['semesters']['1'],
             2: db_entry['semesters']['2']
         },
-        accepts_terms=True,
-        accepts_privacy=True,
         is_public=True,
-        discord_id=None
+        discord_id=None,
+        cohort=Cohort.blue
     )
 
 
@@ -103,7 +101,8 @@ def test_load_student_with_discord_without_schedule(reset_mock):
         'accepts_terms': True,
         'accepts_privacy': True,
         'is_public': True,
-        'discord_id': '100923842098207349'
+        'discord_id': '100923842098207349',
+        'cohort': 'remote'
     }
     mock_db.collection('students').document('hpeng2021').get().to_dict.return_value = db_entry
 
@@ -113,10 +112,9 @@ def test_load_student_with_discord_without_schedule(reset_mock):
         handle='hpeng2021',
         name='Michael Peng',
         schedules=None,
-        accepts_terms=True,
-        accepts_privacy=True,
         is_public=True,
-        discord_id=db_entry['discord_id']
+        discord_id=db_entry['discord_id'],
+        cohort=Cohort.remote
     )
 
 
@@ -137,10 +135,9 @@ def test_students_in_class(reset_mock):
         snapshot.to_dict.return_value = {
             'name': student.name,
             'semesters': None,
-            'accepts_terms': False,
-            'accepts_privacy': False,
             'is_public': False,
-            'discord_id': None
+            'discord_id': None,
+            'cohort': None
         }
         return snapshot
 
@@ -170,6 +167,8 @@ def populate_search_students():
     ret_val = []
     for student in search_students:
         mock = MagicMock()
+        mock_dict = {'name': student.name, 'cohort': None, 'semesters': None, 'is_public': True}
+        mock.to_dict.side_effect = require((), mock_dict)
         mock.get.side_effect = require(('name',), student.name)
         mock.id = student.handle
         ret_val.append(mock)

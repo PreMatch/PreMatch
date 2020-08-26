@@ -12,3 +12,10 @@ Location = str
 
 SemesterSchedule = Dict[Block, Name]
 SemesterLunches = Dict[Block, LunchNumber]
+
+from enum import Enum
+
+class Cohort(Enum):
+    remote = 'remote'
+    blue = 'blue'
+    gold = 'gold'

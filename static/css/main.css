@@ -201,7 +201,7 @@ input[id^="teacherInput"]:focus {
 .teacher-dropdown {
     display: inline-block;
     width: 100%;
-    margin: 45px 0;
+    margin: 25px 0;
     height: auto;
 }
 

@@ -6,7 +6,7 @@ from google.cloud.firestore_v1 import DocumentSnapshot
 
 from entities.klass import Class
 from entities.student import Student
-from entities.types import Semester, Block, Name, Handle, LunchNumber
+from entities.types import Cohort, Semester, Block, Name, Handle, LunchNumber
 from use_cases.types import StudentRepository, ClassRepository
 
 USER_COUNTER_DOC = 'counters/user'
@@ -18,17 +18,16 @@ class FirestoreStudentRepo(StudentRepository):
     client: firestore.Client
     cache: Optional[List[DocumentSnapshot]] = None
 
-    def __init__(self, client: firestore.Client = firestore.Client(project="prematch-db")):
-        self.client = client
+    def __init__(self, client: Optional[firestore.Client] = None):
+        self.client = client if client is not None else firestore.Client(project="prematch-db")
         self._sync_user_count()
 
     def save(self, student: Student):
         data = {
             'name': student.name,
             'semesters': None if student.schedules is None else key_transform(student.schedules, str),
-            'accepts_terms': student.accepts_terms,
-            'accepts_privacy': student.accepts_privacy,
-            'is_public': student.is_public
+            'is_public': student.is_public,
+            'cohort': student.cohort.name if student.cohort is not None else None
         }
         if student.discord_id is not None:
             data['discord_id'] = student.discord_id
@@ -37,7 +36,6 @@ class FirestoreStudentRepo(StudentRepository):
             self._increment_user_count()
 
         self.client.collection(STUDENT_COL).document(student.handle).set(data)
-        cache = None
 
     def exists(self, handle: Handle) -> bool:
         return self.client.collection(STUDENT_COL).document(handle).get(field_paths=[]).exists
@@ -90,18 +88,17 @@ class FirestoreStudentRepo(StudentRepository):
             handle=entry.id,
             name=data['name'],
             schedules=None if data['semesters'] is None else key_transform(data['semesters'], int),
-            accepts_terms=data['accepts_terms'],
-            accepts_privacy=data['accepts_privacy'],
             is_public=data['is_public'],
-            discord_id=data.get('discord_id')
+            discord_id=data.get('discord_id'),
+            cohort=Cohort[data.get('cohort')] if data.get('cohort') is not None else None
         )
 
 
 class FirestoreClassRepo(ClassRepository):
     client: firestore.Client
 
-    def __init__(self, client: firestore.Client = firestore.Client(project="prematch-db")):
-        self.client = client
+    def __init__(self, client: Optional[firestore.Client] = None):
+        self.client = client if client is not None else firestore.Client(project="prematch-db")
 
     def save(self, klass: Class):
         self.classes_col(klass.block, klass.semester).document(klass.teacher).set({

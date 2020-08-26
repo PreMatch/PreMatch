@@ -123,24 +123,6 @@ def test_update_lunch_without_schedule():
         account_case.update_lunches(student, {1: {'C': 2, 'E': 4}})
 
 
-def test_accept_terms():
-    student: Student = Student('divanovich2021', 'Daniel Ivanovich')
-    student.accepts_terms = False
-
-    account_case.accept_terms(student)
-
-    assert student.accepts_terms
-
-
-def test_accept_privacy():
-    student: Student = Student('divanovich2021', 'Daniel Ivanovich')
-    student.accepts_privacy = False
-
-    account_case.accept_privacy(student)
-
-    assert student.accepts_privacy
-
-
 def test_discord_user_init():
     user_info = {
         'id': '101391209481209312',

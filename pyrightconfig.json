@@ -1,0 +1,6 @@
+{
+    "include": [
+        "**/*.py"
+    ],
+    "venv": "python37"
+}

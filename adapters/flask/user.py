@@ -109,19 +109,19 @@ def do_update():
     if request.method == 'GET':
         user = adapt.student_repo.load(g.handle)
 
-        if user is None and 'name' not in session:
+        if user is None:
             flash('Sorry, but you need to log in again', 'error')
             return redirect('/login')
 
         if user.schedules is None:
             return render_template('update.html',
                                    handle=g.handle,
-                                   name=session.get('name', user.name),
+                                   name=user.name,
                                    schedule=None,
                                    teachers=teacher_names,
                                    lunch_periods=LUNCH_BLOCKS, lunches=[1, 2, 3, 4],
                                    lunch_numbers=lambda a, b: None,
-                                   user_public=False)
+                                   user=user)
         else:
             schedule = lambda sem, b: user.semester_schedule(int(sem))[b]
 
@@ -130,12 +130,12 @@ def do_update():
 
             return render_template('update.html',
                                    handle=g.handle,
-                                   name=session.get('name', user.name),
+                                   name=user.name,
                                    schedule=schedule,
                                    teachers=teacher_names,
                                    lunch_periods=LUNCH_BLOCKS, lunches=[1, 2, 3, 4],
                                    lunch_numbers=lunch_number,
-                                   user_public=user.is_public)
+                                   user=user)
     else:
         # Redirect path reading from args
         redirect_path = request.args.get('from', DEFAULT_HOME)
@@ -164,14 +164,16 @@ def do_update():
 
         # Schedule publicly accessible?
         make_public = request.form.get('public') == 'true'
+        cohort = request.form.get('cohort')
+        demand(cohort is None or (cohort in dir(Cohort) and '__' not in cohort), f'Invalid cohort: {cohort}')
 
         try:
             user = adapt.student_repo.load(g.handle)
             user.schedules = new_schedule
             user.is_public = make_public
+            user.cohort = Cohort[cohort] if cohort is not None else None
 
             flash('Schedule updated successfully')
-            # TODO add (I accept) field ^
 
             app.account.update_lunches(user, lunches)
             adapt.student_repo.save(user)

@@ -43,11 +43,14 @@ function submitChanges(periods, semesters, lunchPeriods, lunchNumbers) {
         });
     });
 
+    if (!['remote', 'blue', 'gold'].includes($('#cohort-input').val()))
+        valid = false;
+
     if (valid) {
         document.getElementById('form-invis').submit();
     } else {
         document.getElementById(
-            'err-msg').innerHTML = "Sorry, but your form isn't valid! <br> Make sure <strong>all of your classes have a teacher selected</strong> and that you <strong>didn't</strong> try to edit the site's code to break it."
+            'err-msg').innerHTML = "Sorry, but your form isn't valid! <br> Make sure to select your cohort (remote, blue or gold) and ensure that <strong>all of your classes have a teacher selected</strong>."
     }
 }
 
@@ -55,7 +58,6 @@ function filterTeachers(period, semester) {
     let input, filter, a, i;
     input = document.getElementById(`teacherInput${period}-${semester}`);
     filter = decodeEscapes(input.value.toUpperCase()).replace(/['‘’´]/g,'');
-    console.log(filter);
 
     let linkHolder = document.getElementById(`link-holder-${period}-${semester}`);
 
@@ -143,6 +145,11 @@ function selectTeacher(period, semester, teacher) {
     }
 
     getLunchData(teacher, semester, period);
+}
+
+function selectCohort(cohort) {
+    $(`#cohort-${cohort}`).prop('checked', true);
+    $('#cohort-input').val(cohort);
 }
 
 function getLunchData(teacher, semester, period) {

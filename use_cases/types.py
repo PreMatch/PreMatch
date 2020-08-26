@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Optional, Iterable
+from typing import Optional, Iterable, Tuple
 
 from entities.klass import Class
 from entities.student import Student
@@ -11,7 +11,7 @@ from entities.types import *
 class AuthProvider(ABC):
     # May raise ValueError
     @abstractmethod
-    def verify(self, token: str) -> (Handle, Name):
+    def verify(self, token: str) -> Tuple[Handle, Name]:
         raise NotImplementedError()
 
 

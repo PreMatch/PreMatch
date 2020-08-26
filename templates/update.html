@@ -20,7 +20,8 @@
             <input type="hidden" name="lunch{{ lunch }}1" class="lunch-input" id="lunch-invis-{{ lunch }}-1">
             <input type="hidden" name="lunch{{ lunch }}2" class="lunch-input" id="lunch-invis-{{ lunch }}-2">
         {% endfor %}
-        <input type="hidden" name="public" id="public-input" value="{{ 'true' if user_public or schedule == none }}">
+        <input type="hidden" name="public" id="public-input" value="{{ 'true' if user.is_public or schedule == none }}">
+        <input type="hidden" name="cohort" id="cohort-input"> 
     </form>
 
     <div class="box has-text-centered">
@@ -110,17 +111,30 @@
                     {% for period in 'ABCDEFG' %}
                         {% for semester in '12' %}
                             {% if schedule(semester, period) != '' %}
-                                selectTeacher('{{ period }}', '{{ semester }}', '{{ schedule(semester, period) }}');
+                                selectTeacher('{{ period }}', '{{ semester }}', `{{ schedule(semester, period)|safe }}`);
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
                 </script>
             {% endif %}
+            {% if user.cohort != none %}
+            <script>
+                $(() => selectCohort('{{ user.cohort.name }}'));
+            </script>
+            {% endif %}
 
+            <div style="font-size: 18px">
+                <input type="radio" name="cohort" id="cohort-remote" data-cohort="remote" class="radio" required onchange="selectCohort(this.getAttribute('data-cohort'))">
+                <label for="cohort-remote">Remote</label>
+                <input type="radio" name="cohort" id="cohort-blue" data-cohort="blue" class="radio ml-2" required onchange="selectCohort(this.getAttribute('data-cohort'))">
+                <label for="cohort-blue">Blue</label>
+                <input type="radio" name="cohort" id="cohort-gold" data-cohort="gold" class="radio ml-2" required onchange="selectCohort(this.getAttribute('data-cohort'))">
+                <label for="cohort-gold">Gold</label>
+            </div>
             <div>
                 <div style="display: inline-block">
                     <input type="checkbox" name="public" onclick="togglePublic(this)"
-                           id="public-checkbox" {{ 'checked' if user_public or schedule == none }}>
+                           id="public-checkbox" {{ 'checked' if user.is_public or schedule == none }}>
                     <label for="public-checkbox" style="font-size: 18px;">Make my schedule public</label>
                 </div>
                 <div class="help-tip" style="display: inline-block">
@@ -128,7 +142,7 @@
                         schedule private, your name will only be shown to classmates who share classes with you, and only in the classes you have in common. No AHS student can see your
                         entire schedule. </p>
                 </div>
-                {% if user_public %}
+                {% if user.is_public %}
                     <script type="text/javascript">togglePublic(document.getElementById("public-checkbox"));</script>
                 {% endif %}
             </div>

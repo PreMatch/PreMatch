@@ -55,6 +55,8 @@ class ScheduleCase:
         if schedule is None:
             raise MissingScheduleError(target)
         klass = self.class_repo.load(schedule[block], block, semester)
+        if klass is None:
+            return None
 
         return klass.lunch
 

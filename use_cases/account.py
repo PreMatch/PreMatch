@@ -42,14 +42,6 @@ class AccountCase:
 
         self.class_repo.update_batch(batch_update)
 
-    @staticmethod
-    def accept_terms(student: Student):
-        student.accepts_terms = True
-
-    @staticmethod
-    def accept_privacy(student: Student):
-        student.accepts_privacy = True
-
     def integrate_discord(self, student: Student, code: str, state: str) -> DiscordUser:
         if student.schedules is None:
             raise MissingScheduleError(student)

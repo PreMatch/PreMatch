@@ -98,13 +98,13 @@ def api_login():
         return api_bad_value('id_token')
 
     try:
-        handle, name = validate_ios_token_for_info(token)
+        handle, _ = validate_ios_token_for_info(token)
         log_in(handle)
         return api_success({'handle': handle})
 
-    except ValueError as e1:
+    except ValueError:
         try:
-            handle, name = validate_token_for_info(token)
+            handle, _ = validate_token_for_info(token)
             log_in(handle)
             return api_success({'handle': handle})
 
