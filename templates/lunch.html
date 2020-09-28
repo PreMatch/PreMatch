@@ -92,7 +92,7 @@
         <div class="columns">
             <div class="column is-one-third">
                 {% for user in roster %}
-                    {% if viewer_in_lunch or user.is_public %}
+                    {% if (viewer_in_lunch or user.is_public) and user.cohort.name != 'remote' %}
                         {% if loop.index == (loop|length / 3)|round|int + 1 or loop.index == (loop|length / 3)|round|int * 2 + 1 %}
                             {% if loop|length != 1 %}
                                 </div>
@@ -101,7 +101,11 @@
                         {% endif %}
                         <div class="{{ 'is-selected' if handle == user.handle }} lunch-row">
                             <h1 class="name">{{ user.name }}</h1>
-                            <h1 class="handle">{{ user.handle }}</h1>
+                            <h1 class="handle">{{ user.handle }}
+                                <div class="cohort {{ user.cohort.name }}">
+                                    {{ user.cohort.name }}
+                                </div>
+                            </h1>
                             {% if user.is_public %}
                                 <p class="roster-link"
                                    style="{{ 'border: none!important;' if loop.index == roster|length else '' }} text-align: center;">

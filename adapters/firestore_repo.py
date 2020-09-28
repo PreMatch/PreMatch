@@ -87,7 +87,7 @@ class FirestoreStudentRepo(StudentRepository):
         return Student(
             handle=entry.id,
             name=data['name'],
-            schedules=None if data['semesters'] is None else key_transform(data['semesters'], int),
+            schedules=None if data.get('semesters') is None else key_transform(data['semesters'], int),
             is_public=data['is_public'],
             discord_id=data.get('discord_id'),
             cohort=Cohort[data.get('cohort')] if data.get('cohort') is not None else None
@@ -119,7 +119,7 @@ class FirestoreClassRepo(ClassRepository):
 
         for klass in classes:
             doc_ref = self.classes_col(klass.block, klass.semester).document(klass.teacher)
-            batch.update(doc_ref, {
+            batch.set(doc_ref, {
                 'lunch': klass.lunch,
                 'location': klass.location
             })

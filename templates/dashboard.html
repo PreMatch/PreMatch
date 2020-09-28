@@ -11,6 +11,7 @@
 {{ bodyPaddingNav() }}
 
 {% macro rosterCard(period) %}
+    {% if schedule[period] != "(None)" %}
     <div class="card roster-card" id="roster-card-{{ period }}">
         <header class="card-header" style="flex-direction: column; padding: 0.5rem;">
             <h1 class="card-header-title is-size-3">{{ schedule[period] }}</h1>
@@ -28,8 +29,14 @@
                 <table class="table is-fullwidth" id="card-table-{{ period }}">
                     {% for user in rosters[period] if roster_handle != handle %}
                         <tr style="{{ 'display: none;' if loop.index > 10 }}">
-                            <td class="name">{{ user.name }}</td>
-                            <td class="handle is-size-7">{{ user.handle }}</td>
+                                
+                            <td class="name">
+                                {{ user.name }}
+                            </td>
+                            <td class="handle is-size-7">{{ user.handle }}
+                                <div class="cohort {{ user.cohort.name }}">
+                                    {{ user.cohort.name }}
+                                </div></td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -65,6 +72,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 {% endmacro %}
 
 <section class="hero is-primary pushed">
@@ -105,7 +113,7 @@
 <style>
     .table td {
         padding: 0.5rem 0.75rem !important;
-        text-align: center;
+        text-align: center !important;
     }
 </style>
 

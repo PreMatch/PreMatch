@@ -40,7 +40,7 @@
                         <div class="teacher-dropdown-content" id="teacher-dropdown-{{ period }}-{{ semester }}">
                             <label class="block-label" for="teacherInput{{ period }}-{{ semester }}">Block {{ period }}, Semester {{ semester }}</label>
                             <br>
-                            <input type="text" placeholder="Search for a teacher..." id="teacherInput{{ period }}-{{ semester }}"
+                            <input type="text" placeholder="Enter teacher name or '(None)'" id="teacherInput{{ period }}-{{ semester }}"
                                    onkeyup="filterTeachers('{{ period }}', '{{ semester }}')" onfocus="selectInput('{{ period }}', '{{ semester }}')">
                             <div class="link-holder has-text-left" id="link-holder-{{ period }}-{{ semester }}">
                                 {% for teacher in teachers %}

@@ -48,7 +48,12 @@
         {% for user in roster %}
             {% if user.is_public or user_in_class %}
             <tr class="{{ 'is-selected' if handle == user.handle }}">
-                <td class="name">{{ user.name }}</td>
+                <td class="name">{{ user.name }}
+                    &nbsp;
+                    <div class="cohort {{ user.cohort.name }}">
+                        {{ user.cohort.name }}
+                    </div>
+                </td>
                 <td class="handle">{{ user.handle }}</td>
                 <td class="roster-link">
                     <a class="button {{ 'is-outlined' if handle != user.handle }} is-primary is-medium"

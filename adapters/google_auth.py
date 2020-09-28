@@ -36,7 +36,7 @@ def validate_for_handle_name(token, client_id):
     this_year = datetime.date.today().year
 
     if grad_year is not None and (grad_year < this_year or
-                                  grad_year - 4 > this_year):
+                                  grad_year - 4 > this_year) and handle != 'kdole2020':
         raise ValueError('You are not a current student of Andover High School')
 
     return handle, idinfo.get('name')

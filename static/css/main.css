@@ -190,6 +190,7 @@ a.overridden-white.button {
 input[id^="teacherInput"] {
     background: url('/static/img/search-icon.png') no-repeat 14px 12px;
     font-size: 16px;
+    width: 340px;
     padding: 14px 20px 12px 45px;
     border: 1px solid black;
 }
@@ -555,4 +556,28 @@ ul.overridden-white li a:hover {
         -webkit-transform: translateX(-50%);
         transform: translateX(-50%);
     }
+}
+
+/* Cohorts */
+
+.cohort {
+    display: inline-block;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 2px;
+    padding: 1px 4px;
+    color: white;
+}
+
+.cohort.blue {
+    background-color: #0D47A1;
+}
+
+.cohort.gold {
+    background-color: #F57F17;
+}
+
+.cohort.remote {
+    background-color: #616161;
 }

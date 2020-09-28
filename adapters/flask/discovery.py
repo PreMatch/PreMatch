@@ -28,7 +28,8 @@ def show_roster(semester_str, period, teacher):
         return redirect('/')
 
     user_in_class = g.handle in list(map(lambda student: student.handle, classmates))
-    lunch_number = adapt.class_repo.load(teacher, period, semester).lunch
+    klass = adapt.class_repo.load(teacher, period, semester)
+    lunch_number = klass.lunch if klass is not None else None
 
     return render_template('roster.html', period=period, teacher=teacher,
                            roster=classmates, handle=g.handle,
